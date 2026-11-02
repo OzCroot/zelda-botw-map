@@ -24,15 +24,15 @@ Out of the box the app uses a small **sample dataset** (`src/data/sample/markers
 
 ## Using real marker data
 
-Marker data and map tiles are third-party content (the source site / Nintendo) and are **gitignored**.
+Marker data and map tiles are third-party content (Nintendo / the original site) and are **gitignored**.
 Keep it for personal use; get permission before deploying publicly.
 
 1. In your browser, open each marker file and save it into `data/raw/source/`
    (`locations.json`, `pins.json`, `seeds.json`, `treasures.json`, `wiki.json`).
    The site sits behind a bot check, so download manually rather than via script.
 2. `npm run import-data` → writes `src/data/generated/markers.json` (validated with zod).
-   The source mapper in `scripts/import-data.ts` is best-effort — adjust `toMarkers()` to the real schema
-   and category names (must match ids in `src/data/categories.ts`).
+   Category names are mapped in `scripts/import-data.ts` (`ALIAS` / slugs) and must match ids in
+   `src/data/categories.ts`.
 3. Map tiles: cut them from a full-size map export (24000x20000 PNG) you own:
    `npm run cut-tiles -- path/to/botw_map.png` → `public/tiles/{z}/{x}_{y}.webp`
    (750px tiles, zoom 0–5, 32×27 grid at max zoom, 1 map unit = 1 source pixel; ~1,165 tiles, ~82 MB).
