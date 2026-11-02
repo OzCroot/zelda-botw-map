@@ -28,5 +28,5 @@ data/raw/
 src/data/generated/
 public/tiles/
 
-# Third-party screenshots, local only
-public/images/korok/
+# Unoptimised screenshot originals, local only (public/images/korok/webp is tracked)
+public/images/korok/raw/
