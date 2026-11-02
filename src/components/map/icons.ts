@@ -12,7 +12,7 @@ export function markerIcon(category: string, done: boolean, selected: boolean): 
       className: 'bg-transparent',
       iconSize: [32, 32],
       iconAnchor: [16, 16],
-      html: `<div class="pin${done ? ' pin-done' : ''}${selected ? ' pin-selected' : ''}" style="--c:${c?.color ?? '#fff'}">${done ? '✓' : (c?.glyph ?? '?')}</div>`,
+      html: `<div class="pin${done ? ' pin-done' : ''}${selected ? ' pin-selected' : ''}" style="--c:${c?.color ?? '#fff'}">${done ? '✓' : (c?.glyph ?? '?')}${c?.icon && !done ? `<img src="/icons/${c.icon}.png" alt="" onerror="this.remove()">` : ''}</div>`,
     })
     cache.set(key, icon)
   }

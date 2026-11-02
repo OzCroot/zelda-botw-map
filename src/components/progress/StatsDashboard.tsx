@@ -1,6 +1,5 @@
 import { CATEGORIES } from '../../data/categories'
-import { MARKERS } from '../../data/loadMarkers'
-import { REGIONS } from '../../data/regions'
+import { MARKERS, REGIONS } from '../../data/loadMarkers'
 import { useProgress } from '../../store/progress'
 import { useUi } from '../../store/ui'
 

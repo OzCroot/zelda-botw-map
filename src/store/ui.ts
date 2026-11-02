@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { CATEGORIES } from '../data/categories'
+import { CATEGORIES, defaultEnabled } from '../data/categories'
 import type { MarkerId } from '../types/marker'
 
 export type Tab = 'filters' | 'list' | 'stats' | 'data'
@@ -27,19 +27,19 @@ interface UiState {
   toggleTheme: () => void
 }
 
-const allOn = Object.fromEntries(CATEGORIES.map((c) => [c.id, true]))
 
 export const PRESETS: { label: string; ids: string[] }[] = [
-  { label: 'Shrine hunt', ids: ['shrine', 'tower'] },
-  { label: 'Korok run', ids: ['korok'] },
-  { label: 'Story', ids: ['memory', 'beast', 'tower'] },
+  { label: 'Shrine hunt', ids: ['shrine', 'sheikah-tower'] },
+  { label: 'Korok run', ids: ['korok-seed'] },
+  { label: 'Story', ids: ['main-quest', 'memory', 'sheikah-tower'] },
+  { label: 'Treasure', ids: CATEGORIES.filter((c) => c.group === 'Treasure').map((c) => c.id) },
   { label: 'Everything', ids: CATEGORIES.map((c) => c.id) },
 ]
 
 export const useUi = create<UiState>()(
   persist(
     (set) => ({
-      enabled: allOn,
+      enabled: defaultEnabled(),
       hideCompleted: false,
       region: null,
       tab: 'filters',
@@ -64,6 +64,11 @@ export const useUi = create<UiState>()(
     {
       name: 'hyrule-tracker:ui:v1',
       storage: createJSONStorage(() => localStorage),
+      merge: (p, cur) => ({
+        ...cur,
+        ...(p as object),
+        enabled: { ...cur.enabled, ...((p as { enabled?: Record<string, boolean> })?.enabled ?? {}) },
+      }),
       partialize: (s) => ({ enabled: s.enabled, hideCompleted: s.hideCompleted, theme: s.theme }),
     },
   ),

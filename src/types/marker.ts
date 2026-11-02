@@ -9,6 +9,7 @@ export interface Marker {
   /** Game-space north/south (0 = north edge), 0..MAP_H */
   y: number
   layer?: 'surface' | 'sky' | 'depths'
+  tags?: string[]
   region?: string
   description?: string
   wikiUrl?: string
@@ -17,15 +18,28 @@ export interface Marker {
 export interface Category {
   id: string
   label: string
-  group: 'Collectibles' | 'Challenges' | 'Places' | 'Quests' | 'Enemies'
+  group: 'Travel' | 'Quests' | 'Collectibles' | 'Enemies' | 'Places' | 'Services' | 'Treasure'
   /** short glyph rendered in the map pin */
   glyph: string
   color: string
   /** whether the user can check it off */
   checkable: boolean
+  /** shown on the map by default */
+  defaultOn?: boolean
+  /** optional PNG name in public/icons/ (without extension) */
+  icon?: string
+}
+
+export interface RegionInfo {
+  id: string
+  label: string
+  /** label position in map units */
+  x: number
+  y: number
 }
 
 export interface MarkerDataset {
+  regions: RegionInfo[]
   version: string
   source: string
   markers: Marker[]

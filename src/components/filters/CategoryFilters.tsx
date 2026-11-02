@@ -1,8 +1,7 @@
 import { CATEGORIES, CATEGORY_GROUPS } from '../../data/categories'
-import { MARKERS } from '../../data/loadMarkers'
+import { MARKERS, REGIONS } from '../../data/loadMarkers'
 import { PRESETS, useUi } from '../../store/ui'
 import { useProgress } from '../../store/progress'
-import { REGIONS } from '../../data/regions'
 
 const totals: Record<string, number> = {}
 for (const m of MARKERS) totals[m.category] = (totals[m.category] ?? 0) + 1

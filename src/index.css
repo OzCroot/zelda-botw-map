@@ -40,6 +40,9 @@ body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-ser
 .map-grid-light { background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 48px 48px; }
 
 .pin { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9999px; background: var(--c); color: #0f172a; font-size: 16px; border: 2px solid #0f172a; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
+.pin { position: relative; }
+.pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
+.pin:has(img) { background: transparent; border-color: transparent; box-shadow: none; font-size: 0; }
 .pin-done { opacity: .55; filter: grayscale(.6); }
 .pin-selected { outline: 3px solid #fff; transform: scale(1.2); }
 
