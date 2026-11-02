@@ -62,6 +62,7 @@ export const CATEGORIES: Category[] = [
 export const MARKER_ICON_OVERRIDES: Record<string, string> = {
   'village:Hyrule Castle': 'locations/castle',
 }
+  'shrine:Shrine of Resurrection': 'travel/resurrection-shrine',
 
 /**
  * Visual scale per icon so artwork reads at a similar size. Travel art is a soft glow (~55% solid),

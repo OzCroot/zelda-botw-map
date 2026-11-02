@@ -96,7 +96,7 @@ export function MarkerList() {
                   className="h-full min-w-0 flex-1 justify-start gap-3 px-2 text-left"
                   onClick={() => select(m.id)}
                 >
-                  <CategoryIcon id={m.category} className="size-7" />
+                  <CategoryIcon id={m.category} markerId={m.id} className="size-7" />
                   <span className="min-w-0 flex-1">
                     <span
                       className={`block truncate text-sm ${done ? 'text-muted-foreground line-through' : ''}`}
