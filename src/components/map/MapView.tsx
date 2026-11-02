@@ -101,7 +101,12 @@ export function MapView() {
           <Marker
             key={m.id}
             position={toLatLng(m.x, m.y)}
-            icon={markerIcon(m.category, m.id in completed, m.id === selectedId)}
+            icon={markerIcon(
+              m.category,
+              m.id in completed,
+              m.id === selectedId,
+              m.tags?.includes('DLC') ? 'shrine_dlc' : undefined,
+            )}
             title={m.name}
             eventHandlers={{ click: () => select(m.id) }}
           />

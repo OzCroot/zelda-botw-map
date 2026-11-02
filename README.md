@@ -35,6 +35,9 @@ Keep it for personal use; get permission before deploying publicly.
    This writes `public/tiles/{z}/{x}_{y}.jpg` (zoom 0 = one 750px tile for the whole 24000px map, max zoom 5)
    and `public/icons/*.png`. Both folders are gitignored.
 
+Optional SVG map icons (towers, shrines, shops, …) can be dropped into `public/icons/<name>.svg`; pins try SVG, then PNG, then a glyph.
+The [RotP Object Map](https://objmap.relicsofthepast.dev) (a fork of zeldamods/objmap) serves 13 of them at `/icons/mapicon_*.svg`.
+
 An open alternative source is [zeldamods/objmap](https://github.com/zeldamods/objmap) (GPL-3.0); add an adapter to `import-data.ts`.
 
 ## Roadmap (ways to present the data better)
