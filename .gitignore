@@ -27,3 +27,4 @@ dist-ssr
 data/raw/
 src/data/generated/
 public/tiles/
+public/icons/
