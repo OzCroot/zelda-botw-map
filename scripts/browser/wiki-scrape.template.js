@@ -87,6 +87,10 @@
   const cache = JSON.parse(localStorage.getItem(CACHE_KEY) || "{}");
   cache.shrines ||= {};
   cache.titles ||= {};
+  // Reuse shrine summaries saved by the earlier shrines-only version of this script, so they are not fetched again.
+  // (Entries that had no summary are left out so they get another try.)
+  const earlier = JSON.parse(localStorage.getItem("zd-shrine-summaries-v1") || "{}");
+  for (const [name, entry] of Object.entries(earlier)) if (!entry.missing && !cache.shrines[name]) cache.shrines[name] = entry;
   const save = () => localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   let stopped = null;
