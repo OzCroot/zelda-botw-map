@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
+import { safeStorage } from '../lib/safeStorage'
 import type { MarkerId } from '../types/marker'
 
 export const STORAGE_KEY = 'hyrule-tracker:v1'
@@ -23,7 +24,7 @@ interface ProgressState extends ProgressData {
   reset: () => void
 }
 
-const empty: ProgressData = {
+export const EMPTY_PROGRESS: ProgressData = {
   completed: {},
   notes: {},
   lastExportedAt: null,
@@ -33,7 +34,7 @@ const empty: ProgressData = {
 export const useProgress = create<ProgressState>()(
   persist(
     (set, get) => ({
-      ...empty,
+      ...EMPTY_PROGRESS,
       toggle: (id) => {
         const done = !(id in get().completed)
         get().setCompleted(id, done)
@@ -62,19 +63,19 @@ export const useProgress = create<ProgressState>()(
           changesSinceExport: s.changesSinceExport + 1,
         })),
       markExported: () => set({ lastExportedAt: Date.now(), changesSinceExport: 0 }),
-      reset: () => set({ ...empty }),
+      reset: () => set({ ...EMPTY_PROGRESS }),
     }),
     {
       name: STORAGE_KEY,
       version: STORAGE_VERSION,
-      storage: createJSONStorage(() => localStorage),
+      storage: safeStorage,
       partialize: (s) => ({
         completed: s.completed,
         notes: s.notes,
         lastExportedAt: s.lastExportedAt,
         changesSinceExport: s.changesSinceExport,
       }),
-      migrate: (persisted) => ({ ...empty, ...(persisted as Partial<ProgressData>) }),
+      migrate: (persisted) => ({ ...EMPTY_PROGRESS, ...(persisted as Partial<ProgressData>) }),
     },
   ),
 )

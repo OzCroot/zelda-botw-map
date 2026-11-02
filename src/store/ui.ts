@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
+import { safeStorage } from '../lib/safeStorage'
 import { CATEGORIES, defaultEnabled } from '../data/categories'
 import { MARKER_BY_ID } from '../data/loadMarkers'
 import type { MarkerId } from '../types/marker'
@@ -51,7 +52,6 @@ interface UiState {
   toggleTheme: () => void
 }
 
-
 export const PRESETS: { label: string; ids: string[] }[] = [
   { label: 'Shrine hunt', ids: ['shrine', 'shrine-dlc', 'sheikah-tower'] },
   { label: 'Korok run', ids: ['korok-seed'] },
@@ -59,6 +59,8 @@ export const PRESETS: { label: string; ids: string[] }[] = [
   { label: 'Treasure', ids: CATEGORIES.filter((c) => c.group === 'Treasure').map((c) => c.id) },
   { label: 'Everything', ids: CATEGORIES.map((c) => c.id) },
 ]
+
+export const UI_STORAGE_KEY = 'hyrule-tracker:ui:v1'
 
 export const useUi = create<UiState>()(
   persist(
@@ -99,11 +101,16 @@ export const useUi = create<UiState>()(
           masterMode: s.masterMode || enabledMasterMode,
           flyTo: { id, n: (s.flyTo?.n ?? 0) + 1 },
           enabled: enabledCategory ? { ...s.enabled, [m.category]: true } : s.enabled,
-          hiddenRegions: m.region && s.hiddenRegions[m.category]?.includes(m.region)
-            ? { ...s.hiddenRegions, [m.category]: s.hiddenRegions[m.category]!.filter((r) => r !== m.region) }
-            : s.hiddenRegions,
+          hiddenRegions:
+            m.region && s.hiddenRegions[m.category]?.includes(m.region)
+              ? {
+                  ...s.hiddenRegions,
+                  [m.category]: s.hiddenRegions[m.category]!.filter((r) => r !== m.region),
+                }
+              : s.hiddenRegions,
           region: s.region && s.region !== m.region ? null : s.region,
-          hideCompleted: s.hideCompleted && id in useProgress.getState().completed ? false : s.hideCompleted,
+          hideCompleted:
+            s.hideCompleted && id in useProgress.getState().completed ? false : s.hideCompleted,
         })
         return { enabledCategory, enabledMasterMode }
       },
@@ -117,18 +124,29 @@ export const useUi = create<UiState>()(
           const next = cur.includes(region) ? cur.filter((r) => r !== region) : [...cur, region]
           return { hiddenRegions: { ...s.hiddenRegions, [cat]: next } }
         }),
-      setCatRegions: (cat, hidden) => set((s) => ({ hiddenRegions: { ...s.hiddenRegions, [cat]: hidden } })),
+      setCatRegions: (cat, hidden) =>
+        set((s) => ({ hiddenRegions: { ...s.hiddenRegions, [cat]: hidden } })),
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
     }),
     {
-      name: 'hyrule-tracker:ui:v1',
-      storage: createJSONStorage(() => localStorage),
+      name: UI_STORAGE_KEY,
+      storage: safeStorage,
       merge: (p, cur) => ({
         ...cur,
         ...(p as object),
-        enabled: { ...cur.enabled, ...((p as { enabled?: Record<string, boolean> })?.enabled ?? {}) },
+        enabled: {
+          ...cur.enabled,
+          ...((p as { enabled?: Record<string, boolean> })?.enabled ?? {}),
+        },
       }),
-      partialize: (s) => ({ enabled: s.enabled, hiddenRegions: s.hiddenRegions, menuWidth: s.menuWidth, masterMode: s.masterMode, hideCompleted: s.hideCompleted, theme: s.theme }),
+      partialize: (s) => ({
+        enabled: s.enabled,
+        hiddenRegions: s.hiddenRegions,
+        menuWidth: s.menuWidth,
+        masterMode: s.masterMode,
+        hideCompleted: s.hideCompleted,
+        theme: s.theme,
+      }),
     },
   ),
 )
