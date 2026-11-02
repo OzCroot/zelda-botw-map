@@ -76,6 +76,40 @@ export function ClusterLayer({
     if (added.length) g.addLayers(added)
   }, [markers])
 
+  // The highlighted marker keeps its name label on its own pin, wherever that pin currently is (in place, or spread
+  // out from a cluster), rather than a second copy of it being drawn on top.
+  const labelled = useRef<L.Marker | null>(null)
+  useEffect(() => {
+    const entry = focusId ? pins.current.get(focusId) : undefined
+    if (labelled.current === entry?.pin) return
+    labelled.current?.unbindTooltip()
+    labelled.current = entry?.pin ?? null
+    entry?.pin.bindTooltip(entry.data.name, { permanent: true, direction: 'top', offset: [0, -22] })
+  }, [focusId, markers])
+
+  // Reveal: once the map has flown to a marker, make sure its pin is actually showing: zoom in or spread out the
+  // cluster that is holding it. (Markers on exactly the same spot, like a shrine and its chest, never separate by
+  // zooming, so they spread out instead.)
+  const flyTo = useUi((s) => s.flyTo)
+  useEffect(() => {
+    const g = group.current
+    if (!flyTo || !g) return
+    let done = false
+    const show = () => {
+      if (done) return
+      done = true
+      const entry = pins.current.get(flyTo.id)
+      if (entry && g.hasLayer(entry.pin)) g.zoomToShowLayer(entry.pin, () => {})
+    }
+    map.on('moveend', show)
+    const fallback = setTimeout(show, 1500) // the map may already be there, in which case it never moves
+    return () => {
+      done = true
+      map.off('moveend', show)
+      clearTimeout(fallback)
+    }
+  }, [map, flyTo])
+
   // Appearance: swap icons only on pins whose done/selected state changed.
   useEffect(() => {
     for (const { pin, data: m } of pins.current.values()) {
