@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { toast } from 'sonner'
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { CATEGORY_BY_ID } from '@/data/categories'
 import { searchMarkers } from '@/lib/search'
@@ -8,7 +9,7 @@ import type { Marker } from '@/types/marker'
 export function SearchBox() {
   const query = useUi((s) => s.query)
   const setQuery = useUi((s) => s.setQuery)
-  const select = useUi((s) => s.select)
+  const reveal = useUi((s) => s.reveal)
   const ref = useRef<HTMLInputElement>(null)
   const results = useMemo(() => searchMarkers(query), [query])
 
@@ -25,7 +26,8 @@ export function SearchBox() {
   }, [])
 
   const pick = (m: Marker) => {
-    select(m.id)
+    const { enabledCategory } = reveal(m.id)
+    if (enabledCategory) toast(`Showing ${CATEGORY_BY_ID[m.category]?.label ?? 'category'} on the map`)
     setQuery('')
     ref.current?.blur()
   }
