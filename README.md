@@ -84,26 +84,18 @@ Put a dataset at `src/data/generated/markers.json`. It is picked up automaticall
 - **Coordinates** are pixels of the full-size map image: origin at the top-left, `x` east, `y` south.
 - **Categories** (ids, labels, colours, which ones are checkable) live in [`src/data/categories.ts`](src/data/categories.ts).
 - The shape is validated with [zod](https://zod.dev) ([`src/data/schema.ts`](src/data/schema.ts)); an invalid file falls back to the sample.
-- `npm run import-data` converts a category → layers → markers JSON export (coordinates as `[lat, lng]` from the image centre)
-  from `data/raw/source/` into this format. Adapt [`scripts/import-data.ts`](scripts/import-data.ts) to your source's shape and category names.
 
 ### 2. Map tiles
 
-Cut tiles from a full-size map image you have the right to use (the app is configured for **24000 × 20000 px**):
-
-```bash
-npm run cut-tiles -- path/to/map.png      # writes public/tiles/{z}/{x}_{y}.webp
-```
-
-This produces 750px WebP tiles for zoom 0–5 (about 1,165 files, ~82 MB). Zoom 5 is lossless; the lower zoom levels are resampled
-and use high-quality lossy WebP. Use `--lossless-all` (~140 MB) or `--lossy` (about half the size) to change that.
+Provide your own tile pyramid from a full-size map image you have the right to use (the app is configured for **24000 × 20000 px**).
+Tiles are 750px WebP files for zoom 0–5, laid out as `public/tiles/{z}/{x}_{y}.webp`.
 If your image is a different size, adjust `MAP_W` / `MAP_H` in [`src/data/regions.ts`](src/data/regions.ts).
 
 Without tiles the map still works on a plain grid.
 
 ### 3. Icons (optional)
 
-Drop icon files into `public/icons/<name>.svg` (or `.png`). Pins try SVG, then PNG, then fall back to a built-in glyph. Icon names are the
+Icons live in `public/icons/` (grouped in subfolders such as `travel/`, `quest/`, `stamps/`, `locations/`) as `<path>.svg` or `.png`. Pins try SVG, then PNG, then fall back to a built-in glyph. Icon paths (relative to that folder, no extension) are the
 `icon` fields in [`src/data/categories.ts`](src/data/categories.ts).
 
 ## Scripts
@@ -116,13 +108,10 @@ Drop icon files into `public/icons/<name>.svg` (or `.png`). Pins try SVG, then P
 | `npm test` | Run the unit tests (Vitest) |
 | `npm run lint` | Lint with oxlint |
 | `npm run format` | Format with Prettier |
-| `npm run import-data` | Convert raw marker JSON into the app's dataset format |
-| `npm run cut-tiles -- <image>` | Cut a full-size map image into a tile pyramid |
-| `npm run extract-har -- <file.har>` | Pull icon files out of a browser HAR you saved yourself |
 
 ## Tech stack
 
-React 19 · TypeScript · Vite · Tailwind CSS v4 · [shadcn/ui](https://ui.shadcn.com) (Base UI) · Leaflet / react-leaflet · Zustand · zod · Fuse.js · TanStack Virtual · sharp (tile cutting)
+React 19 · TypeScript · Vite · Tailwind CSS v4 · [shadcn/ui](https://ui.shadcn.com) (Base UI) · Leaflet / react-leaflet · Zustand · zod · Fuse.js · TanStack Virtual
 
 ```
 src/
@@ -131,7 +120,7 @@ src/
   store/        progress (persisted to localStorage) and UI state
   lib/          export/import, share codes, search
   hooks/        URL deep links, filtering, undo-on-toggle
-scripts/        import-data, cut-tiles, extract-har
+design/         icon colour palette
 ```
 
 ## Roadmap
