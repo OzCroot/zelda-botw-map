@@ -1,4 +1,4 @@
-// Local-only finding hints for Korok seeds (src/data/generated/ is gitignored; see scripts/merge-seed-hints.ts).
+// Local-only finding hints for Korok seeds (src/data/generated/ is gitignored).
 export interface SeedHint {
   location?: string
   puzzle?: string

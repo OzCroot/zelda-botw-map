@@ -64,8 +64,7 @@ export function DataMenu() {
       {usingSampleData && (
         <Alert>
           <AlertDescription>
-            Showing the bundled <b>sample dataset</b>. Run <code>npm run import-data</code> to load real markers (see
-            README).
+            Showing the bundled <b>sample dataset</b>. See the README to load real markers.
           </AlertDescription>
         </Alert>
       )}

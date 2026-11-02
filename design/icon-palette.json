@@ -1,5 +1,5 @@
 {
-  "_about": "Colour families lifted from the brand-toolkit icons plus the colours already used in public/icons. 'tones' are every tint/shade seen for that family; 'base' is the main fill; 'glow' / 'glowDeep' are the outer and inner layers of the toolkit's two-layer glow. Re-apply with: npm run recolor-icon -- <in.svg> <family> [--glow] [-o out.svg]",
+  "_about": "Colour families lifted from the brand-toolkit icons plus the colours already used in public/icons. 'tones' are every tint/shade seen for that family; 'base' is the main fill; 'glow' / 'glowDeep' are the outer and inner layers of the toolkit's two-layer glow.",
   "baseline": {
     "_about": "The map-marker baseline: the community UI icon kit's 'stamp' colouring. New and re-coloured marker icons should start from these two colours.",
     "fill": "#F6F65E",
