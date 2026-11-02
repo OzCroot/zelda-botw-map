@@ -5,9 +5,10 @@ React 19 · TypeScript · Tailwind v4 · shadcn/ui (Base UI) · Leaflet · Zusta
 
 - **Local storage** — progress, notes and filters persist in your browser; no account, no server.
 - **Export / import** — JSON (with merge-or-replace and a diff preview), CSV, and a short share code.
+- **UI built entirely on shadcn/ui** — Tabs, Command (search), Select, Checkbox, Progress, Card, Alert/AlertDialog, Drawer (mobile sheet), Sonner toasts.
 - **Item dialog** — selecting a marker (map, list, search or `?m=` link) opens a shadcn `Dialog` with details, complete/undo and notes.
 - **Mobile-first panel** — draggable bottom sheet, 44px touch targets, details in the sheet instead of tiny popups.
-- **UX** — fuzzy search (`/`), undo on every check-off, filter presets, hide-completed, region filter, deep links (`?m=<id>`), keyboard shortcuts (`c` complete, `Esc` close), dark/light.
+- **UX** — fuzzy search (`/`), undo on every check-off, filter presets, hide-completed, region filter, deep links (`?m=<id>`, `?tab=list|stats|data|filters`, `?q=<search>`), keyboard shortcuts (`c` complete, `Esc` close), dark/light.
 - **Data presented better** — progress dashboard by category/region, virtualized list synced to the map filters, region drill-down.
 
 ## Run

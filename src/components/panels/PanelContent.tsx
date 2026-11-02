@@ -1,5 +1,7 @@
 import { Moon, Sun } from 'lucide-react'
-import { useUi, type Tab } from '../../store/ui'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useUi, type Tab } from '@/store/ui'
 import { CategoryFilters } from '../filters/CategoryFilters'
 import { MarkerList } from '../list/MarkerList'
 import { StatsDashboard } from '../progress/StatsDashboard'
@@ -21,29 +23,31 @@ export function PanelContent() {
         <div className="min-w-0 flex-1">
           <SearchBox />
         </div>
-        <button className="icon-btn" onClick={toggleTheme} aria-label="Toggle theme">
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-        </button>
+        <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+          {theme === 'dark' ? <Sun /> : <Moon />}
+        </Button>
       </div>
-      <div role="tablist" className="grid grid-cols-4 gap-1 rounded-xl bg-border p-1">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            role="tab"
-            aria-selected={tab === t.id}
-            onClick={() => setTab(t.id)}
-            className={`min-h-10 rounded-lg text-sm transition ${tab === t.id ? 'bg-card font-medium shadow' : 'text-muted-foreground'}`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-      <div className="min-h-0 flex-1 overflow-y-auto pb-6" role="tabpanel">
-        {tab === 'filters' && <CategoryFilters />}
-        {tab === 'list' && <MarkerList />}
-        {tab === 'stats' && <StatsDashboard />}
-        {tab === 'data' && <DataMenu />}
-      </div>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)} className="min-h-0 flex-1 gap-3">
+        <TabsList className="w-full">
+          {TABS.map((t) => (
+            <TabsTrigger key={t.id} value={t.id}>
+              {t.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <TabsContent value="filters" className="min-h-0 flex-1 overflow-y-auto pb-6">
+          <CategoryFilters />
+        </TabsContent>
+        <TabsContent value="list" className="min-h-0 flex-1 pb-2">
+          <MarkerList />
+        </TabsContent>
+        <TabsContent value="stats" className="min-h-0 flex-1 overflow-y-auto pb-6">
+          <StatsDashboard />
+        </TabsContent>
+        <TabsContent value="data" className="min-h-0 flex-1 overflow-y-auto pb-6">
+          <DataMenu />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

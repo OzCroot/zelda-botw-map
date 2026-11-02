@@ -1,14 +1,24 @@
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { Check } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
-import { CATEGORY_BY_ID } from '../../data/categories'
-import { REGION_BY_ID } from '../../data/loadMarkers'
-import { useVisibleMarkers } from '../../hooks/useVisibleMarkers'
-import { toggleWithUndo } from '../../hooks/useToggleWithUndo'
-import { useProgress } from '../../store/progress'
-import { useUi } from '../../store/ui'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { CATEGORY_BY_ID } from '@/data/categories'
+import { REGION_BY_ID } from '@/data/loadMarkers'
+import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
+import { useVisibleMarkers } from '@/hooks/useVisibleMarkers'
+import { useProgress } from '@/store/progress'
+import { useUi } from '@/store/ui'
 
 type Sort = 'name' | 'category' | 'region'
+const SORTS = [
+  { value: 'category', label: 'Sort: category' },
+  { value: 'name', label: 'Sort: name' },
+  { value: 'region', label: 'Sort: region' },
+]
+const byName = (a: { name: string }, b: { name: string }) =>
+  a.name.localeCompare(b.name, undefined, { numeric: true })
 
 export function MarkerList() {
   const visible = useVisibleMarkers()
@@ -21,10 +31,10 @@ export function MarkerList() {
     () =>
       [...visible].sort((a, b) =>
         sort === 'name'
-          ? a.name.localeCompare(b.name, undefined, { numeric: true })
+          ? byName(a, b)
           : sort === 'region'
-            ? (a.region ?? '').localeCompare(b.region ?? '') || a.name.localeCompare(b.name, undefined, { numeric: true })
-            : a.category.localeCompare(b.category) || a.name.localeCompare(b.name, undefined, { numeric: true }),
+            ? (a.region ?? '').localeCompare(b.region ?? '') || byName(a, b)
+            : a.category.localeCompare(b.category) || byName(a, b),
       ),
     [visible, sort],
   )
@@ -35,15 +45,22 @@ export function MarkerList() {
       <div className="mb-2 flex items-center gap-2 text-sm">
         <span className="text-muted-foreground">{rows.length} shown</span>
         {region && (
-          <button className="chip" onClick={() => setRegion(null)}>
-            {REGION_BY_ID[region]?.label} ✕
-          </button>
+          <Button variant="secondary" size="xs" onClick={() => setRegion(null)}>
+            {REGION_BY_ID[region]?.label} <X data-icon="inline-end" />
+          </Button>
         )}
-        <select className="field ml-auto w-auto" value={sort} onChange={(e) => setSort(e.target.value as Sort)} aria-label="Sort by">
-          <option value="category">Sort: category</option>
-          <option value="name">Sort: name</option>
-          <option value="region">Sort: region</option>
-        </select>
+        <Select items={SORTS} value={sort} onValueChange={(s) => s && setSort(s as Sort)}>
+          <SelectTrigger className="ml-auto w-auto" aria-label="Sort by">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SORTS.map((s) => (
+              <SelectItem key={s.value} value={s.value}>
+                {s.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div ref={ref} className="min-h-0 flex-1 overflow-auto">
         <div style={{ height: v.getTotalSize(), position: 'relative' }}>
@@ -57,29 +74,36 @@ export function MarkerList() {
                 className={`absolute inset-x-0 flex items-center gap-2 rounded-lg ${m.id === selectedId ? 'bg-card' : ''}`}
                 style={{ height: vi.size, transform: `translateY(${vi.start}px)` }}
               >
-                <button className="flex min-w-0 flex-1 items-center gap-3 px-2 text-left" onClick={() => select(m.id)}>
-                  <span className="grid size-7 shrink-0 place-items-center rounded-full text-xs" style={{ background: cat?.color, color: '#0f172a' }}>
+                <Button
+                  variant="ghost"
+                  className="h-full min-w-0 flex-1 justify-start gap-3 px-2 text-left"
+                  onClick={() => select(m.id)}
+                >
+                  <span
+                    className="grid size-7 shrink-0 place-items-center rounded-full text-xs"
+                    style={{ background: cat?.color, color: '#0f172a' }}
+                    aria-hidden
+                  >
                     {cat?.glyph}
                   </span>
-                  <span className="min-w-0">
-                    <span className={`block truncate text-sm ${done ? 'text-muted-foreground line-through' : ''}`}>{m.name}</span>
-                    <span className="block truncate text-xs text-muted-foreground">
+                  <span className="min-w-0 flex-1">
+                    <span className={`block truncate text-sm ${done ? 'text-muted-foreground line-through' : ''}`}>
+                      {m.name}
+                    </span>
+                    <span className="block truncate text-xs font-normal text-muted-foreground">
                       {cat?.label} · {REGION_BY_ID[m.region ?? '']?.label}
                     </span>
                   </span>
-                </button>
+                </Button>
                 {cat?.checkable && (
-                  <button
-                    role="checkbox"
-                    aria-checked={done}
-                    aria-label={`Complete ${m.name}`}
-                    onClick={() => toggleWithUndo(m.id)}
-                    className={`mr-1 grid size-11 shrink-0 place-items-center ${done ? 'text-emerald-400' : 'text-muted-foreground'}`}
-                  >
-                    <span className={`grid size-6 place-items-center rounded-md border ${done ? 'border-emerald-400 bg-emerald-400/20' : 'border-border'}`}>
-                      {done && <Check size={16} />}
-                    </span>
-                  </button>
+                  <div className="grid size-11 shrink-0 place-items-center">
+                    <Checkbox
+                      className="size-5"
+                      checked={done}
+                      onCheckedChange={() => toggleWithUndo(m.id)}
+                      aria-label={`Complete ${m.name}`}
+                    />
+                  </div>
                 )}
               </div>
             )
