@@ -151,8 +151,10 @@ export function MapView() {
   const focusDone = useProgress((s) => (focusId ? focusId in s.completed : false))
   const hideCompleted = useUi((s) => s.hideCompleted)
   const select = useUi((s) => s.select)
-  // The highlighted marker is drawn outside the normal filter, so it has to honour "Hide completed" itself.
-  const focused = focusId && !(hideCompleted && focusDone) ? MARKER_BY_ID.get(focusId) : undefined
+  // Landmarks are plain labels outside the cluster group, so their highlight is drawn here. Every other marker is
+  // highlighted on its own pin inside the cluster group (see ClusterLayer), so it never appears twice.
+  const focusedMarker = focusId && !(hideCompleted && focusDone) ? MARKER_BY_ID.get(focusId) : undefined
+  const focused = focusedMarker?.category === 'landmark' ? focusedMarker : undefined
 
   return (
     <MapContainer
@@ -201,7 +203,7 @@ export function MapView() {
         {landmarksOn && <AreaLabels />}
       </Pane>
       {focused && (
-        // Drawn outside the cluster group so the revealed marker is never hidden inside a cluster.
+        // A landmark isn't in the cluster group, so its highlight is a separate pin.
         <Marker
           key={focused.id}
           position={toLatLng(focused.x, focused.y)}

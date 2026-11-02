@@ -11,5 +11,7 @@ declare module 'leaflet' {
     constructor(options?: MarkerClusterGroupOptions)
     addLayers(layers: Layer[]): this
     removeLayers(layers: Layer[]): this
+    /** Zooms or spreads out clusters until the layer is showing, then calls back. */
+    zoomToShowLayer(layer: Layer, callback?: () => void): void
   }
 }
