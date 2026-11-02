@@ -13,6 +13,8 @@ export interface Marker {
   region?: string
   description?: string
   wikiUrl?: string
+  /** Clothing only: the armor set an item belongs to ("Other" if none). */
+  set?: string
   /** Landmarks only: lowest map zoom at which the label is shown. */
   minZoom?: number
 }
@@ -32,7 +34,7 @@ export interface AreaLabel {
 export interface Category {
   id: string
   label: string
-  group: 'Travel' | 'Quests' | 'Collectibles' | 'Enemies' | 'Places' | 'Services' | 'Treasure'
+  group: 'Travel' | 'Quests' | 'Collectibles' | 'Clothing' | 'Enemies' | 'Places' | 'Services' | 'Treasure'
   /** short glyph rendered in the map pin */
   glyph: string
   color: string

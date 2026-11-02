@@ -1,3 +1,4 @@
+import { facetKey } from '../data/facets'
 import { MARKERS } from '../data/loadMarkers'
 import { useProgress } from '../store/progress'
 import { useUi } from '../store/ui'
@@ -16,6 +17,12 @@ type Inputs = [
 // runs once per change of inputs instead of once per component.
 let last: { inputs: Inputs; result: Marker[] } | undefined
 
+/** Hidden via the category's sub-group chips (region, or set for clothing). */
+function hiddenIn(hidden: Record<string, string[]>, m: Marker) {
+  const key = facetKey(m)
+  return !!key && !!hidden[m.category]?.includes(key)
+}
+
 function filterVisible(inputs: Inputs): Marker[] {
   if (last && last.inputs.every((v, i) => v === inputs[i])) return last.result
   const [enabled, masterMode, hiddenRegions, hideCompleted, region, completed] = inputs
@@ -23,7 +30,7 @@ function filterVisible(inputs: Inputs): Marker[] {
     (m) =>
       enabled[m.category] &&
       (masterMode || !m.tags?.includes('Master Mode')) &&
-      !(m.region && hiddenRegions[m.category]?.includes(m.region)) &&
+      !hiddenIn(hiddenRegions, m) &&
       (!region || m.region === region) &&
       !(hideCompleted && m.id in completed),
   )

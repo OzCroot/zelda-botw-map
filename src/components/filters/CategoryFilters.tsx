@@ -1,7 +1,8 @@
-import { ChevronDown, EyeOff, MapPin, Swords } from 'lucide-react'
+import { ChevronDown, EyeOff, MapPin, Shirt, Swords } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CATEGORIES, CATEGORY_GROUPS } from '@/data/categories'
+import { FACET_BY_SET, SET_ORDER, facetKey } from '@/data/facets'
 import { MARKERS, REGIONS } from '@/data/loadMarkers'
 import { once } from '@/lib/once'
 import { cn } from '@/lib/utils'
@@ -11,16 +12,17 @@ import { CategoryIcon } from '../map/CategoryIcon'
 const isMaster = (m: { tags?: string[] }) => !!m.tags?.includes('Master Mode')
 const masterCount = once(() => MARKERS.filter(isMaster).length)
 
-// Counts per category, and per category+region, with and without Master Mode items.
+// Counts per category, and per category+sub-group (region, or set for clothing), with and without Master Mode items.
 function tally(master: boolean) {
   const totals: Record<string, number> = {}
   const byRegion: Record<string, Record<string, number>> = {}
   for (const m of MARKERS) {
     if (!master && isMaster(m)) continue
     totals[m.category] = (totals[m.category] ?? 0) + 1
-    if (m.region) {
+    const key = facetKey(m)
+    if (key) {
       const r = (byRegion[m.category] ??= {})
-      r[m.region] = (r[m.region] ?? 0) + 1
+      r[key] = (r[key] ?? 0) + 1
     }
   }
   return { totals, byRegion }
@@ -215,7 +217,11 @@ export function CategoryFilters() {
               <ul className="grid grid-cols-[repeat(auto-fill,minmax(10.5rem,1fr))] gap-2">
                 {items.map((c) => {
                   const regs = byRegion[c.id] ?? {}
-                  const regIds = REGIONS.filter((r) => regs[r.id]).map((r) => r.id)
+                  // Sub-groups: the sets for clothing (people hunt it a set at a time), the regions otherwise.
+                  const bySet = FACET_BY_SET.has(c.id)
+                  const regIds = bySet ? SET_ORDER.filter((s) => regs[s]) : REGIONS.filter((r) => regs[r.id]).map((r) => r.id)
+                  const noun = bySet ? 'sets' : 'areas'
+                  const FacetIcon = bySet ? Shirt : MapPin
                   const canSplit = regIds.length > 1
                   const hidden = hiddenRegions[c.id] ?? []
                   const on = enabled[c.id]
@@ -245,7 +251,7 @@ export function CategoryFilters() {
                               <CountChip>{totals[c.id] ?? 0}</CountChip>
                               {hidden.length > 0 && (
                                 <CountChip tone="primary">
-                                  {regIds.length - hidden.length}/{regIds.length} areas
+                                  {regIds.length - hidden.length}/{regIds.length} {noun}
                                 </CountChip>
                               )}
                             </span>
@@ -254,7 +260,7 @@ export function CategoryFilters() {
                         {canSplit ? (
                           <Popover>
                             <PopoverTrigger
-                              aria-label={`${c.label} by area`}
+                              aria-label={`${c.label} by ${bySet ? 'set' : 'area'}`}
                               className={cn(
                                 'mr-1 grid size-8 shrink-0 place-items-center rounded-lg text-muted-foreground outline-none hover:bg-accent/60 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 data-popup-open:bg-accent/60 data-popup-open:text-foreground',
                                 hidden.length > 0 && 'text-primary',
@@ -265,7 +271,7 @@ export function CategoryFilters() {
                             <PopoverContent>
                               <div className="mb-2 flex items-center justify-between gap-2">
                                 <span className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                                  <MapPin className="size-3.5" /> {c.label}
+                                  <FacetIcon className="size-3.5" /> {c.label}
                                 </span>
                                 <button
                                   type="button"
@@ -275,7 +281,7 @@ export function CategoryFilters() {
                                     setCatRegions(c.id, hidden.length ? [] : regIds)
                                   }}
                                 >
-                                  {hidden.length ? 'All areas' : 'None'}
+                                  {hidden.length ? `All ${noun}` : 'None'}
                                 </button>
                               </div>
                               <div className="flex flex-wrap gap-1.5">
@@ -288,7 +294,7 @@ export function CategoryFilters() {
                                       toggleCatRegion(c.id, rid)
                                     }}
                                   >
-                                    {REGIONS.find((r) => r.id === rid)?.label}{' '}
+                                    {bySet ? rid : REGIONS.find((r) => r.id === rid)?.label}{' '}
                                     <span className="opacity-60 tabular-nums">{regs[rid]}</span>
                                   </Chip>
                                 ))}
