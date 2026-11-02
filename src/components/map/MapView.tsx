@@ -149,8 +149,10 @@ export function MapView() {
   const pins = useMemo(() => visible.filter((m) => m.category !== 'landmark'), [visible])
   const focusId = useUi((s) => s.focusId)
   const focusDone = useProgress((s) => (focusId ? focusId in s.completed : false))
+  const hideCompleted = useUi((s) => s.hideCompleted)
   const select = useUi((s) => s.select)
-  const focused = focusId ? MARKER_BY_ID.get(focusId) : undefined
+  // The highlighted marker is drawn outside the normal filter, so it has to honour "Hide completed" itself.
+  const focused = focusId && !(hideCompleted && focusDone) ? MARKER_BY_ID.get(focusId) : undefined
 
   return (
     <MapContainer
