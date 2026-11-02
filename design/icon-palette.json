@@ -1,0 +1,188 @@
+{
+  "_about": "Colour families lifted from the brand-toolkit icons plus the colours already used in public/icons. 'tones' are every tint/shade seen for that family; 'base' is the main fill; 'glow' / 'glowDeep' are the outer and inner layers of the toolkit's two-layer glow. Re-apply with: npm run recolor-icon -- <in.svg> <family> [--glow] [-o out.svg]",
+  "baseline": {
+    "_about": "The map-marker baseline: the community UI icon kit's 'stamp' colouring. New and re-coloured marker icons should start from these two colours.",
+    "fill": "#F6F65E",
+    "outline": "#000000",
+    "icons": "public/icons/stamps/"
+  },
+  "toolkit": {
+    "cyan": {
+      "base": "#1CFFFF",
+      "tones": [
+        "#BAEFFB",
+        "#ADEFFF",
+        "#9FE8F8",
+        "#96EBF0",
+        "#1CFFFF",
+        "#3CD3FC",
+        "#2E8697"
+      ],
+      "glow": "#4FC0FF",
+      "glowDeep": "#0A8DD7"
+    },
+    "blue": {
+      "base": "#3B90F7",
+      "tones": [
+        "#65B8E2",
+        "#3B90F7",
+        "#0090FF",
+        "#0F4A81",
+        "#02111E"
+      ],
+      "glow": "#4FC0FF",
+      "glowDeep": "#0A8DD7"
+    },
+    "gold": {
+      "base": "#FCC413",
+      "tones": [
+        "#FFF381",
+        "#FFE465",
+        "#FCC413"
+      ],
+      "glow": "#FFB800",
+      "glowDeep": "#FFDB7E"
+    },
+    "lime": {
+      "base": "#BFEA00",
+      "tones": [
+        "#EFF110",
+        "#BFEA00",
+        "#88D201"
+      ],
+      "glow": "#BFEA00",
+      "glowDeep": "#88D201"
+    },
+    "green": {
+      "base": "#13FF59",
+      "tones": [
+        "#6FD49C",
+        "#13FF59"
+      ],
+      "glow": "#13FF59",
+      "glowDeep": "#6FD49C"
+    },
+    "orange": {
+      "base": "#FF9600",
+      "tones": [
+        "#FF9600"
+      ],
+      "glow": "#FF9600",
+      "glowDeep": "#B35A00"
+    },
+    "red": {
+      "base": "#F83E3C",
+      "tones": [
+        "#F83E3C"
+      ],
+      "glow": "#F83E3C",
+      "glowDeep": "#A01514"
+    },
+    "purple": {
+      "base": "#D60EF9",
+      "tones": [
+        "#D60EF9"
+      ],
+      "glow": "#D60EF9",
+      "glowDeep": "#7A0690"
+    },
+    "cream": {
+      "base": "#E2DED3",
+      "tones": [
+        "#E2DED3"
+      ],
+      "glow": null,
+      "glowDeep": null
+    },
+    "white": {
+      "base": "#FFFFFF",
+      "tones": [
+        "#FFFFFF"
+      ],
+      "glow": null,
+      "glowDeep": null
+    },
+    "black": {
+      "base": "#000000",
+      "tones": [
+        "#363930",
+        "#000000"
+      ],
+      "glow": null,
+      "glowDeep": null
+    }
+  },
+  "project": {
+    "marker-yellow": {
+      "base": "#F2F35B",
+      "tones": [
+        "#F3F35B",
+        "#EBEC57",
+        "#C8CA4C"
+      ],
+      "outline": "#141B18"
+    },
+    "marker-gold": {
+      "base": "#F4DE02",
+      "tones": [
+        "#FDE803",
+        "#F4DE02",
+        "#DCBA06",
+        "#A37D03"
+      ],
+      "outline": null
+    },
+    "marker-tan": {
+      "base": "#C8B46B",
+      "tones": [
+        "#C7B46A",
+        "#AD8A45"
+      ],
+      "outline": null
+    },
+    "marker-cream": {
+      "base": "#F8FADF",
+      "tones": [
+        "#F8FADF"
+      ],
+      "outline": "#67695A"
+    },
+    "marker-shrine": {
+      "base": "#3DB2E5",
+      "tones": [
+        "#3DB2E5"
+      ],
+      "outline": "#003781"
+    },
+    "marker-stamp": {
+      "base": "#F6F65E",
+      "tones": [
+        "#F6F65E"
+      ],
+      "outline": "#000000"
+    },
+    "marker-quest": {
+      "base": "#FFE100",
+      "tones": [
+        "#FFE100"
+      ],
+      "outline": null
+    },
+    "marker-korok": {
+      "base": "#C8B56D",
+      "tones": [
+        "#C8B56D"
+      ],
+      "outline": "#000000"
+    },
+    "travel-blue": {
+      "base": "#ADEFFF",
+      "tones": [
+        "#ADEFFF"
+      ],
+      "glow": "#4FC0FF",
+      "glowDeep": "#0A8DD7",
+      "outline": null
+    }
+  }
+}
