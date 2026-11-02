@@ -103,15 +103,6 @@
   }
 }
 
-@layer components {
-  .btn { @apply inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm transition active:scale-95; }
-  .btn-primary { @apply border-transparent bg-primary font-medium text-primary-foreground; }
-  .btn-done { @apply border-emerald-500/50 bg-emerald-500/15 text-emerald-500; }
-  .icon-btn { @apply grid size-11 shrink-0 place-items-center rounded-lg text-muted-foreground hover:text-foreground; }
-  .chip { @apply inline-flex min-h-9 items-center rounded-full border border-border bg-card px-3 text-xs; }
-  .field { @apply min-h-11 w-full rounded-lg border border-border bg-card px-3 text-base text-foreground outline-none focus:border-primary; }
-}
-
 /* Map */
 .leaflet-container { font: inherit; background: var(--map-bg); }
 .map-grid {

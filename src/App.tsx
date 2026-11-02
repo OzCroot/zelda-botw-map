@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Toaster } from 'sonner'
+import { Toaster } from '@/components/ui/sonner'
 import { MarkerDialog } from './components/detail/MarkerDialog'
 import { MapView } from './components/map/MapView'
 import { BottomSheet } from './components/panels/BottomSheet'
@@ -44,7 +44,7 @@ export default function App() {
       </main>
       {!desktop && <BottomSheet />}
       <MarkerDialog />
-      <Toaster position={desktop ? 'bottom-right' : 'top-center'} theme={theme} />
+      <Toaster position={desktop ? 'bottom-right' : 'top-center'} />
     </div>
   )
 }

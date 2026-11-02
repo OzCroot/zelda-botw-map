@@ -1,33 +1,21 @@
 import { useState } from 'react'
-import { Drawer } from 'vaul'
+import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer'
 import { PanelContent } from './PanelContent'
 
-const SNAPS = ['120px', 0.55, 0.94]
+// Peek (search + tabs), half, near-full.
+const SNAPS: (string | number)[] = ['160px', 0.55, 0.94]
 
+/** Mobile bottom sheet: non-modal so the map stays interactive behind it. */
 export function BottomSheet() {
   const [snap, setSnap] = useState<string | number | null>(SNAPS[0]!)
   return (
-    <Drawer.Root
-      open
-      modal={false}
-      dismissible={false}
-      snapPoints={SNAPS}
-      activeSnapPoint={snap}
-      setActiveSnapPoint={setSnap}
-    >
-      <Drawer.Portal>
-        <Drawer.Content
-          aria-describedby={undefined}
-          className="fixed inset-x-0 bottom-0 z-[1100] flex h-full max-h-[96%] flex-col rounded-t-2xl border-t border-border bg-background px-4 pt-2 shadow-2xl outline-none"
-          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
-        >
-          <Drawer.Title className="sr-only">Map controls</Drawer.Title>
-          <div className="mx-auto mb-3 h-1.5 w-12 shrink-0 rounded-full bg-border" />
-          <div className="min-h-0 flex-1">
-            <PanelContent />
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+    <Drawer open modal={false} snapPoints={SNAPS} snapPoint={snap} onSnapPointChange={setSnap} showSwipeHandle>
+      <DrawerContent className="border-border bg-background" aria-describedby={undefined}>
+        <DrawerTitle className="sr-only">Map controls</DrawerTitle>
+        <div className="min-h-0 flex-1 px-4 pt-1 pb-[env(safe-area-inset-bottom)]">
+          <PanelContent />
+        </div>
+      </DrawerContent>
+    </Drawer>
   )
 }

@@ -1,14 +1,32 @@
-import { CATEGORIES, CATEGORY_GROUPS } from '../../data/categories'
-import { MARKERS, REGIONS } from '../../data/loadMarkers'
-import { PRESETS, useUi } from '../../store/ui'
-import { useProgress } from '../../store/progress'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { CATEGORIES, CATEGORY_GROUPS } from '@/data/categories'
+import { MARKERS, REGIONS } from '@/data/loadMarkers'
+import { useProgress } from '@/store/progress'
+import { PRESETS, useUi } from '@/store/ui'
 
 const totals: Record<string, number> = {}
 for (const m of MARKERS) totals[m.category] = (totals[m.category] ?? 0) + 1
 
+const REGION_ITEMS = [
+  { value: 'all', label: 'All of Hyrule' },
+  ...REGIONS.map((r) => ({ value: r.id, label: r.label })),
+]
+
 export function CategoryFilters() {
-  const { enabled, toggleCategory, soloCategory, setAll, applyPreset, hideCompleted, setHideCompleted, region, setRegion } =
-    useUi()
+  const {
+    enabled,
+    toggleCategory,
+    soloCategory,
+    setAll,
+    applyPreset,
+    hideCompleted,
+    setHideCompleted,
+    region,
+    setRegion,
+  } = useUi()
   const completed = useProgress((s) => s.completed)
   const done: Record<string, number> = {}
   for (const m of MARKERS) if (m.id in completed) done[m.category] = (done[m.category] ?? 0) + 1
@@ -17,67 +35,77 @@ export function CategoryFilters() {
     <div className="space-y-5">
       <div className="flex flex-wrap gap-2">
         {PRESETS.map((p) => (
-          <button key={p.label} className="chip" onClick={() => applyPreset(p.ids)}>
+          <Button key={p.label} variant="outline" size="sm" className="rounded-full" onClick={() => applyPreset(p.ids)}>
             {p.label}
-          </button>
+          </Button>
         ))}
-        <button className="chip" onClick={() => setAll(false)}>
+        <Button variant="outline" size="sm" className="rounded-full" onClick={() => setAll(false)}>
           Clear
-        </button>
+        </Button>
       </div>
 
-      <label className="flex min-h-11 items-center gap-3 text-sm">
-        <input
-          type="checkbox"
-          className="size-5 accent-primary"
+      <Label htmlFor="hide-completed" className="min-h-11 gap-3 text-sm md:min-h-8">
+        <Checkbox
+          id="hide-completed"
           checked={hideCompleted}
-          onChange={(e) => setHideCompleted(e.target.checked)}
+          onCheckedChange={(c) => setHideCompleted(c === true)}
         />
         Hide completed
-      </label>
+      </Label>
 
-      <label className="block text-sm">
-        <span className="mb-1 block text-muted-foreground">Region</span>
-        <select
-          className="field"
-          value={region ?? ''}
-          onChange={(e) => setRegion(e.target.value || null)}
+      <div className="space-y-1.5 text-sm">
+        <Label>Region</Label>
+        <Select
+          items={REGION_ITEMS}
+          value={region ?? 'all'}
+          onValueChange={(v) => setRegion(!v || v === 'all' ? null : v)}
         >
-          <option value="">All of Hyrule</option>
-          {REGIONS.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.label}
-            </option>
-          ))}
-        </select>
-      </label>
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {REGION_ITEMS.map((r) => (
+              <SelectItem key={r.value} value={r.value}>
+                {r.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       {CATEGORY_GROUPS.map((g) => (
         <section key={g}>
           <h3 className="mb-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">{g}</h3>
           <ul>
             {CATEGORIES.filter((c) => c.group === g).map((c) => (
-              <li key={c.id} className="flex items-center">
-                <button
+              <li key={c.id} className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
                   aria-pressed={enabled[c.id]}
                   onClick={() => toggleCategory(c.id)}
-                  className={`flex min-h-11 flex-1 items-center gap-3 rounded-lg px-2 text-left text-sm transition ${enabled[c.id] ? '' : 'opacity-40'}`}
+                  className={`h-11 flex-1 justify-start gap-3 px-2 ${enabled[c.id] ? '' : 'opacity-40'}`}
                 >
-                  <span className="grid size-7 place-items-center rounded-full text-sm" style={{ background: c.color, color: '#0f172a' }}>
+                  <span
+                    className="grid size-7 place-items-center rounded-full text-sm"
+                    style={{ background: c.color, color: '#0f172a' }}
+                    aria-hidden
+                  >
                     {c.glyph}
                   </span>
-                  <span className="flex-1">{c.label}</span>
+                  <span className="flex-1 text-left">{c.label}</span>
                   <span className="text-xs text-muted-foreground tabular-nums">
                     {c.checkable ? `${done[c.id] ?? 0}/${totals[c.id] ?? 0}` : (totals[c.id] ?? 0)}
                   </span>
-                </button>
-                <button
-                  className="min-h-11 px-3 text-xs text-muted-foreground hover:text-foreground"
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  className="text-muted-foreground"
                   onClick={() => soloCategory(c.id)}
                   aria-label={`Show only ${c.label}`}
                 >
                   only
-                </button>
+                </Button>
               </li>
             ))}
           </ul>

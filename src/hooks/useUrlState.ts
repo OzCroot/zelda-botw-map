@@ -1,15 +1,25 @@
 import { useEffect } from 'react'
 import { MARKER_BY_ID } from '../data/loadMarkers'
-import { useUi } from '../store/ui'
+import { useUi, type Tab } from '../store/ui'
 
-/** Deep links: ?m=<markerId> selects a marker; selection is mirrored back to the URL. */
+const TABS = ['filters', 'list', 'stats', 'data']
+
+/**
+ * Deep links: ?m=<markerId> selects a marker (mirrored back to the URL while selected);
+ * ?tab=filters|list|stats|data opens a panel tab; ?q=<text> pre-fills the search box.
+ */
 export function useUrlState() {
   const selectedId = useUi((s) => s.selectedId)
   const select = useUi((s) => s.select)
 
   useEffect(() => {
-    const id = new URLSearchParams(location.search).get('m')
+    const params = new URLSearchParams(location.search)
+    const id = params.get('m')
     if (id && MARKER_BY_ID.has(id)) select(id)
+    const tab = params.get('tab')
+    if (tab && TABS.includes(tab)) useUi.getState().setTab(tab as Tab)
+    const q = params.get('q')
+    if (q) useUi.getState().setQuery(q)
   }, [select])
 
   useEffect(() => {
