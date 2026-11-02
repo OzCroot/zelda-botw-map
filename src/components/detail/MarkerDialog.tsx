@@ -55,7 +55,7 @@ export function MarkerDialog() {
           <>
             <DialogHeader>
               <div className="flex items-center gap-3 pr-8">
-                <CategoryIcon id={m.category} className="size-10" />
+                <CategoryIcon id={m.category} markerId={m.id} className="size-10" />
                 <div className="min-w-0">
                   <DialogTitle className="truncate text-base">{m.name}</DialogTitle>
                   <DialogDescription>

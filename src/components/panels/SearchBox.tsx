@@ -150,7 +150,7 @@ export function SearchBox() {
                 ].filter(Boolean)
                 return (
                   <Command.Item key={m.id} value={m.id} onSelect={() => pick(m)} className={item}>
-                    <CategoryIcon id={m.category} className="size-7" />
+                    <CategoryIcon id={m.category} markerId={m.id} className="size-7" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate">{m.name}</span>
                       <span className="block truncate text-xs text-muted-foreground">
