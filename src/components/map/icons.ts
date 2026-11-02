@@ -3,6 +3,10 @@ import { CATEGORY_BY_ID, MARKER_ICON_OVERRIDES, iconScale } from '../../data/cat
 
 const cache = new Map<string, L.DivIcon>()
 
+// Pin images fill a square box and are fitted inside it, so a landscape icon comes out shorter than it used to.
+// Scale those back up by their aspect ratio to keep their size.
+const LANDSCAPE: Record<string, number> = { 'travel/tech-lab': 74 / 62, 'stamps/guardian': 32 / 28 }
+
 // Icons are .svg unless that file is missing, in which case there is a .png. Remember what each one turned out
 // to be so a missing .svg is requested once, not once per pin.
 const pngOnly = new Set<string>()
@@ -39,7 +43,7 @@ export function markerIcon(
     const c = CATEGORY_BY_ID[category]
     const name = override ?? c?.icon
     const img = name
-      ? `<img src="${iconSrc(name)}" data-icon="${name}" alt="" style="transform:scale(${iconScale(name)})">`
+      ? `<img src="${iconSrc(name)}" data-icon="${name}" alt="" style="transform:scale(${iconScale(name) * (LANDSCAPE[name] ?? 1)})">`
       : ''
     icon = L.divIcon({
       className: 'bg-transparent',
