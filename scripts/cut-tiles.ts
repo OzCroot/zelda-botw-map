@@ -1,7 +1,12 @@
 /**
  * Cuts a full-size map export into a slippy-style tile pyramid.
  *
- *   npm run cut-tiles -- ~/Downloads/botw/botw_map.png [outDir=public/tiles]
+ *   npm run cut-tiles -- ~/Downloads/botw/botw_map.png [outDir=public/tiles] [--lossless-all | --lossy[=82]]
+ *
+ * Encoding (default hybrid): zoom 5 is lossless WebP — exact copies of the source pixels, and smaller
+ * than PNG or near-lossless on this flat-colour map. Zoom 0-4 are resampled from the source anyway, so
+ * they use high-quality lossy WebP (q92) instead of paying ~4x the size for "exact" copies of a resample.
+ * `--lossless-all` makes every level lossless (~140 MB); `--lossy[=q]` makes every level lossy (~half size).
  *
  * Layout: 750px tiles, max zoom 5 where 1 map unit = 1 source pixel, tiles named {z}/{x}_{y}.webp.
  * Only the real image area is tiled (no padding to a square); partial edge tiles are padded with
@@ -11,7 +16,9 @@ import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import sharp from 'sharp'
 
-const [src, outDir = join('public', 'tiles')] = process.argv.slice(2)
+const args = process.argv.slice(2)
+const lossyArg = args.find((a) => a.startsWith('--lossy'))
+const [src, outDir = join('public', 'tiles')] = args.filter((a) => !a.startsWith('--'))
 if (!src) {
   console.error('Usage: npm run cut-tiles -- map.png [outDir]')
   process.exit(1)
@@ -19,7 +26,12 @@ if (!src) {
 
 const TILE = 750
 const MAX_ZOOM = 5
-const QUALITY = 82
+const losslessAll = args.includes('--lossless-all')
+const LOSSY_QUALITY = lossyArg?.includes('=') ? Number(lossyArg.split('=')[1]) : lossyArg ? 82 : 92
+const encode = (img: sharp.Sharp, z: number) =>
+  losslessAll || (!lossyArg && z === MAX_ZOOM)
+    ? img.webp({ lossless: true, effort: 6 })
+    : img.webp({ quality: LOSSY_QUALITY })
 
 const base = await sharp(src, { limitInputPixels: false }).removeAlpha().raw().toBuffer({ resolveWithObject: true })
 const { width: W, height: H, channels } = base.info
@@ -55,7 +67,7 @@ for (let z = MAX_ZOOM; z >= 0; z--) {
             .ensureAlpha()
             .extend({ right: TILE - width, bottom: TILE - height, background: { r: 0, g: 0, b: 0, alpha: 0 } })
         }
-        return img.webp({ quality: QUALITY }).toFile(join(outDir, String(z), `${x}_${y}.webp`))
+        return encode(img, z).toFile(join(outDir, String(z), `${x}_${y}.webp`))
       })
     }
   }
