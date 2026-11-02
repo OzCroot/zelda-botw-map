@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { CATEGORY_BY_ID } from '@/data/categories'
 import { REGION_BY_ID } from '@/data/loadMarkers'
+import { CategoryIcon } from '../map/CategoryIcon'
 import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
 import { useVisibleMarkers } from '@/hooks/useVisibleMarkers'
 import { useProgress } from '@/store/progress'
@@ -80,13 +81,7 @@ export function MarkerList() {
                   className="h-full min-w-0 flex-1 justify-start gap-3 px-2 text-left"
                   onClick={() => select(m.id)}
                 >
-                  <span
-                    className="grid size-7 shrink-0 place-items-center rounded-full text-xs"
-                    style={{ background: cat?.color, color: '#0f172a' }}
-                    aria-hidden
-                  >
-                    {cat?.glyph}
-                  </span>
+                  <CategoryIcon id={m.category} className="size-7" />
                   <span className="min-w-0 flex-1">
                     <span className={`block truncate text-sm ${done ? 'text-muted-foreground line-through' : ''}`}>
                       {m.name}

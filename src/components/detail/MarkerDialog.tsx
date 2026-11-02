@@ -1,4 +1,5 @@
 import { Check, ExternalLink, Link2 } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -10,12 +11,30 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/textarea'
 import { CATEGORY_BY_ID } from '@/data/categories'
+import { CategoryIcon } from '../map/CategoryIcon'
 import { MARKER_BY_ID, REGION_BY_ID } from '@/data/loadMarkers'
+import { SEED_HINTS } from '@/data/seedHints'
 import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
 import { useProgress } from '@/store/progress'
 import { useUi } from '@/store/ui'
+
+/** Local-only screenshot: public/images/korok/webp/<seed number>.webp. Hidden if the file isn't there. */
+function SeedImage({ markerId, alt }: { markerId: string; alt: string }) {
+  const num = /Seed(\d+)$/.exec(markerId)?.[1]
+  const [failed, setFailed] = useState<string | null>(null)
+  if (!num || failed === num) return null
+  return (
+    <img
+      key={num}
+      src={`/images/korok/webp/${num}.webp`}
+      alt={alt}
+      loading="lazy"
+      onError={() => setFailed(num)}
+      className="aspect-video w-full rounded-lg border border-border bg-muted object-cover"
+    />
+  )
+}
 
 /** Opens whenever a marker is selected (map pin, list row, search result or ?m= deep link). */
 export function MarkerDialog() {
@@ -23,11 +42,10 @@ export function MarkerDialog() {
   const select = useUi((s) => s.select)
   const done = useProgress((s) => (id ? id in s.completed : false))
   const completedAt = useProgress((s) => (id ? s.completed[id] : undefined))
-  const note = useProgress((s) => (id ? (s.notes[id] ?? '') : ''))
-  const setNote = useProgress((s) => s.setNote)
 
   const m = id ? MARKER_BY_ID.get(id) : undefined
   const cat = m ? CATEGORY_BY_ID[m.category] : undefined
+  const hint = m ? SEED_HINTS[m.id] : undefined
   const region = m?.region ? (REGION_BY_ID[m.region]?.label ?? m.region) : undefined
 
   return (
@@ -37,13 +55,7 @@ export function MarkerDialog() {
           <>
             <DialogHeader>
               <div className="flex items-center gap-3 pr-8">
-                <span
-                  className="grid size-10 shrink-0 place-items-center rounded-full text-lg"
-                  style={{ background: cat?.color, color: '#0f172a' }}
-                  aria-hidden
-                >
-                  {cat?.glyph}
-                </span>
+                <CategoryIcon id={m.category} className="size-10" />
                 <div className="min-w-0">
                   <DialogTitle className="truncate text-base">{m.name}</DialogTitle>
                   <DialogDescription>
@@ -63,7 +75,31 @@ export function MarkerDialog() {
               )}
             </DialogHeader>
 
-            {m.description && <p className="text-sm text-muted-foreground">{m.description}</p>}
+            {m.category === 'korok-seed' && <SeedImage markerId={m.id} alt={`Where to find ${m.name}`} />}
+
+            {hint ? (
+              <dl className="space-y-2.5 text-sm">
+                {(hint.location || m.description) && (
+                  <div>
+                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Where</dt>
+                    <dd>
+                      {hint.location ?? m.description}
+                      {hint.location && m.description && (
+                        <span className="text-muted-foreground"> · near {m.description}</span>
+                      )}
+                    </dd>
+                  </div>
+                )}
+                {hint.puzzle && (
+                  <div>
+                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Puzzle</dt>
+                    <dd>{hint.puzzle}</dd>
+                  </div>
+                )}
+              </dl>
+            ) : (
+              m.description && <p className="text-sm text-muted-foreground">{m.description}</p>
+            )}
 
             {cat?.checkable && (
               <Button
@@ -81,13 +117,6 @@ export function MarkerDialog() {
                 Completed {new Date(completedAt).toLocaleDateString()}
               </p>
             )}
-
-            <Textarea
-              aria-label="Notes"
-              placeholder="Add a note…"
-              value={note}
-              onChange={(e) => setNote(m.id, e.target.value)}
-            />
 
             <DialogFooter className="sm:justify-start">
               <Button

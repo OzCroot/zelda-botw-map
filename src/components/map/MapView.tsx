@@ -1,6 +1,6 @@
 import L from 'leaflet'
 import { useEffect } from 'react'
-import { MapContainer, Marker, TileLayer, Tooltip, useMap, useMapEvents } from 'react-leaflet'
+import { MapContainer, Marker, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import { MAP_H, MAP_W, MAX_NATIVE_ZOOM, TILE_SIZE } from '../../data/regions'
 import { MARKER_BY_ID, MARKERS } from '../../data/loadMarkers'
@@ -41,7 +41,12 @@ function Controller() {
   }, [map])
 
   // Clicking empty map clears the highlight.
-  useMapEvents({ click: () => useUi.getState().clearFocus() })
+  useMapEvents({
+    click: () => {
+      useUi.getState().clearFocus()
+      if (matchMedia('(max-width: 639px)').matches) useUi.getState().setMenuOpen(false)
+    },
+  })
 
   // Search results / deep links ask the map to show a marker at a zoom where it stands alone.
   useEffect(() => {
@@ -99,6 +104,7 @@ export function MapView() {
       className="map-grid h-full w-full"
     >
       <Controller />
+      <ZoomControl position="bottomright" />
       <TileLayer
         url="/tiles/{z}/{x}_{y}.webp"
         tileSize={TILE_SIZE}
@@ -114,12 +120,7 @@ export function MapView() {
           <Marker
             key={m.id}
             position={toLatLng(m.x, m.y)}
-            icon={markerIcon(
-              m.category,
-              m.id in completed,
-              m.id === focusId,
-              m.tags?.includes('DLC') ? 'shrine_dlc' : undefined,
-            )}
+            icon={markerIcon(m.category, m.id in completed, m.id === focusId)}
             title={m.name}
             eventHandlers={{ click: () => select(m.id) }}
           />
@@ -130,12 +131,7 @@ export function MapView() {
         <Marker
           key={focused.id}
           position={toLatLng(focused.x, focused.y)}
-          icon={markerIcon(
-            focused.category,
-            focused.id in completed,
-            true,
-            focused.tags?.includes('DLC') ? 'shrine_dlc' : undefined,
-          )}
+          icon={markerIcon(focused.category, focused.id in completed, true)}
           zIndexOffset={2000}
           eventHandlers={{ click: () => select(focused.id) }}
         >

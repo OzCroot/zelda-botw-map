@@ -13,7 +13,8 @@
     "import-data": "tsx scripts/import-data.ts",
     "format": "prettier --write .",
     "extract-har": "tsx scripts/extract-har.ts",
-    "cut-tiles": "tsx scripts/cut-tiles.ts"
+    "cut-tiles": "tsx scripts/cut-tiles.ts",
+    "merge-seed-hints": "tsx scripts/merge-seed-hints.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

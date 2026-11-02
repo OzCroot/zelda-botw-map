@@ -104,6 +104,11 @@
 }
 
 /* Map */
+.leaflet-bottom.leaflet-right { margin: 0 .75rem .75rem 0; }
+.leaflet-control-zoom { border: 1px solid color-mix(in oklab, var(--border) 70%, transparent) !important; border-radius: .75rem; overflow: hidden; box-shadow: 0 8px 24px rgb(0 0 0 / .25) !important; backdrop-filter: blur(8px); }
+.leaflet-control-zoom a { background: color-mix(in oklab, var(--background) 85%, transparent) !important; color: var(--foreground) !important; border-color: var(--border) !important; width: 40px !important; height: 40px !important; line-height: 40px !important; }
+.leaflet-control-zoom a:hover { background: var(--accent) !important; }
+
 .leaflet-container { font: inherit; background: var(--map-bg); }
 .map-grid {
   background-image: linear-gradient(var(--map-grid) 1px, transparent 1px), linear-gradient(90deg, var(--map-grid) 1px, transparent 1px);
@@ -111,9 +116,9 @@
 }
 
 .pin { position: relative; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9999px; background: var(--c); color: #0f172a; font-size: 16px; border: 2px solid #0f172a; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
-.pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
+.pin img { position: absolute; inset: -2px; width: calc(100% + 4px); height: calc(100% + 4px); object-fit: contain; }
 .pin:has(img) { background: transparent; border-color: transparent; box-shadow: none; font-size: 0; }
-.pin-done { opacity: .55; filter: grayscale(.6); }
+.pin-done { opacity: .45; }
 .pin-selected { outline: 3px solid #fff; transform: scale(1.2); }
 .pin-selected::after { content: ''; position: absolute; inset: -6px; border-radius: 9999px; border: 2px solid #fff; animation: pin-ping 1.4s ease-out infinite; pointer-events: none; }
 @keyframes pin-ping { from { transform: scale(0.8); opacity: 1; } to { transform: scale(1.7); opacity: 0; } }
