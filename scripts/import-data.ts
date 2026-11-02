@@ -1,5 +1,5 @@
 /**
- * Normalizes the source site marker JSON into src/data/generated/markers.json.
+ * Normalizes third-party marker JSON into src/data/generated/markers.json.
  *
  *   npm run import-data      # reads data/raw/source/{locations,pins,seeds,treasures,wiki}.json
  *
@@ -27,7 +27,7 @@ interface RawCategory { name: string; layers: RawLayer[] }
 const read = (f: string): RawCategory[] => JSON.parse(readFileSync(join(rawDir, `${f}.json`), 'utf8'))
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
-/** source category name -> our category id (default: slug of the name). */
+/** Source category name -> our category id (default: slug of the name). */
 const ALIAS: Record<string, string> = {
   Seeds: 'korok-seed',
   'Sheikah Tower': 'sheikah-tower',
@@ -93,7 +93,7 @@ function main() {
   ingest(read('treasures'))
   ingest(read('wiki'))
 
-  const ds = datasetSchema.parse({ version: new Date().toISOString().slice(0, 10), source: 'source', regions, markers })
+  const ds = datasetSchema.parse({ version: new Date().toISOString().slice(0, 10), source: 'imported', regions, markers })
   mkdirSync(outDir, { recursive: true })
   writeFileSync(join(outDir, 'markers.json'), JSON.stringify(ds))
 
