@@ -115,5 +115,10 @@
 .pin:has(img) { background: transparent; border-color: transparent; box-shadow: none; font-size: 0; }
 .pin-done { opacity: .55; filter: grayscale(.6); }
 .pin-selected { outline: 3px solid #fff; transform: scale(1.2); }
+.pin-selected::after { content: ''; position: absolute; inset: -6px; border-radius: 9999px; border: 2px solid #fff; animation: pin-ping 1.4s ease-out infinite; pointer-events: none; }
+@keyframes pin-ping { from { transform: scale(0.8); opacity: 1; } to { transform: scale(1.7); opacity: 0; } }
+
+.leaflet-tooltip { background: var(--popover); color: var(--popover-foreground); border: 1px solid var(--border); border-radius: 0.5rem; font-size: 0.8rem; font-weight: 500; box-shadow: 0 4px 12px rgb(0 0 0 / .35); }
+.leaflet-tooltip-top::before { border-top-color: var(--border); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

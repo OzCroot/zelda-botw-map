@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer'
+import { useUi } from '@/store/ui'
 import { PanelContent } from './PanelContent'
 
 // Peek (search + tabs), half, near-full.
@@ -8,6 +9,11 @@ const SNAPS: (string | number)[] = ['160px', 0.55, 0.94]
 /** Mobile bottom sheet: non-modal so the map stays interactive behind it. */
 export function BottomSheet() {
   const [snap, setSnap] = useState<string | number | null>(SNAPS[0]!)
+  const flyTo = useUi((s) => s.flyTo)
+  // When a search result is revealed, lower the sheet so the map is visible.
+  useEffect(() => {
+    if (flyTo) setSnap(SNAPS[0]!)
+  }, [flyTo])
   return (
     <Drawer open modal={false} snapPoints={SNAPS} snapPoint={snap} onSnapPointChange={setSnap} showSwipeHandle>
       <DrawerContent className="border-border bg-background" aria-describedby={undefined}>

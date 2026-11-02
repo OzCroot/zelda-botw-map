@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { CATEGORIES, defaultEnabled } from '../data/categories'
+import { MARKER_BY_ID } from '../data/loadMarkers'
 import type { MarkerId } from '../types/marker'
+import { useProgress } from './progress'
 
 export type Tab = 'filters' | 'list' | 'stats' | 'data'
 
@@ -10,7 +12,12 @@ interface UiState {
   hideCompleted: boolean
   region: string | null
   tab: Tab
+  /** Marker whose details dialog is open. */
   selectedId: MarkerId | null
+  /** Marker highlighted on the map (search result, last clicked pin). */
+  focusId: MarkerId | null
+  /** Bumped by reveal() to ask the map to fly to a marker. */
+  flyTo: { id: MarkerId; n: number } | null
   query: string
   sheetOpen: boolean
   theme: 'dark' | 'light'
@@ -22,6 +29,9 @@ interface UiState {
   setRegion: (r: string | null) => void
   setTab: (t: Tab) => void
   select: (id: MarkerId | null) => void
+  /** Make a marker visible (adjusting filters if needed), fly to it and highlight it. */
+  reveal: (id: MarkerId) => { enabledCategory: boolean }
+  clearFocus: () => void
   setQuery: (q: string) => void
   setSheetOpen: (v: boolean) => void
   toggleTheme: () => void
@@ -38,12 +48,14 @@ export const PRESETS: { label: string; ids: string[] }[] = [
 
 export const useUi = create<UiState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       enabled: defaultEnabled(),
       hideCompleted: false,
       region: null,
       tab: 'filters',
       selectedId: null,
+      focusId: null,
+      flyTo: null,
       query: '',
       sheetOpen: false,
       theme: 'dark',
@@ -56,7 +68,23 @@ export const useUi = create<UiState>()(
       setHideCompleted: (hideCompleted) => set({ hideCompleted }),
       setRegion: (region) => set({ region }),
       setTab: (tab) => set({ tab }),
-      select: (selectedId) => set(selectedId ? { selectedId, sheetOpen: true } : { selectedId }),
+      select: (selectedId) =>
+        set(selectedId ? { selectedId, focusId: selectedId, sheetOpen: true } : { selectedId }),
+      reveal: (id) => {
+        const m = MARKER_BY_ID.get(id)
+        if (!m) return { enabledCategory: false }
+        const s = get()
+        const enabledCategory = !s.enabled[m.category]
+        set({
+          focusId: id,
+          flyTo: { id, n: (s.flyTo?.n ?? 0) + 1 },
+          enabled: enabledCategory ? { ...s.enabled, [m.category]: true } : s.enabled,
+          region: s.region && s.region !== m.region ? null : s.region,
+          hideCompleted: s.hideCompleted && id in useProgress.getState().completed ? false : s.hideCompleted,
+        })
+        return { enabledCategory }
+      },
+      clearFocus: () => set({ focusId: null }),
       setQuery: (query) => set({ query }),
       setSheetOpen: (sheetOpen) => set({ sheetOpen }),
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
