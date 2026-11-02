@@ -29,7 +29,7 @@ export function CategoryFilters() {
       <label className="flex min-h-11 items-center gap-3 text-sm">
         <input
           type="checkbox"
-          className="size-5 accent-sky-500"
+          className="size-5 accent-primary"
           checked={hideCompleted}
           onChange={(e) => setHideCompleted(e.target.checked)}
         />
@@ -37,7 +37,7 @@ export function CategoryFilters() {
       </label>
 
       <label className="block text-sm">
-        <span className="mb-1 block text-muted">Region</span>
+        <span className="mb-1 block text-muted-foreground">Region</span>
         <select
           className="field"
           value={region ?? ''}
@@ -54,7 +54,7 @@ export function CategoryFilters() {
 
       {CATEGORY_GROUPS.map((g) => (
         <section key={g}>
-          <h3 className="mb-1 text-xs font-semibold tracking-wide text-muted uppercase">{g}</h3>
+          <h3 className="mb-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">{g}</h3>
           <ul>
             {CATEGORIES.filter((c) => c.group === g).map((c) => (
               <li key={c.id} className="flex items-center">
@@ -67,12 +67,12 @@ export function CategoryFilters() {
                     {c.glyph}
                   </span>
                   <span className="flex-1">{c.label}</span>
-                  <span className="text-xs text-muted tabular-nums">
+                  <span className="text-xs text-muted-foreground tabular-nums">
                     {c.checkable ? `${done[c.id] ?? 0}/${totals[c.id] ?? 0}` : (totals[c.id] ?? 0)}
                   </span>
                 </button>
                 <button
-                  className="min-h-11 px-3 text-xs text-muted hover:text-fg"
+                  className="min-h-11 px-3 text-xs text-muted-foreground hover:text-foreground"
                   onClick={() => soloCategory(c.id)}
                   aria-label={`Show only ${c.label}`}
                 >

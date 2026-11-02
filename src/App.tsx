@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Toaster } from 'sonner'
+import { MarkerDialog } from './components/detail/MarkerDialog'
 import { MapView } from './components/map/MapView'
 import { BottomSheet } from './components/panels/BottomSheet'
 import { PanelContent } from './components/panels/PanelContent'
@@ -16,7 +17,7 @@ export default function App() {
   useUrlState()
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme
+    document.documentElement.classList.toggle('dark', theme === 'dark')
   }, [theme])
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function App() {
   return (
     <div className="flex h-dvh w-full">
       {desktop && (
-        <aside className="z-[1000] w-[22rem] shrink-0 border-r border-line bg-panel p-4">
+        <aside className="z-[1000] w-[22rem] shrink-0 border-r border-border bg-background p-4">
           <PanelContent />
         </aside>
       )}
@@ -42,6 +43,7 @@ export default function App() {
         <MapView />
       </main>
       {!desktop && <BottomSheet />}
+      <MarkerDialog />
       <Toaster position={desktop ? 'bottom-right' : 'top-center'} theme={theme} />
     </div>
   )
