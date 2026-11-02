@@ -1,0 +1,806 @@
+{
+ "version": "sample-1",
+ "source": "sample",
+ "markers": [
+  {
+   "id": "shrine-1",
+   "category": "shrine",
+   "name": "Sample Shrine 1",
+   "x": 5705,
+   "y": 2871,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-2",
+   "category": "shrine",
+   "name": "Sample Shrine 2",
+   "x": 6868,
+   "y": 1191,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-3",
+   "category": "shrine",
+   "name": "Sample Shrine 3",
+   "x": 1586,
+   "y": 9179,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-4",
+   "category": "shrine",
+   "name": "Sample Shrine 4",
+   "x": 1942,
+   "y": 6391,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-5",
+   "category": "shrine",
+   "name": "Sample Shrine 5",
+   "x": 9948,
+   "y": 1350,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-6",
+   "category": "shrine",
+   "name": "Sample Shrine 6",
+   "x": 8713,
+   "y": 3917,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-7",
+   "category": "shrine",
+   "name": "Sample Shrine 7",
+   "x": 1014,
+   "y": 1808,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-8",
+   "category": "shrine",
+   "name": "Sample Shrine 8",
+   "x": 7504,
+   "y": 7251,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-9",
+   "category": "shrine",
+   "name": "Sample Shrine 9",
+   "x": 1544,
+   "y": 4343,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-10",
+   "category": "shrine",
+   "name": "Sample Shrine 10",
+   "x": 1886,
+   "y": 9428,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-11",
+   "category": "shrine",
+   "name": "Sample Shrine 11",
+   "x": 7355,
+   "y": 1368,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-12",
+   "category": "shrine",
+   "name": "Sample Shrine 12",
+   "x": 9664,
+   "y": 2428,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-13",
+   "category": "shrine",
+   "name": "Sample Shrine 13",
+   "x": 4057,
+   "y": 1413,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "shrine-14",
+   "category": "shrine",
+   "name": "Sample Shrine 14",
+   "x": 9855,
+   "y": 6899,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-1",
+   "category": "korok",
+   "name": "Sample Korok Seed 1",
+   "x": 1212,
+   "y": 4022,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-2",
+   "category": "korok",
+   "name": "Sample Korok Seed 2",
+   "x": 1163,
+   "y": 9520,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-3",
+   "category": "korok",
+   "name": "Sample Korok Seed 3",
+   "x": 2581,
+   "y": 5144,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-4",
+   "category": "korok",
+   "name": "Sample Korok Seed 4",
+   "x": 7267,
+   "y": 2763,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-5",
+   "category": "korok",
+   "name": "Sample Korok Seed 5",
+   "x": 9258,
+   "y": 2329,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-6",
+   "category": "korok",
+   "name": "Sample Korok Seed 6",
+   "x": 9753,
+   "y": 5454,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-7",
+   "category": "korok",
+   "name": "Sample Korok Seed 7",
+   "x": 9579,
+   "y": 3361,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-8",
+   "category": "korok",
+   "name": "Sample Korok Seed 8",
+   "x": 2088,
+   "y": 3478,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-9",
+   "category": "korok",
+   "name": "Sample Korok Seed 9",
+   "x": 6501,
+   "y": 1996,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-10",
+   "category": "korok",
+   "name": "Sample Korok Seed 10",
+   "x": 9374,
+   "y": 1428,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-11",
+   "category": "korok",
+   "name": "Sample Korok Seed 11",
+   "x": 9646,
+   "y": 1376,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-12",
+   "category": "korok",
+   "name": "Sample Korok Seed 12",
+   "x": 10541,
+   "y": 3774,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-13",
+   "category": "korok",
+   "name": "Sample Korok Seed 13",
+   "x": 8533,
+   "y": 9111,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-14",
+   "category": "korok",
+   "name": "Sample Korok Seed 14",
+   "x": 7405,
+   "y": 5546,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-15",
+   "category": "korok",
+   "name": "Sample Korok Seed 15",
+   "x": 8028,
+   "y": 7824,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-16",
+   "category": "korok",
+   "name": "Sample Korok Seed 16",
+   "x": 6324,
+   "y": 5311,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-17",
+   "category": "korok",
+   "name": "Sample Korok Seed 17",
+   "x": 4470,
+   "y": 3345,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-18",
+   "category": "korok",
+   "name": "Sample Korok Seed 18",
+   "x": 4399,
+   "y": 1741,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-19",
+   "category": "korok",
+   "name": "Sample Korok Seed 19",
+   "x": 9811,
+   "y": 5319,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-20",
+   "category": "korok",
+   "name": "Sample Korok Seed 20",
+   "x": 9004,
+   "y": 8511,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-21",
+   "category": "korok",
+   "name": "Sample Korok Seed 21",
+   "x": 6027,
+   "y": 7753,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-22",
+   "category": "korok",
+   "name": "Sample Korok Seed 22",
+   "x": 5117,
+   "y": 1599,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-23",
+   "category": "korok",
+   "name": "Sample Korok Seed 23",
+   "x": 2334,
+   "y": 8787,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "korok-24",
+   "category": "korok",
+   "name": "Sample Korok Seed 24",
+   "x": 7250,
+   "y": 3102,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "tower-1",
+   "category": "tower",
+   "name": "Sample Tower 1",
+   "x": 6004,
+   "y": 2890,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "tower-2",
+   "category": "tower",
+   "name": "Sample Tower 2",
+   "x": 8411,
+   "y": 7309,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "tower-3",
+   "category": "tower",
+   "name": "Sample Tower 3",
+   "x": 1042,
+   "y": 1671,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "tower-4",
+   "category": "tower",
+   "name": "Sample Tower 4",
+   "x": 9543,
+   "y": 5540,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "tower-5",
+   "category": "tower",
+   "name": "Sample Tower 5",
+   "x": 5972,
+   "y": 6137,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "tower-6",
+   "category": "tower",
+   "name": "Sample Tower 6",
+   "x": 10138,
+   "y": 8537,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "memory-1",
+   "category": "memory",
+   "name": "Sample Memory 1",
+   "x": 9901,
+   "y": 7874,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "memory-2",
+   "category": "memory",
+   "name": "Sample Memory 2",
+   "x": 1526,
+   "y": 1933,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "memory-3",
+   "category": "memory",
+   "name": "Sample Memory 3",
+   "x": 4822,
+   "y": 8167,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "memory-4",
+   "category": "memory",
+   "name": "Sample Memory 4",
+   "x": 11281,
+   "y": 1464,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "memory-5",
+   "category": "memory",
+   "name": "Sample Memory 5",
+   "x": 1394,
+   "y": 5472,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "memory-6",
+   "category": "memory",
+   "name": "Sample Memory 6",
+   "x": 11002,
+   "y": 7701,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-1",
+   "category": "chest",
+   "name": "Sample Chest 1",
+   "x": 5062,
+   "y": 6720,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-2",
+   "category": "chest",
+   "name": "Sample Chest 2",
+   "x": 11355,
+   "y": 6085,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-3",
+   "category": "chest",
+   "name": "Sample Chest 3",
+   "x": 769,
+   "y": 7964,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-4",
+   "category": "chest",
+   "name": "Sample Chest 4",
+   "x": 6223,
+   "y": 3153,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-5",
+   "category": "chest",
+   "name": "Sample Chest 5",
+   "x": 10409,
+   "y": 2318,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-6",
+   "category": "chest",
+   "name": "Sample Chest 6",
+   "x": 8488,
+   "y": 1365,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-7",
+   "category": "chest",
+   "name": "Sample Chest 7",
+   "x": 3975,
+   "y": 5109,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-8",
+   "category": "chest",
+   "name": "Sample Chest 8",
+   "x": 2519,
+   "y": 4456,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-9",
+   "category": "chest",
+   "name": "Sample Chest 9",
+   "x": 6919,
+   "y": 6805,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-10",
+   "category": "chest",
+   "name": "Sample Chest 10",
+   "x": 8534,
+   "y": 1720,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-11",
+   "category": "chest",
+   "name": "Sample Chest 11",
+   "x": 3125,
+   "y": 7759,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-12",
+   "category": "chest",
+   "name": "Sample Chest 12",
+   "x": 6980,
+   "y": 9402,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-13",
+   "category": "chest",
+   "name": "Sample Chest 13",
+   "x": 4952,
+   "y": 2643,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "chest-14",
+   "category": "chest",
+   "name": "Sample Chest 14",
+   "x": 7453,
+   "y": 9414,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "beast-1",
+   "category": "beast",
+   "name": "Sample Divine Beast 1",
+   "x": 4961,
+   "y": 7204,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "beast-2",
+   "category": "beast",
+   "name": "Sample Divine Beast 2",
+   "x": 6278,
+   "y": 6633,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "beast-3",
+   "category": "beast",
+   "name": "Sample Divine Beast 3",
+   "x": 4180,
+   "y": 2872,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "beast-4",
+   "category": "beast",
+   "name": "Sample Divine Beast 4",
+   "x": 1759,
+   "y": 3287,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "fairy-1",
+   "category": "fairy",
+   "name": "Sample Great Fairy 1",
+   "x": 2878,
+   "y": 4200,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "fairy-2",
+   "category": "fairy",
+   "name": "Sample Great Fairy 2",
+   "x": 11189,
+   "y": 4222,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "fairy-3",
+   "category": "fairy",
+   "name": "Sample Great Fairy 3",
+   "x": 597,
+   "y": 8345,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "fairy-4",
+   "category": "fairy",
+   "name": "Sample Great Fairy 4",
+   "x": 10052,
+   "y": 3387,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "stable-1",
+   "category": "stable",
+   "name": "Sample Stable 1",
+   "x": 4704,
+   "y": 5019,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "stable-2",
+   "category": "stable",
+   "name": "Sample Stable 2",
+   "x": 467,
+   "y": 2786,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "stable-3",
+   "category": "stable",
+   "name": "Sample Stable 3",
+   "x": 7264,
+   "y": 9158,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "stable-4",
+   "category": "stable",
+   "name": "Sample Stable 4",
+   "x": 6449,
+   "y": 5620,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "stable-5",
+   "category": "stable",
+   "name": "Sample Stable 5",
+   "x": 2456,
+   "y": 8845,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "stable-6",
+   "category": "stable",
+   "name": "Sample Stable 6",
+   "x": 10518,
+   "y": 1284,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "village-1",
+   "category": "village",
+   "name": "Sample Village 1",
+   "x": 7881,
+   "y": 9563,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "village-2",
+   "category": "village",
+   "name": "Sample Village 2",
+   "x": 6828,
+   "y": 6921,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "village-3",
+   "category": "village",
+   "name": "Sample Village 3",
+   "x": 6936,
+   "y": 6857,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "village-4",
+   "category": "village",
+   "name": "Sample Village 4",
+   "x": 2096,
+   "y": 8289,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "village-5",
+   "category": "village",
+   "name": "Sample Village 5",
+   "x": 10792,
+   "y": 6960,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "village-6",
+   "category": "village",
+   "name": "Sample Village 6",
+   "x": 1419,
+   "y": 3522,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-1",
+   "category": "sidequest",
+   "name": "Sample Side Quest 1",
+   "x": 1503,
+   "y": 3820,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-2",
+   "category": "sidequest",
+   "name": "Sample Side Quest 2",
+   "x": 7619,
+   "y": 3059,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-3",
+   "category": "sidequest",
+   "name": "Sample Side Quest 3",
+   "x": 2201,
+   "y": 5971,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-4",
+   "category": "sidequest",
+   "name": "Sample Side Quest 4",
+   "x": 10242,
+   "y": 1261,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-5",
+   "category": "sidequest",
+   "name": "Sample Side Quest 5",
+   "x": 2077,
+   "y": 403,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-6",
+   "category": "sidequest",
+   "name": "Sample Side Quest 6",
+   "x": 9686,
+   "y": 2878,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-7",
+   "category": "sidequest",
+   "name": "Sample Side Quest 7",
+   "x": 9191,
+   "y": 2062,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "sidequest-8",
+   "category": "sidequest",
+   "name": "Sample Side Quest 8",
+   "x": 6357,
+   "y": 817,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-1",
+   "category": "boss",
+   "name": "Sample Boss 1",
+   "x": 1552,
+   "y": 3807,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-2",
+   "category": "boss",
+   "name": "Sample Boss 2",
+   "x": 10460,
+   "y": 6564,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-3",
+   "category": "boss",
+   "name": "Sample Boss 3",
+   "x": 2833,
+   "y": 4532,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-4",
+   "category": "boss",
+   "name": "Sample Boss 4",
+   "x": 6091,
+   "y": 6366,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-5",
+   "category": "boss",
+   "name": "Sample Boss 5",
+   "x": 8168,
+   "y": 2412,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-6",
+   "category": "boss",
+   "name": "Sample Boss 6",
+   "x": 2289,
+   "y": 8396,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-7",
+   "category": "boss",
+   "name": "Sample Boss 7",
+   "x": 8034,
+   "y": 8270,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  },
+  {
+   "id": "boss-8",
+   "category": "boss",
+   "name": "Sample Boss 8",
+   "x": 8327,
+   "y": 5509,
+   "description": "Placeholder entry from the bundled sample dataset. Import real data with `npm run import-data`."
+  }
+ ]
+}
