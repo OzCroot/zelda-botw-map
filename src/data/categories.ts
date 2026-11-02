@@ -24,6 +24,8 @@ export const CATEGORIES: Category[] = [
   c('goddess-statue', 'Goddess Statues', 'Collectibles', '♆', '#e2e8f0', false, false, 'stamps/human'),
   c('cooking-pot', 'Cooking Pots', 'Collectibles', '♨', '#fca5a5', false, false, 'stamps/cuisine'),
   c('raft', 'Rafts', 'Collectibles', '≈', '#93c5fd', false, false, 'stamps/leaf'),
+  // Clothing: its own group, and tracked (checkable) so it appears in Progress
+  c('clothing', 'Clothing', 'Clothing', '▣', '#f472b6', true, true, 'stamps/treasure'),
   // Enemies
   c('stone-talus', 'Stone Taluses', 'Enemies', '▲', '#a8a29e', false, false, 'stamps/ore'),
   c('hinox', 'Hinoxes', 'Enemies', '☠', '#ef4444', false, false, 'stamps/enemy'),
@@ -47,7 +49,6 @@ export const CATEGORIES: Category[] = [
   c('big-rupees', 'Big rupees', 'Treasure', '◆', '#a78bfa', false, false, 'stamps/treasure'),
   c('small-rupees', 'Small rupees', 'Treasure', '◆', '#60a5fa', false, false, 'stamps/treasure'),
   c('materials', 'Materials', 'Treasure', '▣', '#fbbf24', false, false, 'stamps/treasure'),
-  c('clothing', 'Clothing', 'Treasure', '▣', '#f472b6', false, false, 'stamps/treasure'),
   c('uniques', 'Uniques', 'Treasure', '▣', '#fde047', false, false, 'stamps/treasure'),
   c('one-handed-weapons', 'One-handed weapons', 'Treasure', '⚔', '#d1d5db', false, false, 'stamps/treasure'),
   c('two-handed-weapons', 'Two-handed weapons', 'Treasure', '⚔', '#9ca3af', false, false, 'stamps/treasure'),
@@ -61,8 +62,8 @@ export const CATEGORIES: Category[] = [
 /** Per-marker icon overrides (marker id -> icon path in public/icons, no extension). */
 export const MARKER_ICON_OVERRIDES: Record<string, string> = {
   'village:Hyrule Castle': 'locations/castle',
-}
   'shrine:Shrine of Resurrection': 'travel/resurrection-shrine',
+}
 
 /**
  * Visual scale per icon so artwork reads at a similar size. Travel art is a soft glow (~55% solid),
@@ -73,9 +74,9 @@ const ICON_SCALE: Record<string, number> = {
   'quest/quest-shrine': 0.69,
   'quest/quest-side': 0.72,
   'quest/quest-memory': 0.72,
+  'travel/sheikah-tower': 1.375, // travel's 1.25 plus 10%
 }
 export const iconScale = (name?: string): number =>
-  'travel/sheikah-tower': 1.375, // travel's 1.25 plus 10%
   (name && ICON_SCALE[name]) || (name?.startsWith('travel/') ? 1.25 : 1)
 
 export const CATEGORY_BY_ID: Record<string, Category> = Object.fromEntries(

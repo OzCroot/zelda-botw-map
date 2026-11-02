@@ -1,6 +1,7 @@
 import type { AreaLabel, Marker, MarkerDataset } from '../types/marker'
 import sample from './sample/markers.json'
 import { CATEGORY_BY_ID } from './categories'
+import { clothingSetOf } from './clothingSets'
 import { datasetSchema } from './schema'
 
 // The full dataset is a separate hashed asset fetched at startup (see initData), not part of the JS bundle.
@@ -10,20 +11,25 @@ const generated = import.meta.glob('./generated/markers.json', {
   import: 'default',
 }) as Record<string, string>
 
+const DLC_CATEGORY: Record<string, string> = { shrine: 'shrine-dlc' }
+
 function prepare(ds: MarkerDataset): MarkerDataset {
   // DLC shrines get their own category so they can be shown, hidden and counted separately.
   // (The id is unchanged, so saved progress and deep links keep working.)
   const markers: Marker[] = ds.markers
-    .map((m) =>
-      m.category === 'shrine' && m.tags?.includes('DLC')
-        ? { ...m, category: 'shrine-dlc', tags: [...new Set(m.tags)] }
-        : m,
-    )
+    .map((m) => {
+      const dlc = DLC_CATEGORY[m.category]
+      return dlc && m.tags?.includes('DLC')
+        ? { ...m, category: dlc, tags: [...new Set(m.tags)] }
+        : m
+    })
     // Korok seeds are all named alike; show their number (e.g. "Korok Seed #031") so they can be told apart and searched.
     .map((m) => {
       const num = m.category === 'korok-seed' ? /Seed(\d+)$/.exec(m.id)?.[1] : undefined
       return num ? { ...m, name: `Korok Seed #${num.padStart(3, '0')}` } : m
     })
+    // Clothing is browsed by set, which the data doesn't carry; work it out from the name.
+    .map((m) => (m.category === 'clothing' && !m.set ? { ...m, set: clothingSetOf(m.name) } : m))
     .filter((m) => m.category in CATEGORY_BY_ID)
   return { ...ds, markers }
 }

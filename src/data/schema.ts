@@ -11,6 +11,7 @@ export const markerSchema = z.object({
   region: z.string().optional(),
   description: z.string().optional(),
   wikiUrl: z.string().optional(),
+  set: z.string().optional(),
   minZoom: z.number().optional(),
 })
 

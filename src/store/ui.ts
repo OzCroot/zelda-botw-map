@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { safeStorage } from '../lib/safeStorage'
 import { CATEGORIES, defaultEnabled } from '../data/categories'
+import { facetKey } from '../data/facets'
 import { MARKER_BY_ID } from '../data/loadMarkers'
 import type { MarkerId } from '../types/marker'
 import { useProgress } from './progress'
@@ -29,7 +30,7 @@ interface UiState {
   menuOpen: boolean
   /** User-dragged menu width in px (desktop). */
   menuWidth: number
-  /** Per-category list of region ids hidden for that category. */
+  /** Per-category list of sub-groups hidden for that category (region ids, or set names for clothing). */
   hiddenRegions: Record<string, string[]>
   theme: 'dark' | 'light'
   toggleCategory: (id: string) => void
@@ -55,6 +56,7 @@ interface UiState {
 export const PRESETS: { label: string; ids: string[] }[] = [
   { label: 'Shrine hunt', ids: ['shrine', 'shrine-dlc', 'sheikah-tower'] },
   { label: 'Korok run', ids: ['korok-seed'] },
+  { label: 'Clothing', ids: ['clothing'] },
   { label: 'Story', ids: ['main-quest', 'memory', 'sheikah-tower'] },
   { label: 'Treasure', ids: CATEGORIES.filter((c) => c.group === 'Treasure').map((c) => c.id) },
   { label: 'Everything', ids: CATEGORIES.map((c) => c.id) },
@@ -95,6 +97,7 @@ export const useUi = create<UiState>()(
         if (!m) return { enabledCategory: false, enabledMasterMode: false }
         const s = get()
         const enabledCategory = !s.enabled[m.category]
+        const facet = facetKey(m)
         const enabledMasterMode = !!m.tags?.includes('Master Mode') && !s.masterMode
         set({
           focusId: id,
@@ -102,10 +105,10 @@ export const useUi = create<UiState>()(
           flyTo: { id, n: (s.flyTo?.n ?? 0) + 1 },
           enabled: enabledCategory ? { ...s.enabled, [m.category]: true } : s.enabled,
           hiddenRegions:
-            m.region && s.hiddenRegions[m.category]?.includes(m.region)
+            facet && s.hiddenRegions[m.category]?.includes(facet)
               ? {
                   ...s.hiddenRegions,
-                  [m.category]: s.hiddenRegions[m.category]!.filter((r) => r !== m.region),
+                  [m.category]: s.hiddenRegions[m.category]!.filter((r) => r !== facet),
                 }
               : s.hiddenRegions,
           region: s.region && s.region !== m.region ? null : s.region,
