@@ -13,7 +13,15 @@ function load(): MarkerDataset {
   const raw = (import.meta.env.MODE === 'test' ? undefined : Object.values(generated)[0]) ?? sample
   const parsed = datasetSchema.safeParse(raw)
   const ds = parsed.success ? parsed.data : datasetSchema.parse(sample)
-  const markers: Marker[] = ds.markers.filter((m) => m.category in CATEGORY_BY_ID)
+  // DLC shrines get their own category so they can be shown, hidden and counted separately.
+  // (The id is unchanged, so saved progress and deep links keep working.)
+  const markers: Marker[] = ds.markers
+    .map((m) =>
+      m.category === 'shrine' && m.tags?.includes('DLC')
+        ? { ...m, category: 'shrine-dlc', tags: [...new Set(m.tags)] }
+        : m,
+    )
+    .filter((m) => m.category in CATEGORY_BY_ID)
   return { ...ds, markers }
 }
 

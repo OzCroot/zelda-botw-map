@@ -23,7 +23,10 @@ export function useUrlState() {
     const focus = params.get('focus')
     if (focus && MARKER_BY_ID.has(focus)) useUi.getState().reveal(focus)
     const tab = params.get('tab')
-    if (tab && TABS.includes(tab)) useUi.getState().setTab(tab as Tab)
+    if (tab && TABS.includes(tab)) {
+      useUi.getState().setTab(tab as Tab)
+      useUi.getState().setMenuOpen(true)
+    }
     const q = params.get('q')
     if (q) useUi.getState().setQuery(q)
   }, [select])
