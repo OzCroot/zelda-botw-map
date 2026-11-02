@@ -10,21 +10,27 @@ beforeEach(() => {
 })
 
 describe('toggleWithUndo', () => {
-  it('keeps the dialog open after completing when completed items are shown', () => {
+  it('dismisses the dialog when the item is checked off', () => {
     toggleWithUndo('a')
-    expect(useUi.getState().selectedId).toBe('a')
+    expect(useProgress.getState().completed).toHaveProperty('a')
+    expect(useUi.getState().selectedId).toBeNull()
   })
 
-  it('closes the dialog as soon as the item is completed when "Hide completed" is on', () => {
+  it('dismisses it whether or not completed items are being hidden', () => {
     useUi.setState({ hideCompleted: true })
     toggleWithUndo('a')
     expect(useUi.getState().selectedId).toBeNull()
   })
 
-  it('does not close the dialog when un-completing', () => {
-    useUi.setState({ hideCompleted: true })
+  it('keeps the dialog open when un-checking, so a mistake can be corrected in place', () => {
     useProgress.getState().setCompleted('a', true)
     toggleWithUndo('a')
+    expect(useProgress.getState().completed).not.toHaveProperty('a')
+    expect(useUi.getState().selectedId).toBe('a')
+  })
+
+  it("leaves a different marker's dialog alone", () => {
+    toggleWithUndo('b')
     expect(useUi.getState().selectedId).toBe('a')
   })
 })
