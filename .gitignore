@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Third-party data & imagery (never commit)
+# Third-party data & imagery (never commit; raw sources live in the private zelda-botw-data repo)
 data/raw/
 src/data/generated/
 
