@@ -29,3 +29,5 @@ src/data/generated/
 
 # Unoptimised screenshot originals, local only (public/images/korok/webp is tracked)
 public/images/korok/raw/
+.vercel
+.env*
