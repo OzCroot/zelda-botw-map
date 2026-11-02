@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CATEGORY_BY_ID } from '@/data/categories'
+import { CATEGORY_BY_ID, iconScale } from '@/data/categories'
 import { cn } from '@/lib/utils'
 
 /** The same artwork the map pins use (svg → png → coloured glyph), so filters look like what they control. */
@@ -13,6 +13,7 @@ export function CategoryIcon({ id, className }: { id: string; className?: string
         src={`/icons/${c.icon}.${ext}`}
         alt=""
         draggable={false}
+        style={{ transform: `scale(${iconScale(c.icon)})` }}
         onError={() => setExt(ext === 'svg' ? 'png' : null)}
         className={cn('size-8 shrink-0 object-contain', className)}
       />

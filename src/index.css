@@ -116,8 +116,10 @@
 }
 
 .pin { position: relative; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9999px; background: var(--c); color: #0f172a; font-size: 16px; border: 2px solid #0f172a; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
-.pin img { position: absolute; inset: -2px; width: calc(100% + 4px); height: calc(100% + 4px); object-fit: contain; }
+.pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
 .pin:has(img) { background: transparent; border-color: transparent; box-shadow: none; font-size: 0; }
+.landmark-label { pointer-events: none; }
+.landmark-label span { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: auto; cursor: pointer; font: 600 15px/1 Georgia, 'Times New Roman', serif; color: #f3e3b0; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 1px 2px #000; }
 .pin-done { opacity: .45; }
 .pin-selected { outline: 3px solid #fff; transform: scale(1.2); }
 .pin-selected::after { content: ''; position: absolute; inset: -6px; border-radius: 9999px; border: 2px solid #fff; animation: pin-ping 1.4s ease-out infinite; pointer-events: none; }
