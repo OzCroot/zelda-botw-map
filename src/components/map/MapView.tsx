@@ -44,7 +44,20 @@ function Controller() {
   }, [map, region])
 
   useEffect(() => {
-    map.fitBounds(BOUNDS)
+    // Open on the playable area (marker extent) rather than the whole padded tile square.
+    const xs = MARKERS.map((m) => m.x)
+    const ys = MARKERS.map((m) => m.y)
+    if (!xs.length) {
+      map.fitBounds(BOUNDS)
+      return
+    }
+    map.fitBounds(
+      [
+        [-Math.max(...ys), Math.min(...xs)],
+        [-Math.min(...ys), Math.max(...xs)],
+      ],
+      { padding: [24, 24], animate: false },
+    )
   }, [map])
   return null
 }
@@ -61,7 +74,7 @@ export function MapView() {
       crs={CRS}
       center={[-MAP_SIZE / 2, MAP_SIZE / 2]}
       zoom={1}
-      minZoom={0}
+      minZoom={-1}
       maxZoom={MAX_NATIVE_ZOOM + 2}
       maxBounds={[
         [-MAP_SIZE - 3000, -3000],
@@ -78,6 +91,8 @@ export function MapView() {
         tileSize={TILE_SIZE}
         noWrap
         bounds={BOUNDS}
+        minZoom={-1}
+        minNativeZoom={0}
         maxNativeZoom={MAX_NATIVE_ZOOM}
         errorTileUrl="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
       />
