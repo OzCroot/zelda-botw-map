@@ -1,9 +1,20 @@
 import L from 'leaflet'
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import type { Marker as MarkerData } from '../../types/marker'
-import { ImageOverlay, MapContainer, Marker, Pane, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from 'react-leaflet'
+import {
+  ImageOverlay,
+  MapContainer,
+  Marker,
+  Pane,
+  TileLayer,
+  Tooltip,
+  ZoomControl,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet'
 import { MAP_H, MAP_W, MAX_NATIVE_ZOOM, TILE_SIZE } from '../../data/regions'
-import { MARKER_BY_ID, MARKERS } from '../../data/loadMarkers'
+import { AREA_LABELS, MARKER_BY_ID, MARKERS } from '../../data/loadMarkers'
+import { areaVisibleAt, landmarkVisibleAt } from '../../lib/labelVisibility'
 import { useVisibleMarkers } from '../../hooks/useVisibleMarkers'
 import { useProgress } from '../../store/progress'
 import { useUi } from '../../store/ui'
@@ -57,7 +68,8 @@ function Controller() {
     const raf = requestAnimationFrame(() => {
       const zoom = Math.max(map.getZoom(), MAX_NATIVE_ZOOM)
       // A link opened on page load jumps straight there; later reveals animate.
-      if (flyTo.n === 1 && performance.now() < 4000) map.setView(toLatLng(m.x, m.y), zoom, { animate: false })
+      if (flyTo.n === 1 && performance.now() < 4000)
+        map.setView(toLatLng(m.x, m.y), zoom, { animate: false })
       else map.flyTo(toLatLng(m.x, m.y), zoom, { duration: 0.8 })
     })
     return () => cancelAnimationFrame(raf)
@@ -81,22 +93,58 @@ function Controller() {
   return null
 }
 
-// Memoised so ticking an item off (which re-renders MapView) doesn't rebuild every landmark label.
-const Landmarks = memo(function Landmarks({ markers }: { markers: MarkerData[] }) {
+/** Current zoom and a padded viewport, refreshed when panning or zooming ends. */
+function useViewport() {
+  const map = useMap()
+  const read = () => ({ zoom: map.getZoom(), bounds: map.getBounds().pad(0.5) })
+  const [view, setView] = useState(read)
+  useMapEvents({ moveend: () => setView(read()) })
+  return view
+}
+
+const LandmarkPin = memo(function LandmarkPin({ marker: m }: { marker: MarkerData }) {
   const select = useUi((s) => s.select)
-  return markers.map((m) => (
+  return (
     <Marker
-      key={m.id}
       position={toLatLng(m.x, m.y)}
       icon={labelIcon(m.name)}
       keyboard={false}
       eventHandlers={{ click: () => select(m.id) }}
     />
-  ))
+  )
 })
+
+// Only labels near the viewport and at their own zoom level get DOM nodes, instead of all ~590 at all times.
+function Landmarks({ markers }: { markers: MarkerData[] }) {
+  const { zoom, bounds } = useViewport()
+  const shown = useMemo(
+    () => markers.filter((m) => landmarkVisibleAt(m, zoom) && bounds.contains(toLatLng(m.x, m.y))),
+    [markers, zoom, bounds],
+  )
+  return shown.map((m) => <LandmarkPin key={m.id} marker={m} />)
+}
+
+/** Region names (far out) then subregion names (zoom 2-3), before individual landmarks take over. */
+function AreaLabels() {
+  const { zoom, bounds } = useViewport()
+  const shown = useMemo(
+    () => AREA_LABELS.filter((l) => areaVisibleAt(l, zoom) && bounds.contains(toLatLng(l.x, l.y))),
+    [zoom, bounds],
+  )
+  return shown.map((l) => (
+    <Marker
+      key={l.id}
+      position={toLatLng(l.x, l.y)}
+      icon={labelIcon(l.name, l.kind === 'region' ? 'region-label' : 'area-label')}
+      interactive={false}
+      keyboard={false}
+    />
+  ))
+}
 
 export function MapView() {
   const visible = useVisibleMarkers()
+  const landmarksOn = useUi((s) => !!s.enabled.landmark)
   const landmarks = useMemo(() => visible.filter((m) => m.category === 'landmark'), [visible])
   const pins = useMemo(() => visible.filter((m) => m.category !== 'landmark'), [visible])
   const focusId = useUi((s) => s.focusId)
@@ -146,6 +194,10 @@ export function MapView() {
         <Landmarks markers={landmarks} />
       </Pane>
       <ClusterLayer markers={pins} toLatLng={toLatLng} />
+      {/* Above the pins (z 600) so region names stay readable over clusters; non-interactive so clicks fall through. */}
+      <Pane name="area-labels" style={{ zIndex: 640, pointerEvents: 'none' }}>
+        {landmarksOn && <AreaLabels />}
+      </Pane>
       {focused && (
         // Drawn outside the cluster group so the revealed marker is never hidden inside a cluster.
         <Marker

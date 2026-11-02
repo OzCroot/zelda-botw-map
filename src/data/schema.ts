@@ -11,6 +11,17 @@ export const markerSchema = z.object({
   region: z.string().optional(),
   description: z.string().optional(),
   wikiUrl: z.string().optional(),
+  minZoom: z.number().optional(),
+})
+
+export const areaLabelSchema = z.object({
+  id: z.string(),
+  kind: z.enum(['region', 'area']).optional(),
+  name: z.string(),
+  x: z.number(),
+  y: z.number(),
+  minZoom: z.number(),
+  maxZoom: z.number(),
 })
 
 export const regionSchema = z.object({ id: z.string(), label: z.string(), x: z.number(), y: z.number() })
@@ -19,5 +30,6 @@ export const datasetSchema = z.object({
   regions: z.array(regionSchema),
   version: z.string(),
   source: z.string(),
+  labels: z.array(areaLabelSchema).optional(),
   markers: z.array(markerSchema),
 })
