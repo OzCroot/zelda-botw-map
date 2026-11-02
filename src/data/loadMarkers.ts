@@ -1,4 +1,4 @@
-import type { Marker, MarkerDataset } from '../types/marker'
+import type { AreaLabel, Marker, MarkerDataset } from '../types/marker'
 import sample from './sample/markers.json'
 import { CATEGORY_BY_ID } from './categories'
 import { datasetSchema } from './schema'
@@ -33,6 +33,7 @@ export let dataset: MarkerDataset
 export let MARKERS: Marker[]
 export let MARKER_BY_ID: Map<string, Marker>
 export let usingSampleData: boolean
+export let AREA_LABELS: AreaLabel[]
 export let REGIONS: MarkerDataset['regions']
 export let REGION_BY_ID: Record<string, MarkerDataset['regions'][number]>
 
@@ -41,6 +42,7 @@ function apply(ds: MarkerDataset) {
   MARKERS = dataset.markers
   MARKER_BY_ID = new Map(MARKERS.map((m) => [m.id, m]))
   usingSampleData = dataset.source === 'sample'
+  AREA_LABELS = dataset.labels ?? []
   REGIONS = dataset.regions
   REGION_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]))
 }

@@ -13,6 +13,20 @@ export interface Marker {
   region?: string
   description?: string
   wikiUrl?: string
+  /** Landmarks only: lowest map zoom at which the label is shown. */
+  minZoom?: number
+}
+
+/** Text-only area name (subregion) drawn on the map between minZoom and maxZoom (inclusive). */
+export interface AreaLabel {
+  id: string
+  /** region = broadest names (zoomed far out); area = subregions. */
+  kind?: 'region' | 'area'
+  name: string
+  x: number
+  y: number
+  minZoom: number
+  maxZoom: number
 }
 
 export interface Category {
@@ -40,6 +54,7 @@ export interface RegionInfo {
 
 export interface MarkerDataset {
   regions: RegionInfo[]
+  labels?: AreaLabel[]
   version: string
   source: string
   markers: Marker[]
