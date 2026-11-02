@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "import-data": "tsx scripts/import-data.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "extract-har": "tsx scripts/extract-har.ts"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.14.25",
