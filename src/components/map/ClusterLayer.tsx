@@ -5,7 +5,7 @@ import { useMap } from 'react-leaflet'
 import { useProgress } from '../../store/progress'
 import { useUi } from '../../store/ui'
 import type { Marker as MarkerData } from '../../types/marker'
-import { markerIcon } from './icons'
+import { handlePinImageError, markerIcon } from './icons'
 
 /**
  * Clustered pins managed imperatively. Rendering ~3,600 <Marker> elements through React made every
@@ -37,8 +37,11 @@ export function ClusterLayer({
     })
     group.current = g
     map.addLayer(g)
+    const container = map.getContainer()
+    container.addEventListener('error', handlePinImageError, true)
     const all = pins.current
     return () => {
+      container.removeEventListener('error', handlePinImageError, true)
       map.removeLayer(g)
       all.clear()
       group.current = null

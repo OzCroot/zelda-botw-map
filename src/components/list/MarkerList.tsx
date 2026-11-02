@@ -4,7 +4,13 @@ import { useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { CATEGORY_BY_ID } from '@/data/categories'
 import { REGION_BY_ID } from '@/data/loadMarkers'
 import { CategoryIcon } from '../map/CategoryIcon'
@@ -19,13 +25,17 @@ const SORTS = [
   { value: 'name', label: 'Sort: name' },
   { value: 'region', label: 'Sort: region' },
 ]
-const byName = (a: { name: string }, b: { name: string }) =>
-  a.name.localeCompare(b.name, undefined, { numeric: true })
+// One shared collator: calling localeCompare with options builds a new one per comparison, which is slow on thousands of rows.
+const collator = new Intl.Collator(undefined, { numeric: true })
+const byName = (a: { name: string }, b: { name: string }) => collator.compare(a.name, b.name)
 
 export function MarkerList() {
   const visible = useVisibleMarkers()
   const completed = useProgress((s) => s.completed)
-  const { select, selectedId, region, setRegion } = useUi()
+  const select = useUi((s) => s.select)
+  const selectedId = useUi((s) => s.selectedId)
+  const region = useUi((s) => s.region)
+  const setRegion = useUi((s) => s.setRegion)
   const [sort, setSort] = useState<Sort>('category')
   const ref = useRef<HTMLDivElement>(null)
 
@@ -35,12 +45,17 @@ export function MarkerList() {
         sort === 'name'
           ? byName(a, b)
           : sort === 'region'
-            ? (a.region ?? '').localeCompare(b.region ?? '') || byName(a, b)
-            : a.category.localeCompare(b.category) || byName(a, b),
+            ? collator.compare(a.region ?? '', b.region ?? '') || byName(a, b)
+            : collator.compare(a.category, b.category) || byName(a, b),
       ),
     [visible, sort],
   )
-  const v = useVirtualizer({ count: rows.length, getScrollElement: () => ref.current, estimateSize: () => 52, overscan: 8 })
+  const v = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => ref.current,
+    estimateSize: () => 52,
+    overscan: 8,
+  })
 
   return (
     <div className="flex h-full min-h-72 flex-col">
@@ -83,7 +98,9 @@ export function MarkerList() {
                 >
                   <CategoryIcon id={m.category} className="size-7" />
                   <span className="min-w-0 flex-1">
-                    <span className={`block truncate text-sm ${done ? 'text-muted-foreground line-through' : ''}`}>
+                    <span
+                      className={`block truncate text-sm ${done ? 'text-muted-foreground line-through' : ''}`}
+                    >
                       {m.name}
                     </span>
                     <span className="block truncate text-xs font-normal text-muted-foreground">
