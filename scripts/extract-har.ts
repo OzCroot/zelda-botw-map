@@ -4,7 +4,7 @@
  *
  *   npm run extract-har -- path/to/session.har
  *
- *   .../maps/game/tiles/{z}/{x}_{y}.jpg  ->  public/tiles/{z}/{x}_{y}.jpg
+ *   .../maps/game/tiles/{z}/{x}_{y}.jpg  ->  public/tiles-legacy/{z}/{x}_{y}.jpg (legacy; prefer `npm run cut-tiles`)
  *   .../maps/game/icons/{name}.png       ->  public/icons/{name}.png
  *
  * Output folders are gitignored. Personal use only; the artwork belongs to Nintendo.
@@ -40,7 +40,7 @@ for (const e of entries) {
   const url = e.request.url.split('?')[0]!
   const tile = TILE.exec(url)
   const icon = ICON.exec(url)
-  const dest = tile ? join('public', 'tiles', tile[1]!, tile[2]!) : icon ? join('public', 'icons', icon[1]!) : null
+  const dest = tile ? join('public', 'tiles-legacy', tile[1]!, tile[2]!) : icon ? join('public', 'icons', icon[1]!) : null
   if (!dest) continue
   const { text, encoding } = e.response.content ?? {}
   if (!text) {
