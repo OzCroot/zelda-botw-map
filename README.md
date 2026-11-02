@@ -38,8 +38,8 @@ Keep it for personal use; get permission before deploying publicly.
    (750px tiles, zoom 0–5, 32×27 grid at max zoom, 1 map unit = 1 source pixel; ~1,165 tiles, ~82 MB).
    Zoom 5 is lossless WebP (pixel-exact); zoom 0–4 are resampled so they use q92 lossy. Flags: `--lossless-all` (~140 MB), `--lossy` (~half size).
    Marker coordinates are `[lat, lng]` from the image centre; `fromSource()` in `src/data/regions.ts` converts them.
-   Icons (optional): `npm run extract-har -- session.har` pulls icons out of a browser HAR you saved
-   (it also saves legacy source tiles to `public/tiles-legacy/`, which the app doesn't use). All three folders are gitignored.
+   Icons (optional): `npm run extract-har -- session.har` pulls icons out of a browser HAR you saved into
+   `public/icons/`. Tiles and icons are gitignored.
 
 Optional SVG map icons (towers, shrines, shops, …) can be dropped into `public/icons/<name>.svg`; pins try SVG, then PNG, then a glyph.
 The [RotP Object Map](https://objmap.relicsofthepast.dev) (a fork of zeldamods/objmap) serves 13 of them at `/icons/mapicon_*.svg`.
