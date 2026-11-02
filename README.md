@@ -30,7 +30,10 @@ Keep it for personal use; get permission before deploying publicly.
 2. `npm run import-data` → writes `src/data/generated/markers.json` (validated with zod).
    The source mapper in `scripts/import-data.ts` is best-effort — adjust `toMarkers()` to the real schema
    and category names (must match ids in `src/data/categories.ts`).
-3. Optional tiles: put slippy tiles in `public/tiles/{z}/{x}/{y}.png` (zoom 0 = one tile for the whole map).
+3. Optional tiles & icons: browse the map yourself in your browser (zoom 3 and pan around), save the session via
+   DevTools → Network → *Save all as HAR with content*, then run `npm run extract-har -- session.har`.
+   This writes `public/tiles/{z}/{x}_{y}.jpg` (zoom 0 = one 750px tile for the whole 24000px map, max zoom 5)
+   and `public/icons/*.png`. Both folders are gitignored.
 
 An open alternative source is [zeldamods/objmap](https://github.com/zeldamods/objmap) (GPL-3.0); add an adapter to `import-data.ts`.
 
