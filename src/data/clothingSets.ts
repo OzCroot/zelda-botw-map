@@ -13,6 +13,10 @@ const SETS: { name: string; test: RegExp }[] = [
   { name: 'Royal Guard', test: /^Royal Guard /i },
   { name: 'Salvager', test: /^Salvager /i },
   { name: 'Of the Wild', test: / of the Wild$/i },
+  // Sets whose pieces are shrine treasures (see scripts/add-shrine-details.mjs).
+  { name: 'Barbarian', test: /^Barbarian /i },
+  { name: 'Climbing', test: /^(Climbing |Climber's )/i },
+  { name: 'Rubber', test: /^Rubber /i },
 ]
 
 /** Display order for the set chips; "Other" is always last. */

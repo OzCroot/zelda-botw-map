@@ -21,6 +21,12 @@ describe('clothingSetOf', () => {
     ).toEqual(['Of the Wild', 'Of the Wild', 'Of the Wild'])
   })
 
+  it('knows the sets whose pieces are shrine treasures', () => {
+    expect(['Barbarian Helm', 'Barbarian Armor', 'Barbarian Leg Wraps'].map(clothingSetOf)).toEqual(['Barbarian', 'Barbarian', 'Barbarian'])
+    expect(["Climber's Bandanna", 'Climbing Gear', 'Climbing Boots'].map(clothingSetOf)).toEqual(['Climbing', 'Climbing', 'Climbing'])
+    expect(['Rubber Armor', 'Rubber Tights'].map(clothingSetOf)).toEqual(['Rubber', 'Rubber'])
+  })
+
   it('keeps Phantom Ganon apart from Phantom', () => {
     expect(clothingSetOf('Phantom Armor (DLC)')).toBe('Phantom')
     expect(clothingSetOf('Phantom Ganon Armor (DLC)')).toBe('Phantom Ganon')
