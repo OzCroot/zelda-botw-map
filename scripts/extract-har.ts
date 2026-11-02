@@ -17,13 +17,15 @@ interface Entry {
   response: { status: number; content?: { text?: string; encoding?: string } }
 }
 
-const file = process.argv[2]
-if (!file) {
-  console.error('Usage: npm run extract-har -- path/to/session.har')
+const files = process.argv.slice(2)
+if (!files.length) {
+  console.error('Usage: npm run extract-har -- a.har [b.har ...]')
   process.exit(1)
 }
 
-const har = JSON.parse(readFileSync(file, 'utf8')) as { log: { entries: Entry[] } }
+const entries = files.flatMap(
+  (f) => (JSON.parse(readFileSync(f, 'utf8')) as { log: { entries: Entry[] } }).log.entries,
+)
 const TILE = /\/maps\/game\/tiles\/(\d+)\/(\d+_\d+\.jpg)$/
 const ICON = /\/maps\/game\/icons\/([a-z0-9_-]+\.(?:png|svg))$/i
 
@@ -31,8 +33,9 @@ let tiles = 0
 let icons = 0
 let noBody = 0
 const zooms = new Map<string, number>()
+const written = new Set<string>()
 
-for (const e of har.log.entries) {
+for (const e of entries) {
   if (e.response.status !== 200) continue
   const url = e.request.url.split('?')[0]!
   const tile = TILE.exec(url)
@@ -44,6 +47,8 @@ for (const e of har.log.entries) {
     noBody++
     continue
   }
+  if (written.has(dest)) continue // HARs often list a resource twice
+  written.add(dest)
   mkdirSync(dirname(dest), { recursive: true })
   writeFileSync(dest, Buffer.from(text, encoding === 'base64' ? 'base64' : 'utf8'))
   if (tile) {
