@@ -23,9 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# Third-party data & imagery (never commit; raw sources live in the private zelda-botw-data repo)
+# Raw third-party sources live in the private zelda-botw-data repo; generated data, tiles and screenshots are tracked
 data/raw/
-src/data/generated/
 
 # Unoptimised screenshot originals, local only (public/images/korok/webp is tracked)
 public/images/korok/raw/
