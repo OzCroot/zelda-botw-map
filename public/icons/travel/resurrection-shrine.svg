@@ -1,0 +1,22 @@
+<svg width="63" height="61" viewBox="0 0 63 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_ddf_146_52)">
+<path d="M48.4117 27.8589L43.1861 22.8238C42.8477 22.4978 42.2838 22.7151 42.2838 23.1861V25.3957C42.2838 25.758 42.4342 26.084 42.6974 26.3375L44.6898 28.2574C44.9154 28.4748 44.9154 28.8008 44.6898 29.0543L41.3816 32.1696V21.7371C41.3816 16.6295 37.0207 12.5 31.6071 12.5C26.1936 12.5 21.8327 16.6295 21.8327 21.7371V32.8941L17.7726 29.0181C17.547 28.8008 17.547 28.4385 17.7726 28.2212L20.4417 25.6493C20.7049 25.3957 20.8553 25.0697 20.8553 24.7075V22.534C20.8553 22.0993 20.2914 21.882 19.953 22.1718L14.0883 27.8589C13.6372 28.2936 13.6372 28.9819 14.0883 29.4166L30.4417 45.174C30.8929 45.6087 31.6071 45.6087 32.0583 45.174L48.4117 29.4166C48.8628 28.9819 48.8628 28.2936 48.4117 27.8589ZM34.6147 34.5966C34.6147 34.9951 34.2763 35.3211 33.8628 35.3211H28.5996C28.1861 35.3211 27.8477 34.9951 27.8477 34.5966V26.2651C27.8477 24.4539 29.3515 23.0049 31.2312 23.0049C33.1109 23.0049 34.6147 24.4539 34.6147 26.2651V34.5966Z" fill="#ADEFFF"/>
+</g>
+<defs>
+<filter id="filter0_ddf_146_52" x="-7" y="-9" width="77.5" height="77.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="6.25"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.3098 0 0 0 0 0.7529 0 0 0 0 1.0000 0 0 0 1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_146_52"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1.25"/>
+<feGaussianBlur stdDeviation="6.875"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.0392 0 0 0 0 0.5529 0 0 0 0 0.8431 0 0 0 1 0"/>
+<feBlend mode="hard-light" in2="effect1_dropShadow_146_52" result="effect2_dropShadow_146_52"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_146_52" result="shape"/>
+<feGaussianBlur stdDeviation="0.25" result="effect3_foregroundBlur_146_52"/>
+</filter>
+</defs>
+</svg>

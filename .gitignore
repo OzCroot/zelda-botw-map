@@ -27,7 +27,6 @@ dist-ssr
 data/raw/
 src/data/generated/
 public/tiles/
-public/icons/
 
 # Third-party screenshots, local only
 public/images/korok/
