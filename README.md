@@ -30,10 +30,12 @@ Keep it for personal use; get permission before deploying publicly.
 2. `npm run import-data` → writes `src/data/generated/markers.json` (validated with zod).
    The source mapper in `scripts/import-data.ts` is best-effort — adjust `toMarkers()` to the real schema
    and category names (must match ids in `src/data/categories.ts`).
-3. Optional tiles & icons: browse the map yourself in your browser (zoom 3 and pan around), save the session via
-   DevTools → Network → *Save all as HAR with content*, then run `npm run extract-har -- session.har`.
-   This writes `public/tiles/{z}/{x}_{y}.jpg` (zoom 0 = one 750px tile for the whole 24000px map, max zoom 5)
-   and `public/icons/*.png`. Both folders are gitignored.
+3. Map tiles: cut them from a full-size map export (24000x20000 PNG) you own:
+   `npm run cut-tiles -- path/to/botw_map.png` → `public/tiles/{z}/{x}_{y}.webp`
+   (750px tiles, zoom 0–5, 32×27 grid at max zoom, 1 map unit = 1 source pixel; ~1,165 tiles, ~43 MB).
+   Marker coordinates are `[lat, lng]` from the image centre; `fromSource()` in `src/data/regions.ts` converts them.
+   Icons (optional): `npm run extract-har -- session.har` pulls icons out of a browser HAR you saved
+   (it also saves legacy source tiles to `public/tiles-legacy/`, which the app doesn't use). All three folders are gitignored.
 
 Optional SVG map icons (towers, shrines, shops, …) can be dropped into `public/icons/<name>.svg`; pins try SVG, then PNG, then a glyph.
 The [RotP Object Map](https://objmap.relicsofthepast.dev) (a fork of zeldamods/objmap) serves 13 of them at `/icons/mapicon_*.svg`.
