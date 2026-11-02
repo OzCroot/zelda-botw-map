@@ -1,11 +1,16 @@
 import { Moon, Sun } from 'lucide-react'
+import { lazy, Suspense } from 'react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useUi, type Tab } from '@/store/ui'
 import { CategoryFilters } from '../filters/CategoryFilters'
-import { MarkerList } from '../list/MarkerList'
-import { StatsDashboard } from '../progress/StatsDashboard'
-import { DataMenu } from '../settings/DataMenu'
+
+// Secondary tabs load on first open, keeping them (and their dependencies) out of the startup bundle.
+const MarkerList = lazy(() => import('../list/MarkerList').then((m) => ({ default: m.MarkerList })))
+const StatsDashboard = lazy(() =>
+  import('../progress/StatsDashboard').then((m) => ({ default: m.StatsDashboard })),
+)
+const DataMenu = lazy(() => import('../settings/DataMenu').then((m) => ({ default: m.DataMenu })))
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'filters', label: 'Filters' },
@@ -44,19 +49,25 @@ export function PanelContent() {
         </ScrollArea>
       </TabsContent>
       <TabsContent value="list" className="min-h-0 flex-1 pb-2">
-        <MarkerList />
+        <Suspense fallback={null}>
+          <MarkerList />
+        </Suspense>
       </TabsContent>
       <TabsContent value="stats" className="min-h-0 flex-1">
         <ScrollArea className="h-full">
           <div className="pr-3 pb-6">
-            <StatsDashboard />
+            <Suspense fallback={null}>
+              <StatsDashboard />
+            </Suspense>
           </div>
         </ScrollArea>
       </TabsContent>
       <TabsContent value="data" className="min-h-0 flex-1">
         <ScrollArea className="h-full">
           <div className="pr-3 pb-6">
-            <DataMenu />
+            <Suspense fallback={null}>
+              <DataMenu />
+            </Suspense>
           </div>
         </ScrollArea>
       </TabsContent>

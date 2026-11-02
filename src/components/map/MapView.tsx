@@ -1,12 +1,13 @@
 import L from 'leaflet'
-import { useEffect } from 'react'
+import { memo, useEffect, useMemo } from 'react'
+import type { Marker as MarkerData } from '../../types/marker'
 import { ImageOverlay, MapContainer, Marker, Pane, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from 'react-leaflet'
-import MarkerClusterGroup from 'react-leaflet-cluster'
 import { MAP_H, MAP_W, MAX_NATIVE_ZOOM, TILE_SIZE } from '../../data/regions'
 import { MARKER_BY_ID, MARKERS } from '../../data/loadMarkers'
 import { useVisibleMarkers } from '../../hooks/useVisibleMarkers'
 import { useProgress } from '../../store/progress'
 import { useUi } from '../../store/ui'
+import { ClusterLayer } from './ClusterLayer'
 import { labelIcon, markerIcon } from './icons'
 
 // Tile grid: zoom 0 = one TILE_SIZE-wide tile covering the whole map width; 1 map unit = 1px at max native zoom.
@@ -80,10 +81,26 @@ function Controller() {
   return null
 }
 
+// Memoised so ticking an item off (which re-renders MapView) doesn't rebuild every landmark label.
+const Landmarks = memo(function Landmarks({ markers }: { markers: MarkerData[] }) {
+  const select = useUi((s) => s.select)
+  return markers.map((m) => (
+    <Marker
+      key={m.id}
+      position={toLatLng(m.x, m.y)}
+      icon={labelIcon(m.name)}
+      keyboard={false}
+      eventHandlers={{ click: () => select(m.id) }}
+    />
+  ))
+})
+
 export function MapView() {
   const visible = useVisibleMarkers()
-  const completed = useProgress((s) => s.completed)
+  const landmarks = useMemo(() => visible.filter((m) => m.category === 'landmark'), [visible])
+  const pins = useMemo(() => visible.filter((m) => m.category !== 'landmark'), [visible])
   const focusId = useUi((s) => s.focusId)
+  const focusDone = useProgress((s) => (focusId ? focusId in s.completed : false))
   const select = useUi((s) => s.select)
   const focused = focusId ? MARKER_BY_ID.get(focusId) : undefined
 
@@ -126,35 +143,15 @@ export function MapView() {
       />
       {/* Landmarks are plain text labels in a pane below the marker pane so pins overflow them. */}
       <Pane name="landmarks" style={{ zIndex: 450 }}>
-        {visible
-          .filter((m) => m.category === 'landmark')
-          .map((m) => (
-            <Marker
-              key={m.id}
-              position={toLatLng(m.x, m.y)}
-              icon={labelIcon(m.name)}
-              keyboard={false}
-              eventHandlers={{ click: () => select(m.id) }}
-            />
-          ))}
+        <Landmarks markers={landmarks} />
       </Pane>
-      <MarkerClusterGroup chunkedLoading maxClusterRadius={40} showCoverageOnHover={false}>
-        {visible.filter((m) => m.category !== 'landmark').map((m) => (
-          <Marker
-            key={m.id}
-            position={toLatLng(m.x, m.y)}
-            icon={markerIcon(m.category, m.id in completed, m.id === focusId, m.id)}
-            title={m.name}
-            eventHandlers={{ click: () => select(m.id) }}
-          />
-        ))}
-      </MarkerClusterGroup>
+      <ClusterLayer markers={pins} toLatLng={toLatLng} />
       {focused && (
         // Drawn outside the cluster group so the revealed marker is never hidden inside a cluster.
         <Marker
           key={focused.id}
           position={toLatLng(focused.x, focused.y)}
-          icon={markerIcon(focused.category, focused.id in completed, true, focused.id)}
+          icon={markerIcon(focused.category, focusDone, true, focused.id)}
           zIndexOffset={2000}
           eventHandlers={{ click: () => select(focused.id) }}
         >

@@ -1,13 +1,29 @@
-// Local-only finding hints for Korok seeds (src/data/generated/ is gitignored).
+// Local-only finding hints for Korok seeds (src/data/generated/). Loaded on demand: ~140 KB nobody needs until a dialog opens.
+import { useEffect, useState } from 'react'
+
 export interface SeedHint {
   location?: string
   puzzle?: string
 }
+type Hints = Record<string, SeedHint>
 
-const generated = import.meta.glob('./generated/seed-hints.json', { eager: true, import: 'default' }) as Record<
+const loaders = import.meta.glob('./generated/seed-hints.json', { import: 'default' }) as Record<
   string,
-  Record<string, SeedHint>
+  () => Promise<Hints>
 >
 
-export const SEED_HINTS: Record<string, SeedHint> =
-  import.meta.env.MODE === 'test' ? {} : (Object.values(generated)[0] ?? {})
+let cache: Promise<Hints> | undefined
+export function loadSeedHints(): Promise<Hints> {
+  const load = Object.values(loaders)[0]
+  cache ??= import.meta.env.MODE === 'test' || !load ? Promise.resolve({}) : load().catch(() => ({}))
+  return cache
+}
+
+/** Hint for one marker; undefined until the hint file has loaded. */
+export function useSeedHint(id: string | undefined): SeedHint | undefined {
+  const [hints, setHints] = useState<Hints>()
+  useEffect(() => {
+    if (id && !hints) void loadSeedHints().then(setHints)
+  }, [id, hints])
+  return id ? hints?.[id] : undefined
+}

@@ -3,12 +3,13 @@ import { useMemo, useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CATEGORIES, CATEGORY_GROUPS } from '@/data/categories'
 import { MARKERS, REGIONS } from '@/data/loadMarkers'
+import { once } from '@/lib/once'
 import { cn } from '@/lib/utils'
 import { PRESETS, useUi } from '@/store/ui'
 import { CategoryIcon } from '../map/CategoryIcon'
 
 const isMaster = (m: { tags?: string[] }) => !!m.tags?.includes('Master Mode')
-const MASTER_COUNT = MARKERS.filter(isMaster).length
+const masterCount = once(() => MARKERS.filter(isMaster).length)
 
 // Counts per category, and per category+region, with and without Master Mode items.
 function tally(master: boolean) {
@@ -24,7 +25,7 @@ function tally(master: boolean) {
   }
   return { totals, byRegion }
 }
-const COUNTS = { on: tally(true), off: tally(false) }
+const getCounts = once(() => ({ on: tally(true), off: tally(false) }))
 
 const COLLAPSED_BY_DEFAULT = new Set(['Treasure', 'Enemies', 'Services', 'Places'])
 
@@ -121,7 +122,7 @@ export function CategoryFilters() {
   const hiddenRegions = useUi((s) => s.hiddenRegions)
   const masterMode = useUi((s) => s.masterMode)
   const setMasterMode = useUi((s) => s.setMasterMode)
-  const { totals, byRegion } = masterMode ? COUNTS.on : COUNTS.off
+  const { totals, byRegion } = masterMode ? getCounts().on : getCounts().off
   const toggleCatRegion = useUi((s) => s.toggleCatRegion)
   const setCatRegions = useUi((s) => s.setCatRegions)
   const setEnabled = (ids: string[], on: boolean) =>
@@ -164,12 +165,12 @@ export function CategoryFilters() {
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(11.5rem,1fr))] gap-2">
         <ToggleTile icon={EyeOff} label="Hide completed" on={hideCompleted} onChange={setHideCompleted} />
-        {MASTER_COUNT > 0 && (
+        {masterCount() > 0 && (
           <ToggleTile
             icon={Swords}
             label="Master Mode"
-            badge={`+${MASTER_COUNT}`}
-            hint={`${MASTER_COUNT} extra weapons, gems and Lynels that only appear in Master Mode`}
+            badge={`+${masterCount()}`}
+            hint={`${masterCount()} extra weapons, gems and Lynels that only appear in Master Mode`}
             on={masterMode}
             onChange={setMasterMode}
           />

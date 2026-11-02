@@ -4,14 +4,18 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { CATEGORIES, CATEGORY_BY_ID } from '@/data/categories'
 import { MARKERS, REGION_BY_ID } from '@/data/loadMarkers'
+import { once } from '@/lib/once'
 import { searchMarkers } from '@/lib/search'
 import { cn } from '@/lib/utils'
 import { useUi } from '@/store/ui'
 import type { Marker } from '@/types/marker'
 import { CategoryIcon } from '../map/CategoryIcon'
 
-const counts: Record<string, number> = {}
-for (const m of MARKERS) counts[m.category] = (counts[m.category] ?? 0) + 1
+const getCounts = once(() => {
+  const counts: Record<string, number> = {}
+  for (const m of MARKERS) counts[m.category] = (counts[m.category] ?? 0) + 1
+  return counts
+})
 
 const item =
   'flex min-h-12 cursor-pointer items-center gap-3 rounded-lg px-2.5 py-1.5 text-sm outline-none data-[selected=true]:bg-accent sm:min-h-11'
@@ -120,7 +124,7 @@ export function SearchBox() {
               <CategoryIcon id={c.id} className="size-7" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate">Show all {c.label}</span>
-                <span className="block text-xs text-muted-foreground">{counts[c.id] ?? 0} on the map</span>
+                <span className="block text-xs text-muted-foreground">{getCounts()[c.id] ?? 0} on the map</span>
               </span>
               <Layers className="size-4 shrink-0 text-muted-foreground" aria-hidden />
             </Command.Item>
