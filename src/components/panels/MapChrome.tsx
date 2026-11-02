@@ -1,4 +1,3 @@
-import { Moon, Sun } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -61,9 +60,8 @@ function ResizeHandle() {
 export function MapChrome() {
   const menuOpen = useUi((s) => s.menuOpen)
   const setMenuOpen = useUi((s) => s.setMenuOpen)
-  const theme = useUi((s) => s.theme)
-  const toggleTheme = useUi((s) => s.toggleTheme)
   const menuWidth = useUi((s) => s.menuWidth)
+  const tab = useUi((s) => s.tab)
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -93,16 +91,6 @@ export function MapChrome() {
         <div className="pointer-events-auto min-w-0 flex-1 sm:max-w-md sm:flex-none sm:basis-96">
           <SearchBox />
         </div>
-        <div className="flex-1 max-sm:hidden" />
-        <Button
-          variant="ghost"
-          size="icon-lg"
-          onClick={toggleTheme}
-          aria-label="Toggle theme"
-          className={cn('pointer-events-auto size-11 rounded-xl', glass)}
-        >
-          {theme === 'dark' ? <Sun /> : <Moon />}
-        </Button>
       </div>
 
       {/* Slide-over: always mounted (keeps scroll/tab state), overlays the map, never resizes it. */}
@@ -110,10 +98,10 @@ export function MapChrome() {
         id="map-menu"
         inert={!menuOpen}
         aria-hidden={!menuOpen}
+        data-tab={tab}
         style={{ width: `min(${menuWidth}px, calc(100% - 1.5rem))` }}
         className={cn(
-          'absolute top-[3.75rem] bottom-3 left-3 z-[1000] origin-top-left rounded-2xl p-3',
-          glass,
+          'panel-surface absolute top-[3.75rem] bottom-3 left-3 z-[1000] origin-top-left rounded-2xl border border-border/70 p-3 shadow-lg',
           'transition-[opacity,transform] duration-[180ms] ease-[cubic-bezier(.2,.8,.2,1)] will-change-transform',
           menuOpen ? 'translate-x-0 scale-100 opacity-100' : 'pointer-events-none -translate-x-3 scale-[.97] opacity-0',
         )}

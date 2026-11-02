@@ -1,6 +1,6 @@
 import L from 'leaflet'
 import { useEffect } from 'react'
-import { MapContainer, Marker, Pane, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from 'react-leaflet'
+import { ImageOverlay, MapContainer, Marker, Pane, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import { MAP_H, MAP_W, MAX_NATIVE_ZOOM, TILE_SIZE } from '../../data/regions'
 import { MARKER_BY_ID, MARKERS } from '../../data/loadMarkers'
@@ -105,6 +105,15 @@ export function MapView() {
     >
       <Controller />
       <ZoomControl position="bottomright" />
+      {/* Sits under the tiles; its CSS box-shadow darkens the backdrop around the map edge. */}
+      <Pane name="map-shadow" style={{ zIndex: 150 }}>
+        <ImageOverlay
+          url="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+          bounds={BOUNDS}
+          className="map-edge-shadow"
+          interactive={false}
+        />
+      </Pane>
       <TileLayer
         url="/tiles/{z}/{x}_{y}.webp"
         tileSize={TILE_SIZE}

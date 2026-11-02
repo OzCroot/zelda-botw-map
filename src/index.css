@@ -114,6 +114,53 @@
   background-image: linear-gradient(var(--map-grid) 1px, transparent 1px), linear-gradient(90deg, var(--map-grid) 1px, transparent 1px);
   background-size: 48px 48px;
 }
+/* Dark theme: dark-blue Sheikah texture beyond the map edges; the map casts a shadow onto it. */
+.dark .map-grid {
+  background-color: #050d1c;
+  background-image: linear-gradient(rgb(3 8 18 / 0.1), rgb(3 8 18 / 0.1)), url('/brand/texture-blue-grey.webp');
+  background-size: auto, 420px 420px;
+}
+
+.map-edge-shadow {
+  background: #000;
+  box-shadow: 0 0 0 24px #000, 0 0 90px 70px #000, 0 0 240px 140px rgb(0 0 0 / 0.85), 0 0 420px 220px rgb(0 0 0 / 0.5);
+}
+
+/* Menu panel: blue-grey Sheikah texture, with a faint per-tab illustration. */
+.panel-surface {
+  isolation: isolate;
+  overflow: hidden;
+  background-color: color-mix(in oklab, var(--background) 92%, transparent);
+  backdrop-filter: blur(10px);
+}
+.dark .panel-surface {
+  background-color: #0b1526;
+  background-image:
+    linear-gradient(180deg, rgb(7 14 27 / 0.5), rgb(7 14 27 / 0.82)),
+    url('/brand/texture-blue-grey.webp');
+  background-size: auto, 420px 420px;
+}
+.panel-surface::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  right: -48px;
+  bottom: -48px;
+  width: 340px;
+  height: 340px;
+  pointer-events: none;
+  background-color: var(--primary);
+  opacity: 0.07;
+  -webkit-mask: var(--panel-art) center / contain no-repeat;
+  mask: var(--panel-art) center / contain no-repeat;
+  transition: opacity 0.2s;
+}
+.panel-surface[data-tab='filters'] { --panel-art: url('/brand/sheikah-eye-ring.svg'); }
+.panel-surface[data-tab='list'] { --panel-art: url('/brand/sheikah-eye.svg'); }
+.panel-surface[data-tab='stats'] { --panel-art: url('/brand/art-sheikah-slate.svg'); }
+.panel-surface[data-tab='data'] { --panel-art: url('/brand/art-master-sword.svg'); }
+.panel-surface[data-tab='stats']::before,
+.panel-surface[data-tab='data']::before { width: 280px; height: 420px; right: -20px; bottom: -40px; }
 
 .pin { position: relative; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9999px; background: var(--c); color: #0f172a; font-size: 16px; border: 2px solid #0f172a; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
 .pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
