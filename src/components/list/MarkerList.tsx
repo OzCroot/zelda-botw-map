@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { CATEGORY_BY_ID } from '@/data/categories'
 import { REGION_BY_ID } from '@/data/loadMarkers'
@@ -62,7 +63,7 @@ export function MarkerList() {
           </SelectContent>
         </Select>
       </div>
-      <div ref={ref} className="min-h-0 flex-1 overflow-auto">
+      <ScrollArea viewportRef={ref} className="min-h-0 flex-1">
         <div style={{ height: v.getTotalSize(), position: 'relative' }}>
           {v.getVirtualItems().map((vi) => {
             const m = rows[vi.index]!
@@ -109,7 +110,7 @@ export function MarkerList() {
             )
           })}
         </div>
-      </div>
+      </ScrollArea>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { Moon, Sun } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useUi, type Tab } from '@/store/ui'
 import { CategoryFilters } from '../filters/CategoryFilters'
@@ -35,17 +36,29 @@ export function PanelContent() {
             </TabsTrigger>
           ))}
         </TabsList>
-        <TabsContent value="filters" className="min-h-0 flex-1 overflow-y-auto pb-6">
-          <CategoryFilters />
+        <TabsContent value="filters" className="min-h-0 flex-1">
+          <ScrollArea className="h-full">
+            <div className="pr-3 pb-6">
+              <CategoryFilters />
+            </div>
+          </ScrollArea>
         </TabsContent>
         <TabsContent value="list" className="min-h-0 flex-1 pb-2">
           <MarkerList />
         </TabsContent>
-        <TabsContent value="stats" className="min-h-0 flex-1 overflow-y-auto pb-6">
-          <StatsDashboard />
+        <TabsContent value="stats" className="min-h-0 flex-1">
+          <ScrollArea className="h-full">
+            <div className="pr-3 pb-6">
+              <StatsDashboard />
+            </div>
+          </ScrollArea>
         </TabsContent>
-        <TabsContent value="data" className="min-h-0 flex-1 overflow-y-auto pb-6">
-          <DataMenu />
+        <TabsContent value="data" className="min-h-0 flex-1">
+          <ScrollArea className="h-full">
+            <div className="pr-3 pb-6">
+              <DataMenu />
+            </div>
+          </ScrollArea>
         </TabsContent>
       </Tabs>
     </div>
