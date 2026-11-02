@@ -19,6 +19,11 @@ function prepare(ds: MarkerDataset): MarkerDataset {
         ? { ...m, category: 'shrine-dlc', tags: [...new Set(m.tags)] }
         : m,
     )
+    // Korok seeds are all named alike; show their number (e.g. "Korok Seed #031") so they can be told apart and searched.
+    .map((m) => {
+      const num = m.category === 'korok-seed' ? /Seed(\d+)$/.exec(m.id)?.[1] : undefined
+      return num ? { ...m, name: `Korok Seed #${num.padStart(3, '0')}` } : m
+    })
     .filter((m) => m.category in CATEGORY_BY_ID)
   return { ...ds, markers }
 }
