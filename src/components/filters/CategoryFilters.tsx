@@ -1,7 +1,6 @@
-import { ChevronDown, MapPin } from 'lucide-react'
+import { ChevronDown, EyeOff, MapPin, Swords } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CATEGORIES, CATEGORY_GROUPS } from '@/data/categories'
 import { MARKERS, REGIONS } from '@/data/loadMarkers'
 import { cn } from '@/lib/utils'
@@ -47,6 +46,68 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
   )
 }
 
+/** Small pill for counts. */
+function CountChip({ children, tone }: { children: React.ReactNode; tone?: 'primary' }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex h-4 items-center rounded-full border px-1.5 text-[10px] leading-none font-medium tracking-normal whitespace-nowrap normal-case tabular-nums',
+        tone === 'primary'
+          ? 'border-primary/40 bg-primary/15 text-foreground'
+          : 'border-border/70 bg-background/40 text-muted-foreground',
+      )}
+    >
+      {children}
+    </span>
+  )
+}
+
+/** Compact on/off tile: icon, label, optional badge, and a small switch. */
+function ToggleTile({
+  on,
+  onChange,
+  icon: Icon,
+  label,
+  badge,
+  hint,
+}: {
+  on: boolean
+  onChange: (on: boolean) => void
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  badge?: React.ReactNode
+  hint?: string
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      title={hint}
+      onClick={() => onChange(!on)}
+      className={cn(
+        'flex h-11 min-w-0 items-center gap-2 rounded-xl border px-3 text-left text-sm outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50',
+        on ? 'border-primary/50 bg-primary/12' : 'border-border/70 bg-card/40 hover:bg-card/70',
+      )}
+    >
+      <Icon className={cn('size-4 shrink-0', on ? 'text-primary' : 'text-muted-foreground')} />
+      <span className="min-w-0 flex-1 truncate">{label}</span>
+      {badge && <span className="shrink-0 text-[11px] text-muted-foreground tabular-nums">{badge}</span>}
+      <span
+        aria-hidden
+        className={cn('relative h-[18px] w-8 shrink-0 rounded-full transition-colors', on ? 'bg-primary' : 'bg-muted-foreground/30')}
+      >
+        <span
+          className={cn(
+            'absolute top-0.5 left-0.5 size-3.5 rounded-full bg-white shadow transition-transform duration-150',
+            on && 'translate-x-3.5',
+          )}
+        />
+      </span>
+    </button>
+  )
+}
+
 export function CategoryFilters() {
   const enabled = useUi((s) => s.enabled)
   const toggleCategory = useUi((s) => s.toggleCategory)
@@ -67,14 +128,13 @@ export function CategoryFilters() {
     useUi.setState((s) => ({ enabled: { ...s.enabled, ...Object.fromEntries(ids.map((i) => [i, on])) } }))
 
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set(COLLAPSED_BY_DEFAULT))
-  const [expanded, setExpanded] = useState<string | null>(null)
   const groups = useMemo(
     () => CATEGORY_GROUPS.map((g) => ({ g, items: CATEGORIES.filter((c) => c.group === g) })),
     [],
   )
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-1.5">
         {PRESETS.map((p) => (
           <Chip key={p.label} on={false} onClick={() => applyPreset(p.ids)}>
@@ -86,7 +146,7 @@ export function CategoryFilters() {
         </Chip>
       </div>
 
-      <div className="space-y-1.5">
+      <div className="space-y-2.5">
         <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
           <MapPin className="size-3.5" /> Area
         </div>
@@ -102,27 +162,19 @@ export function CategoryFilters() {
         </div>
       </div>
 
-      <Label htmlFor="hide-completed" className="min-h-8 gap-3 text-sm">
-        <Checkbox id="hide-completed" checked={hideCompleted} onCheckedChange={(c) => setHideCompleted(c === true)} />
-        Hide completed
-      </Label>
-
-      {MASTER_COUNT > 0 && (
-        <Label htmlFor="master-mode" className="min-h-8 items-start gap-3 text-sm">
-          <Checkbox
-            id="master-mode"
-            className="mt-0.5"
-            checked={masterMode}
-            onCheckedChange={(c) => setMasterMode(c === true)}
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(11.5rem,1fr))] gap-2">
+        <ToggleTile icon={EyeOff} label="Hide completed" on={hideCompleted} onChange={setHideCompleted} />
+        {MASTER_COUNT > 0 && (
+          <ToggleTile
+            icon={Swords}
+            label="Master Mode"
+            badge={`+${MASTER_COUNT}`}
+            hint={`${MASTER_COUNT} extra weapons, gems and Lynels that only appear in Master Mode`}
+            on={masterMode}
+            onChange={setMasterMode}
           />
-          <span>
-            Master Mode items
-            <span className="block text-xs font-normal text-muted-foreground">
-              {MASTER_COUNT} extra weapons, gems and Lynels that only appear in Master Mode
-            </span>
-          </span>
-        </Label>
-      )}
+        )}
+      </div>
 
       {groups.map(({ g, items }) => {
         const open = !collapsed.has(g)
@@ -130,7 +182,7 @@ export function CategoryFilters() {
         const onCount = ids.filter((i) => enabled[i]).length
         return (
           <section key={g}>
-            <div className="mb-1.5 flex items-center">
+            <div className="mb-2.5 flex items-center">
               <button
                 type="button"
                 aria-expanded={open}
@@ -146,9 +198,9 @@ export function CategoryFilters() {
               >
                 <ChevronDown className={cn('size-3.5 transition-transform duration-150', !open && '-rotate-90')} />
                 {g}
-                <span className="font-normal tabular-nums opacity-70">
+                <CountChip>
                   {onCount}/{ids.length}
-                </span>
+                </CountChip>
               </button>
               <button
                 type="button"
@@ -159,73 +211,93 @@ export function CategoryFilters() {
               </button>
             </div>
             {open && (
-              <ul className="grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-1">
+              <ul className="grid grid-cols-[repeat(auto-fill,minmax(10.5rem,1fr))] gap-2">
                 {items.map((c) => {
                   const regs = byRegion[c.id] ?? {}
                   const regIds = REGIONS.filter((r) => regs[r.id]).map((r) => r.id)
                   const canSplit = regIds.length > 1
                   const hidden = hiddenRegions[c.id] ?? []
-                  const isOpen = expanded === c.id
+                  const on = enabled[c.id]
                   return (
-                    <li key={c.id} className={cn('flex min-w-0 flex-col', isOpen && 'col-span-full')}>
+                    <li key={c.id} className="min-w-0">
                       <div
                         className={cn(
-                          'flex items-center rounded-lg border transition-colors',
-                          enabled[c.id] ? 'border-border bg-card' : 'border-transparent',
+                          'flex h-12 items-center rounded-xl border transition-colors',
+                          on ? 'border-primary/40 bg-card/80 shadow-sm' : 'border-border/50 bg-card/25 hover:bg-card/45',
                         )}
                       >
                         <button
                           type="button"
-                          aria-pressed={enabled[c.id]}
+                          aria-pressed={on}
                           onClick={() => toggleCategory(c.id)}
                           onDoubleClick={() => soloCategory(c.id)}
-                          title="Click to toggle · double-click to show only this"
+                          title={`${c.label} · click to toggle, double-click to show only this`}
                           className={cn(
-                            'flex min-h-10 min-w-0 flex-1 items-center gap-2 rounded-lg px-1.5 text-left text-sm outline-none transition-[opacity,filter] focus-visible:ring-3 focus-visible:ring-ring/50',
-                            !enabled[c.id] && 'opacity-45 grayscale hover:opacity-75',
+                            'flex h-full min-w-0 flex-1 items-center gap-2 rounded-xl pl-2 text-left text-[13px] outline-none transition-[opacity,filter] focus-visible:ring-3 focus-visible:ring-ring/50',
+                            !on && 'opacity-50 grayscale hover:opacity-80',
                           )}
                         >
-                          <CategoryIcon id={c.id} className="size-7" />
+                          <CategoryIcon id={c.id} className="size-7 shrink-0" />
                           <span className="min-w-0 flex-1 leading-tight">
-                            <span className="line-clamp-2 break-words">{c.label}</span>
-                            <span className="block text-[11px] text-muted-foreground tabular-nums">
-                              {totals[c.id] ?? 0}
-                              {hidden.length > 0 && ` · ${regIds.length - hidden.length} areas`}
+                            <span className="block truncate">{c.label}</span>
+                            <span className="mt-0.5 flex items-center gap-1">
+                              <CountChip>{totals[c.id] ?? 0}</CountChip>
+                              {hidden.length > 0 && (
+                                <CountChip tone="primary">
+                                  {regIds.length - hidden.length}/{regIds.length} areas
+                                </CountChip>
+                              )}
                             </span>
                           </span>
                         </button>
-                        {canSplit && (
-                          <button
-                            type="button"
-                            aria-label={`${c.label} by area`}
-                            aria-expanded={isOpen}
-                            onClick={() => setExpanded(isOpen ? null : c.id)}
-                            className="grid size-8 shrink-0 place-items-center rounded-md text-muted-foreground outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
-                          >
-                            <ChevronDown className={cn('size-4 transition-transform duration-150', isOpen && 'rotate-180')} />
-                          </button>
+                        {canSplit ? (
+                          <Popover>
+                            <PopoverTrigger
+                              aria-label={`${c.label} by area`}
+                              className={cn(
+                                'mr-1 grid size-8 shrink-0 place-items-center rounded-lg text-muted-foreground outline-none hover:bg-accent/60 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 data-popup-open:bg-accent/60 data-popup-open:text-foreground',
+                                hidden.length > 0 && 'text-primary',
+                              )}
+                            >
+                              <ChevronDown className="size-4" />
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <div className="mb-2 flex items-center justify-between gap-2">
+                                <span className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                  <MapPin className="size-3.5" /> {c.label}
+                                </span>
+                                <button
+                                  type="button"
+                                  className="rounded px-1 text-xs text-muted-foreground hover:text-foreground"
+                                  onClick={() => {
+                                    if (!on) setEnabled([c.id], true)
+                                    setCatRegions(c.id, hidden.length ? [] : regIds)
+                                  }}
+                                >
+                                  {hidden.length ? 'All areas' : 'None'}
+                                </button>
+                              </div>
+                              <div className="flex flex-wrap gap-1.5">
+                                {regIds.map((rid) => (
+                                  <Chip
+                                    key={rid}
+                                    on={!hidden.includes(rid)}
+                                    onClick={() => {
+                                      if (!on) setEnabled([c.id], true)
+                                      toggleCatRegion(c.id, rid)
+                                    }}
+                                  >
+                                    {REGIONS.find((r) => r.id === rid)?.label}{' '}
+                                    <span className="opacity-60 tabular-nums">{regs[rid]}</span>
+                                  </Chip>
+                                ))}
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                        ) : (
+                          <span className="w-2 shrink-0" aria-hidden />
                         )}
                       </div>
-                      {isOpen && (
-                        <div className="mt-1 mb-1 flex flex-wrap gap-1.5 rounded-lg bg-muted/50 p-2">
-                          {regIds.map((rid) => (
-                            <Chip key={rid} on={!hidden.includes(rid)} onClick={() => {
-                              if (!enabled[c.id]) setEnabled([c.id], true)
-                              toggleCatRegion(c.id, rid)
-                            }}>
-                              {REGIONS.find((r) => r.id === rid)?.label}{' '}
-                              <span className="opacity-60 tabular-nums">{regs[rid]}</span>
-                            </Chip>
-                          ))}
-                          <button
-                            type="button"
-                            className="px-1 text-xs text-muted-foreground hover:text-foreground"
-                            onClick={() => setCatRegions(c.id, hidden.length ? [] : regIds)}
-                          >
-                            {hidden.length ? 'All areas' : 'None'}
-                          </button>
-                        </div>
-                      )}
                     </li>
                   )
                 })}

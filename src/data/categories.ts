@@ -65,10 +65,16 @@ export const MARKER_ICON_OVERRIDES: Record<string, string> = {
 
 /**
  * Visual scale per icon so artwork reads at a similar size. Travel art is a soft glow (~55% solid),
- * so it is enlarged; quest-shrine fills its whole frame, so it is shrunk to match travel/shrine.
+ * so it is enlarged; quest-shrine, quest-side and quest-memory fill their whole frame, so they are
+ * shrunk to match travel/shrine.
  */
+const ICON_SCALE: Record<string, number> = {
+  'quest/quest-shrine': 0.69,
+  'quest/quest-side': 0.72,
+  'quest/quest-memory': 0.72,
+}
 export const iconScale = (name?: string): number =>
-  name === 'quest/quest-shrine' ? 0.69 : name?.startsWith('travel/') ? 1.25 : 1
+  (name && ICON_SCALE[name]) || (name?.startsWith('travel/') ? 1.25 : 1)
 
 export const CATEGORY_BY_ID: Record<string, Category> = Object.fromEntries(
   CATEGORIES.map((x) => [x.id, x]),
