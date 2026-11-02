@@ -165,7 +165,9 @@
 .panel-surface[data-tab='data']::before { width: 280px; height: 420px; right: -20px; bottom: -40px; }
 
 .pin { position: relative; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9999px; background: var(--c); color: #0f172a; font-size: 16px; border: 2px solid #0f172a; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
-.pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
+/* .leaflet-container prefix: Leaflet sets width:auto on marker-pane images at the same specificity, which made non-square icons
+   narrower/wider than the pin and pushed them off-centre. Equal specificity + later in the file wins. */
+.leaflet-container .pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
 .pin:has(img) { background: transparent; border-color: transparent; box-shadow: none; font-size: 0; }
 .landmark-label { pointer-events: none; }
 .landmark-label span { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: auto; cursor: pointer; font: 600 15px/1 Georgia, 'Times New Roman', serif; color: #f3e3b0; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 1px 2px #000; }

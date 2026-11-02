@@ -74,6 +74,7 @@ const ICON_SCALE: Record<string, number> = {
   'quest/quest-memory': 0.72,
 }
 export const iconScale = (name?: string): number =>
+  'travel/sheikah-tower': 1.375, // travel's 1.25 plus 10%
   (name && ICON_SCALE[name]) || (name?.startsWith('travel/') ? 1.25 : 1)
 
 export const CATEGORY_BY_ID: Record<string, Category> = Object.fromEntries(
