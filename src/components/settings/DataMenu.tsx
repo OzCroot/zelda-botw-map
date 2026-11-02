@@ -26,10 +26,11 @@ import {
   type ImportDiff,
   type ProgressExport,
 } from '@/lib/exportImport'
+import { once } from '@/lib/once'
 import { decodeProgress, encodeProgress } from '@/lib/shareCode'
 import { useProgress } from '@/store/progress'
 
-const ids = MARKERS.map((m) => m.id)
+const getIds = once(() => MARKERS.map((m) => m.id))
 
 function Heading({ children }: { children: React.ReactNode }) {
   return <h3 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{children}</h3>
@@ -158,7 +159,7 @@ export function DataMenu() {
           <Button
             variant="outline"
             onClick={() => {
-              const c = encodeProgress(ids, new Set(Object.keys(completed)))
+              const c = encodeProgress(getIds(), new Set(Object.keys(completed)))
               setCode(c)
               navigator.clipboard?.writeText(c).then(() => toast('Code copied'))
             }}
@@ -168,7 +169,7 @@ export function DataMenu() {
           <Button
             variant="outline"
             onClick={() => {
-              const done = decodeProgress(ids, code)
+              const done = decodeProgress(getIds(), code)
               if (!done) return toast.error('Invalid code for this dataset')
               const now = Date.now()
               replaceAll({ completed: Object.fromEntries(done.map((id) => [id, completed[id] ?? now])), notes })

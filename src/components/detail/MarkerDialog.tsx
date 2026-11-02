@@ -14,7 +14,7 @@ import {
 import { CATEGORY_BY_ID } from '@/data/categories'
 import { CategoryIcon } from '../map/CategoryIcon'
 import { MARKER_BY_ID, REGION_BY_ID } from '@/data/loadMarkers'
-import { SEED_HINTS } from '@/data/seedHints'
+import { useSeedHint } from '@/data/seedHints'
 import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
 import { useProgress } from '@/store/progress'
 import { useUi } from '@/store/ui'
@@ -45,7 +45,7 @@ export function MarkerDialog() {
 
   const m = id ? MARKER_BY_ID.get(id) : undefined
   const cat = m ? CATEGORY_BY_ID[m.category] : undefined
-  const hint = m ? SEED_HINTS[m.id] : undefined
+  const hint = useSeedHint(m?.id)
   const region = m?.region ? (REGION_BY_ID[m.region]?.label ?? m.region) : undefined
 
   return (
