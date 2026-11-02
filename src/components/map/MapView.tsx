@@ -1,13 +1,13 @@
 import L from 'leaflet'
 import { useEffect } from 'react'
-import { MapContainer, Marker, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from 'react-leaflet'
+import { MapContainer, Marker, Pane, TileLayer, Tooltip, ZoomControl, useMap, useMapEvents } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import { MAP_H, MAP_W, MAX_NATIVE_ZOOM, TILE_SIZE } from '../../data/regions'
 import { MARKER_BY_ID, MARKERS } from '../../data/loadMarkers'
 import { useVisibleMarkers } from '../../hooks/useVisibleMarkers'
 import { useProgress } from '../../store/progress'
 import { useUi } from '../../store/ui'
-import { markerIcon } from './icons'
+import { labelIcon, markerIcon } from './icons'
 
 // Tile grid: zoom 0 = one TILE_SIZE-wide tile covering the whole map width; 1 map unit = 1px at max native zoom.
 const K = TILE_SIZE / MAP_W
@@ -115,12 +115,26 @@ export function MapView() {
         maxNativeZoom={MAX_NATIVE_ZOOM}
         errorTileUrl="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
       />
+      {/* Landmarks are plain text labels in a pane below the marker pane so pins overflow them. */}
+      <Pane name="landmarks" style={{ zIndex: 450 }}>
+        {visible
+          .filter((m) => m.category === 'landmark')
+          .map((m) => (
+            <Marker
+              key={m.id}
+              position={toLatLng(m.x, m.y)}
+              icon={labelIcon(m.name)}
+              keyboard={false}
+              eventHandlers={{ click: () => select(m.id) }}
+            />
+          ))}
+      </Pane>
       <MarkerClusterGroup chunkedLoading maxClusterRadius={40} showCoverageOnHover={false}>
-        {visible.map((m) => (
+        {visible.filter((m) => m.category !== 'landmark').map((m) => (
           <Marker
             key={m.id}
             position={toLatLng(m.x, m.y)}
-            icon={markerIcon(m.category, m.id in completed, m.id === focusId)}
+            icon={markerIcon(m.category, m.id in completed, m.id === focusId, m.id)}
             title={m.name}
             eventHandlers={{ click: () => select(m.id) }}
           />
@@ -131,7 +145,7 @@ export function MapView() {
         <Marker
           key={focused.id}
           position={toLatLng(focused.x, focused.y)}
-          icon={markerIcon(focused.category, focused.id in completed, true)}
+          icon={markerIcon(focused.category, focused.id in completed, true, focused.id)}
           zIndexOffset={2000}
           eventHandlers={{ click: () => select(focused.id) }}
         >

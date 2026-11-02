@@ -8,55 +8,67 @@ const c = (
 
 export const CATEGORIES: Category[] = [
   // Travel
-  c('shrine', 'Shrines', 'Travel', '⛩', '#38bdf8', true),
-  c('shrine-dlc', 'Shrines (DLC)', 'Travel', '⛩', '#38bdf8', true, true, 'shrine_dlc'),
-  c('sheikah-tower', 'Sheikah Towers', 'Travel', '🗼', '#fbbf24', true, true, 'tower'),
-  c('tech-lab', 'Tech Labs', 'Travel', '⚙', '#22d3ee', true, true, 'lab'),
+  c('shrine', 'Shrines', 'Travel', '⛩', '#38bdf8', true, true, 'travel/shrine'),
+  c('shrine-dlc', 'Shrines (DLC)', 'Travel', '⛩', '#38bdf8', true, true, 'travel/shrine-dlc'),
+  c('sheikah-tower', 'Sheikah Towers', 'Travel', '🗼', '#fbbf24', true, true, 'travel/sheikah-tower'),
+  c('tech-lab', 'Tech Labs', 'Travel', '⚙', '#22d3ee', true, true, 'travel/tech-lab'),
   // Quests
-  c('main-quest', 'Main Quests', 'Quests', '★', '#facc15', true, true, 'mainquest'),
-  c('shrine-quest', 'Shrine Quests', 'Quests', '◈', '#7dd3fc', true, true, 'shrinequest'),
-  c('side-quest', 'Side Quests', 'Quests', '!', '#fb923c', true, true, 'sidequest'),
-  c('memory', 'Memories', 'Quests', '✦', '#c084fc', true),
-  c('quest-objective', 'Quest Objectives', 'Quests', '•', '#fdba74', true, false, 'objective'),
+  c('main-quest', 'Main Quests', 'Quests', '★', '#facc15', true, true, 'quest/quest-main'),
+  c('shrine-quest', 'Shrine Quests', 'Quests', '◈', '#7dd3fc', true, true, 'quest/quest-shrine'),
+  c('side-quest', 'Side Quests', 'Quests', '!', '#fb923c', true, true, 'quest/quest-side'),
+  c('memory', 'Memories', 'Quests', '✦', '#c084fc', true, true, 'quest/quest-memory'),
+  c('quest-objective', 'Quest Objectives', 'Quests', '•', '#fdba74', true, false, 'quest/objective-pulse'),
   // Collectibles
-  c('korok-seed', 'Korok Seeds', 'Collectibles', '🍃', '#4ade80', true, true, 'seed'),
-  c('great-fairy', 'Great Fairies', 'Collectibles', '✿', '#f472b6', true, true, 'fountain'),
-  c('goddess-statue', 'Goddess Statues', 'Collectibles', '♆', '#e2e8f0', false, false, 'statue'),
-  c('cooking-pot', 'Cooking Pots', 'Collectibles', '♨', '#fca5a5', false, false, 'pot'),
-  c('raft', 'Rafts', 'Collectibles', '≈', '#93c5fd', false, false),
+  c('korok-seed', 'Korok Seeds', 'Collectibles', '🍃', '#4ade80', true, true, 'quest/korok'),
+  c('great-fairy', 'Great Fairies', 'Collectibles', '✿', '#f472b6', true, true, 'stamps/star'),
+  c('goddess-statue', 'Goddess Statues', 'Collectibles', '♆', '#e2e8f0', false, false, 'stamps/human'),
+  c('cooking-pot', 'Cooking Pots', 'Collectibles', '♨', '#fca5a5', false, false, 'stamps/cuisine'),
+  c('raft', 'Rafts', 'Collectibles', '≈', '#93c5fd', false, false, 'stamps/leaf'),
   // Enemies
-  c('stone-talus', 'Stone Taluses', 'Enemies', '▲', '#a8a29e', false, false, 'talus'),
-  c('hinox', 'Hinoxes', 'Enemies', '☠', '#ef4444', false, false),
-  c('lynel', 'Lynels', 'Enemies', '♞', '#dc2626', false, false),
-  c('molduga', 'Moldugas', 'Enemies', '≋', '#d97706', false, false),
-  c('guardian', 'Guardians', 'Enemies', '◉', '#64748b', false, false),
+  c('stone-talus', 'Stone Taluses', 'Enemies', '▲', '#a8a29e', false, false, 'stamps/ore'),
+  c('hinox', 'Hinoxes', 'Enemies', '☠', '#ef4444', false, false, 'stamps/enemy'),
+  c('lynel', 'Lynels', 'Enemies', '♞', '#dc2626', false, false, 'stamps/bow'),
+  c('molduga', 'Moldugas', 'Enemies', '≋', '#d97706', false, false, 'stamps/weapon'),
+  c('guardian', 'Guardians', 'Enemies', '◉', '#64748b', false, false, 'stamps/guardian'),
   // Places
-  c('stable', 'Stables', 'Places', '⌂', '#a8a29e', true),
-  c('village', 'Towns & Villages', 'Places', '⌖', '#e2e8f0', false),
-  c('settlement', 'Settlements', 'Places', '·', '#cbd5e1', false, false, 'checkpoint'),
+  c('stable', 'Stables', 'Places', '⌂', '#a8a29e', true, true, 'locations/stable'),
+  c('village', 'Towns & Villages', 'Places', '⌖', '#e2e8f0', false, true, 'locations/village'),
+  c('settlement', 'Settlements', 'Places', '·', '#cbd5e1', false, false, 'locations/checkpoint'),
   c('landmark', 'Landmarks', 'Places', '⚑', '#94a3b8', false, false),
   // Services
-  c('inn', 'Inns', 'Services', '☾', '#fcd34d', false, false),
-  c('general-store', 'General Stores', 'Services', '$', '#86efac', false, false, 'store'),
-  c('armor-shop', 'Armor Shops', 'Services', '🛡', '#fda4af', false, false, 'armor'),
-  c('dye-shop', 'Dye Shops', 'Services', '◐', '#f9a8d4', false, false, 'dye'),
-  c('jewelry-shop', 'Jewelry Shops', 'Services', '◇', '#a5f3fc', false, false, 'jewelry'),
+  c('inn', 'Inns', 'Services', '☾', '#fcd34d', false, false, 'locations/inn'),
+  c('general-store', 'General Stores', 'Services', '$', '#86efac', false, false, 'locations/store'),
+  c('armor-shop', 'Armor Shops', 'Services', '🛡', '#fda4af', false, false, 'locations/armor'),
+  c('dye-shop', 'Dye Shops', 'Services', '◐', '#f9a8d4', false, false, 'locations/dye'),
+  c('jewelry-shop', 'Jewelry Shops', 'Services', '◇', '#a5f3fc', false, false, 'locations/jewelry'),
   // Treasure
-  c('rare-gems', 'Rare gems', 'Treasure', '◆', '#f87171', false, false, 'treasure'),
-  c('common-gems', 'Common gems', 'Treasure', '◆', '#fb923c', false, false, 'treasure'),
-  c('big-rupees', 'Big rupees', 'Treasure', '◆', '#a78bfa', false, false, 'treasure'),
-  c('small-rupees', 'Small rupees', 'Treasure', '◆', '#60a5fa', false, false, 'treasure'),
-  c('materials', 'Materials', 'Treasure', '▣', '#fbbf24', false, false, 'treasure'),
-  c('clothing', 'Clothing', 'Treasure', '▣', '#f472b6', false, false, 'treasure'),
-  c('uniques', 'Uniques', 'Treasure', '▣', '#fde047', false, false, 'treasure'),
-  c('one-handed-weapons', 'One-handed weapons', 'Treasure', '⚔', '#d1d5db', false, false, 'treasure'),
-  c('two-handed-weapons', 'Two-handed weapons', 'Treasure', '⚔', '#9ca3af', false, false, 'treasure'),
-  c('spears', 'Spears', 'Treasure', '↟', '#bef264', false, false, 'treasure'),
-  c('rods', 'Rods', 'Treasure', '⌇', '#67e8f9', false, false, 'treasure'),
-  c('bows', 'Bows', 'Treasure', '☽', '#86efac', false, false, 'treasure'),
-  c('arrows', 'Arrows', 'Treasure', '➶', '#fdba74', false, false, 'treasure'),
-  c('shields', 'Shields', 'Treasure', '⛉', '#7dd3fc', false, false, 'treasure'),
+  c('rare-gems', 'Rare gems', 'Treasure', '◆', '#f87171', false, false, 'stamps/treasure'),
+  c('common-gems', 'Common gems', 'Treasure', '◆', '#fb923c', false, false, 'stamps/treasure'),
+  c('big-rupees', 'Big rupees', 'Treasure', '◆', '#a78bfa', false, false, 'stamps/treasure'),
+  c('small-rupees', 'Small rupees', 'Treasure', '◆', '#60a5fa', false, false, 'stamps/treasure'),
+  c('materials', 'Materials', 'Treasure', '▣', '#fbbf24', false, false, 'stamps/treasure'),
+  c('clothing', 'Clothing', 'Treasure', '▣', '#f472b6', false, false, 'stamps/treasure'),
+  c('uniques', 'Uniques', 'Treasure', '▣', '#fde047', false, false, 'stamps/treasure'),
+  c('one-handed-weapons', 'One-handed weapons', 'Treasure', '⚔', '#d1d5db', false, false, 'stamps/treasure'),
+  c('two-handed-weapons', 'Two-handed weapons', 'Treasure', '⚔', '#9ca3af', false, false, 'stamps/treasure'),
+  c('spears', 'Spears', 'Treasure', '↟', '#bef264', false, false, 'stamps/treasure'),
+  c('rods', 'Rods', 'Treasure', '⌇', '#67e8f9', false, false, 'stamps/treasure'),
+  c('bows', 'Bows', 'Treasure', '☽', '#86efac', false, false, 'stamps/treasure'),
+  c('arrows', 'Arrows', 'Treasure', '➶', '#fdba74', false, false, 'stamps/treasure'),
+  c('shields', 'Shields', 'Treasure', '⛉', '#7dd3fc', false, false, 'stamps/treasure'),
 ] as Category[]
+
+/** Per-marker icon overrides (marker id -> icon path in public/icons, no extension). */
+export const MARKER_ICON_OVERRIDES: Record<string, string> = {
+  'village:Hyrule Castle': 'locations/castle',
+}
+
+/**
+ * Visual scale per icon so artwork reads at a similar size. Travel art is a soft glow (~55% solid),
+ * so it is enlarged; quest-shrine fills its whole frame, so it is shrunk to match travel/shrine.
+ */
+export const iconScale = (name?: string): number =>
+  name === 'quest/quest-shrine' ? 0.69 : name?.startsWith('travel/') ? 1.25 : 1
 
 export const CATEGORY_BY_ID: Record<string, Category> = Object.fromEntries(
   CATEGORIES.map((x) => [x.id, x]),
