@@ -32,7 +32,7 @@ export function SearchBox() {
 
   return (
     <div className="relative">
-      <Search size={16} className="pointer-events-none absolute top-3.5 left-3 text-muted" />
+      <Search size={16} className="pointer-events-none absolute top-3.5 left-3 text-muted-foreground" />
       <input
         ref={ref}
         className="field pl-9"
@@ -58,17 +58,17 @@ export function SearchBox() {
         }}
       />
       {results.length > 0 && (
-        <ul className="absolute z-[1000] mt-1 max-h-72 w-full overflow-auto rounded-xl border border-line bg-card shadow-xl" role="listbox">
+        <ul className="absolute z-[1000] mt-1 max-h-72 w-full overflow-auto rounded-xl border border-border bg-card shadow-xl" role="listbox">
           {results.map((m, i) => (
             <li key={m.id} role="option" aria-selected={i === cursor}>
               <button
-                className={`flex min-h-11 w-full items-center gap-2 px-3 text-left text-sm ${i === cursor ? 'bg-line' : ''}`}
+                className={`flex min-h-11 w-full items-center gap-2 px-3 text-left text-sm ${i === cursor ? 'bg-border' : ''}`}
                 onMouseEnter={() => setCursor(i)}
                 onClick={() => pick(i)}
               >
                 <span style={{ color: CATEGORY_BY_ID[m.category]?.color }}>{CATEGORY_BY_ID[m.category]?.glyph}</span>
                 <span className="truncate">{m.name}</span>
-                <span className="ml-auto text-xs text-muted">{CATEGORY_BY_ID[m.category]?.label}</span>
+                <span className="ml-auto text-xs text-muted-foreground">{CATEGORY_BY_ID[m.category]?.label}</span>
               </button>
             </li>
           ))}

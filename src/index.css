@@ -2,45 +2,124 @@
 @import 'leaflet/dist/leaflet.css';
 @import 'react-leaflet-cluster/dist/assets/MarkerCluster.css';
 @import 'react-leaflet-cluster/dist/assets/MarkerCluster.Default.css';
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
 
-@theme {
-  --color-bg: var(--bg);
-  --color-panel: var(--panel);
-  --color-card: var(--card);
-  --color-line: var(--line);
-  --color-fg: var(--fg);
-  --color-muted: var(--muted);
-  --color-accent: #38bdf8;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* Light theme (default tokens) */
 :root {
-  --bg: #0b1220; --panel: #0f172a; --card: #1e293b; --line: #334155; --fg: #e2e8f0; --muted: #94a3b8;
-  color-scheme: dark;
-}
-:root[data-theme='light'] {
-  --bg: #f1f5f9; --panel: #ffffff; --card: #f8fafc; --line: #cbd5e1; --fg: #0f172a; --muted: #64748b;
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #f8fafc;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0284c7;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e2e8f0;
+  --accent-foreground: #0f172a;
+  --destructive: #dc2626;
+  --border: #cbd5e1;
+  --input: #cbd5e1;
+  --ring: #0284c7;
+  --radius: 0.625rem;
+  --map-bg: #f1f5f9;
+  --map-grid: #e2e8f0;
   color-scheme: light;
 }
 
-html, body, #root { height: 100%; }
-body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overscroll-behavior: none; }
+/* Dark theme (the app default) */
+.dark {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  --card: #1e293b;
+  --card-foreground: #e2e8f0;
+  --popover: #1e293b;
+  --popover-foreground: #e2e8f0;
+  --primary: #0ea5e9;
+  --primary-foreground: #020617;
+  --secondary: #334155;
+  --secondary-foreground: #e2e8f0;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #334155;
+  --accent-foreground: #e2e8f0;
+  --destructive: #f87171;
+  --border: #334155;
+  --input: #334155;
+  --ring: #0ea5e9;
+  --map-bg: #0b1220;
+  --map-grid: #1e293b;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-background text-foreground;
+    overscroll-behavior: none;
+  }
+  html {
+    @apply font-sans;
+  }
+}
 
 @layer components {
-  .btn { @apply inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-card px-3 text-sm transition active:scale-95; }
-  .btn-primary { @apply border-transparent bg-sky-500 font-medium text-slate-950; }
-  .btn-done { @apply border-emerald-500/50 bg-emerald-500/15 text-emerald-400; }
-  .icon-btn { @apply grid size-11 shrink-0 place-items-center rounded-lg text-muted hover:text-fg; }
-  .chip { @apply inline-flex min-h-9 items-center rounded-full border border-line bg-card px-3 text-xs; }
-  .field { @apply min-h-11 w-full rounded-lg border border-line bg-card px-3 text-base text-fg outline-none focus:border-sky-500; }
+  .btn { @apply inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm transition active:scale-95; }
+  .btn-primary { @apply border-transparent bg-primary font-medium text-primary-foreground; }
+  .btn-done { @apply border-emerald-500/50 bg-emerald-500/15 text-emerald-500; }
+  .icon-btn { @apply grid size-11 shrink-0 place-items-center rounded-lg text-muted-foreground hover:text-foreground; }
+  .chip { @apply inline-flex min-h-9 items-center rounded-full border border-border bg-card px-3 text-xs; }
+  .field { @apply min-h-11 w-full rounded-lg border border-border bg-card px-3 text-base text-foreground outline-none focus:border-primary; }
 }
 
 /* Map */
-.leaflet-container { font: inherit; background: var(--bg); }
-.map-grid-dark { background-image: linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px); background-size: 48px 48px; }
-.map-grid-light { background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 48px 48px; }
+.leaflet-container { font: inherit; background: var(--map-bg); }
+.map-grid {
+  background-image: linear-gradient(var(--map-grid) 1px, transparent 1px), linear-gradient(90deg, var(--map-grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
 
-.pin { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9999px; background: var(--c); color: #0f172a; font-size: 16px; border: 2px solid #0f172a; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
-.pin { position: relative; }
+.pin { position: relative; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9999px; background: var(--c); color: #0f172a; font-size: 16px; border: 2px solid #0f172a; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
 .pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
 .pin:has(img) { background: transparent; border-color: transparent; box-shadow: none; font-size: 0; }
 .pin-done { opacity: .55; filter: grayscale(.6); }

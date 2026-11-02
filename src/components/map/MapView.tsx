@@ -67,7 +67,6 @@ export function MapView() {
   const completed = useProgress((s) => s.completed)
   const selectedId = useUi((s) => s.selectedId)
   const select = useUi((s) => s.select)
-  const theme = useUi((s) => s.theme)
 
   return (
     <MapContainer
@@ -83,7 +82,7 @@ export function MapView() {
       zoomSnap={0.5}
       zoomControl={false}
       attributionControl={false}
-      className={`h-full w-full ${theme === 'dark' ? 'map-grid-dark' : 'map-grid-light'}`}
+      className="map-grid h-full w-full"
     >
       <Controller />
       <TileLayer

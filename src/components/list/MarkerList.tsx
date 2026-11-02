@@ -33,7 +33,7 @@ export function MarkerList() {
   return (
     <div className="flex h-full min-h-72 flex-col">
       <div className="mb-2 flex items-center gap-2 text-sm">
-        <span className="text-muted">{rows.length} shown</span>
+        <span className="text-muted-foreground">{rows.length} shown</span>
         {region && (
           <button className="chip" onClick={() => setRegion(null)}>
             {REGION_BY_ID[region]?.label} ✕
@@ -62,8 +62,8 @@ export function MarkerList() {
                     {cat?.glyph}
                   </span>
                   <span className="min-w-0">
-                    <span className={`block truncate text-sm ${done ? 'text-muted line-through' : ''}`}>{m.name}</span>
-                    <span className="block truncate text-xs text-muted">
+                    <span className={`block truncate text-sm ${done ? 'text-muted-foreground line-through' : ''}`}>{m.name}</span>
+                    <span className="block truncate text-xs text-muted-foreground">
                       {cat?.label} · {REGION_BY_ID[m.region ?? '']?.label}
                     </span>
                   </span>
@@ -74,9 +74,9 @@ export function MarkerList() {
                     aria-checked={done}
                     aria-label={`Complete ${m.name}`}
                     onClick={() => toggleWithUndo(m.id)}
-                    className={`mr-1 grid size-11 shrink-0 place-items-center ${done ? 'text-emerald-400' : 'text-muted'}`}
+                    className={`mr-1 grid size-11 shrink-0 place-items-center ${done ? 'text-emerald-400' : 'text-muted-foreground'}`}
                   >
-                    <span className={`grid size-6 place-items-center rounded-md border ${done ? 'border-emerald-400 bg-emerald-400/20' : 'border-line'}`}>
+                    <span className={`grid size-6 place-items-center rounded-md border ${done ? 'border-emerald-400 bg-emerald-400/20' : 'border-border'}`}>
                       {done && <Check size={16} />}
                     </span>
                   </button>

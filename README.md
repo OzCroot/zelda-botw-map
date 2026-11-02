@@ -1,10 +1,11 @@
 # Hyrule Tracker
 
 A local-first interactive map & completion tracker for *Breath of the Wild*.
-React 19 · TypeScript · Tailwind v4 · Leaflet · Zustand · Vite.
+React 19 · TypeScript · Tailwind v4 · shadcn/ui (Base UI) · Leaflet · Zustand · Vite.
 
 - **Local storage** — progress, notes and filters persist in your browser; no account, no server.
 - **Export / import** — JSON (with merge-or-replace and a diff preview), CSV, and a short share code.
+- **Item dialog** — selecting a marker (map, list, search or `?m=` link) opens a shadcn `Dialog` with details, complete/undo and notes.
 - **Mobile-first panel** — draggable bottom sheet, 44px touch targets, details in the sheet instead of tiny popups.
 - **UX** — fuzzy search (`/`), undo on every check-off, filter presets, hide-completed, region filter, deep links (`?m=<id>`), keyboard shortcuts (`c` complete, `Esc` close), dark/light.
 - **Data presented better** — progress dashboard by category/region, virtualized list synced to the map filters, region drill-down.

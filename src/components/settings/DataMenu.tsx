@@ -48,8 +48,8 @@ export function DataMenu() {
       )}
 
       <section className="space-y-2">
-        <h3 className="text-xs font-semibold tracking-wide text-muted uppercase">Export</h3>
-        <p className="text-xs text-muted">
+        <h3 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Export</h3>
+        <p className="text-xs text-muted-foreground">
           Progress lives only in this browser.{' '}
           {lastExportedAt ? `Last export ${new Date(lastExportedAt).toLocaleString()}.` : 'You have never exported.'}
           {changesSinceExport > 0 && ` ${changesSinceExport} change${changesSinceExport > 1 ? 's' : ''} since.`}
@@ -71,10 +71,10 @@ export function DataMenu() {
       </section>
 
       <section className="space-y-2">
-        <h3 className="text-xs font-semibold tracking-wide text-muted uppercase">Import</h3>
+        <h3 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Import</h3>
         <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={(e) => e.target.files?.[0] && readFile(e.target.files[0])} />
         <div
-          className="grid min-h-24 cursor-pointer place-items-center rounded-xl border border-dashed border-line p-4 text-center text-sm text-muted"
+          className="grid min-h-24 cursor-pointer place-items-center rounded-xl border border-dashed border-border p-4 text-center text-sm text-muted-foreground"
           onClick={() => fileRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
@@ -89,7 +89,7 @@ export function DataMenu() {
           Drop an export file here, or tap to choose
         </div>
         {pending && (
-          <div className="rounded-xl border border-line bg-card p-3 text-sm">
+          <div className="rounded-xl border border-border bg-card p-3 text-sm">
             <p>
               File has <b>{pending.diff.incoming}</b> completed items: <b>{pending.diff.newlyCompleted}</b> new,{' '}
               {pending.diff.alreadyCompleted} already done
@@ -105,8 +105,8 @@ export function DataMenu() {
       </section>
 
       <section className="space-y-2">
-        <h3 className="text-xs font-semibold tracking-wide text-muted uppercase">Share code</h3>
-        <p className="text-xs text-muted">A short code for moving progress between devices (notes not included).</p>
+        <h3 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Share code</h3>
+        <p className="text-xs text-muted-foreground">A short code for moving progress between devices (notes not included).</p>
         <textarea className="field min-h-16 font-mono text-xs" value={code} onChange={(e) => setCode(e.target.value)} placeholder="Paste a code to load…" />
         <div className="flex flex-wrap gap-2">
           <button
