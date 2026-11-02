@@ -6,10 +6,9 @@ import { useUi } from '../store/ui'
 export function toggleWithUndo(id: string) {
   const { toggle, setCompleted } = useProgress.getState()
   const done = toggle(id)
-  // With "Hide completed" on, a finished item should vanish right away rather than sit behind its own dialog.
-  // (The toast below still offers Undo.)
+  // Checking an item off dismisses its dialog; the toast below still offers Undo. (Un-checking keeps it open.)
   const ui = useUi.getState()
-  if (done && ui.hideCompleted && ui.selectedId === id) ui.select(null)
+  if (done && ui.selectedId === id) ui.select(null)
   const name = MARKER_BY_ID.get(id)?.name ?? id
   toast(done ? `Checked off ${name}` : `Unchecked ${name}`, {
     duration: 4000,
