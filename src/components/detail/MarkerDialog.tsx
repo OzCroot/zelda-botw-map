@@ -1,4 +1,4 @@
-import { Check, ExternalLink, Link2 } from 'lucide-react'
+import { Check, ExternalLink, Link2, MapPin } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
@@ -18,6 +18,31 @@ import { useSeedHint } from '@/data/seedHints'
 import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
 import { useProgress } from '@/store/progress'
 import { useUi } from '@/store/ui'
+
+/**
+ * A detail row that points at another marker (a shrine's quest, a chest's shrine…). Opens that marker's dialog and
+ * reveals it on the map, switching its category and sub-group filters on if they were hiding it.
+ */
+function MarkerLink({ id, children }: { id: string; children: React.ReactNode }) {
+  const target = MARKER_BY_ID.get(id)
+  if (!target) return <>{children}</>
+  return (
+    <button
+      type="button"
+      title={`Show ${target.name} on the map`}
+      className="inline-flex items-center gap-1 rounded text-left underline decoration-dotted underline-offset-4 outline-none hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/50"
+      onClick={() => {
+        const { reveal, select } = useUi.getState()
+        const { enabledCategory } = reveal(id)
+        select(id)
+        if (enabledCategory) toast(`Showing ${CATEGORY_BY_ID[target.category]?.label ?? 'it'}`)
+      }}
+    >
+      {children}
+      <MapPin className="size-3.5 shrink-0 text-muted-foreground" aria-hidden />
+    </button>
+  )
+}
 
 /** Local-only screenshot: public/images/korok/webp/<seed number>.webp. Hidden if the file isn't there. */
 function SeedImage({ markerId, alt }: { markerId: string; alt: string }) {
@@ -62,6 +87,7 @@ export function MarkerDialog() {
                     {cat?.label}
                     {region ? ` · ${region}` : ''}
                   </DialogDescription>
+                  {m.blessing && <p className="mt-0.5 text-sm text-muted-foreground italic">{m.blessing}</p>}
                 </div>
               </div>
               {(m.tags?.length ?? 0) > 0 && (
@@ -99,6 +125,17 @@ export function MarkerDialog() {
               </dl>
             ) : (
               m.description && <p className="text-sm text-muted-foreground">{m.description}</p>
+            )}
+
+            {m.details && m.details.length > 0 && (
+              <dl className="space-y-2.5 text-sm">
+                {m.details.map((d) => (
+                  <div key={d.label}>
+                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{d.label}</dt>
+                    <dd>{d.marker ? <MarkerLink id={d.marker}>{d.value}</MarkerLink> : d.value}</dd>
+                  </div>
+                ))}
+              </dl>
             )}
 
             {cat?.checkable && (

@@ -13,6 +13,10 @@ export interface Marker {
   region?: string
   description?: string
   wikiUrl?: string
+  /** Shrines only: the shrine's blessing name, e.g. "Dila Maag's Blessing". */
+  blessing?: string
+  /** Extra facts shown in the dialog, in order (e.g. Treasure, Requirements). */
+  details?: { label: string; value: string; /** Id of a marker this row links to (shown as a link that reveals it). */ marker?: string }[]
   /** Clothing only: the armor set an item belongs to ("Other" if none). */
   set?: string
   /** Landmarks only: lowest map zoom at which the label is shown. */
