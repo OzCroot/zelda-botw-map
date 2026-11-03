@@ -95,6 +95,39 @@ describe('questDetails intro and objectives', () => {
   })
 })
 
+describe('questDetails with unbolded labels', () => {
+  it('pulls "Questgiver:" and "Items needed:" lines out of Requirements', () => {
+    const rows = questDetails({
+      requirements: {
+        text: 'Divine Beast Vah Naboris main quest completed\nBegin The Thunder Helm Side Quest\nQuestgiver: Liana, Gerudo Town\nItems needed: 1 Hearty Durian',
+        links: [
+          { name: 'The Thunder Helm', page: 'The Thunder Helm' },
+          { name: 'Liana', page: 'Liana' },
+          { name: 'Gerudo Town', page: 'Gerudo Town' },
+        ],
+      },
+    })
+    expect(rows).toEqual([
+      {
+        label: 'Quest giver',
+        value: 'Liana, Gerudo Town',
+        links: [
+          { name: 'Liana', url: 'https://www.zeldadungeon.net/wiki/Liana' },
+          { name: 'Gerudo Town', url: 'https://www.zeldadungeon.net/wiki/Gerudo_Town' },
+        ],
+      },
+      {
+        label: 'Requirements',
+        value: 'Divine Beast Vah Naboris main quest completed, Begin The Thunder Helm Side Quest',
+        links: [
+          { name: 'The Thunder Helm', url: 'https://www.zeldadungeon.net/wiki/The_Thunder_Helm' },
+        ],
+      },
+      { label: 'Items needed', value: '1 Hearty Durian' },
+    ])
+  })
+})
+
 describe('wikiUrl', () => {
   it('uses underscores and encodes what needs it', () => {
     expect(wikiUrl('Stalhorse: Pictured!')).toBe(

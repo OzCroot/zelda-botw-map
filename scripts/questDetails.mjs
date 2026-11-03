@@ -43,8 +43,47 @@ function valueOf(text, sentences = false) {
   return tidy(joined.replace(/,\s*,/g, ','))
 }
 
-export function questDetails(entry) {
-  if (!entry || entry.missing) return []
+/** Some wiki pages do not bold every label, so "Questgiver: …" or "Items needed: …" ends up as a line inside another field. */
+const EMBEDDED = /^(questgiver|quest giver|needed items|items needed|required items):\s*(.*)$/i
+const EMBEDDED_KEY = {
+  questgiver: 'questgiver',
+  'quest giver': 'questgiver',
+  'needed items': 'neededItems',
+  'items needed': 'neededItems',
+  'required items': 'neededItems',
+}
+
+/** Moves those lines (and the links whose names occur in them) into fields of their own. */
+function splitEmbedded(entry) {
+  const out = { ...entry }
+  for (const [key, field] of Object.entries(entry)) {
+    if (!field || typeof field.text !== 'string') continue
+    const keep = []
+    for (const line of field.text.split('\n')) {
+      const found = line.trim().match(EMBEDDED)
+      const target = found && EMBEDDED_KEY[found[1].toLowerCase()]
+      if (!target || out[target]) {
+        keep.push(line)
+        continue
+      }
+      const value = found[2]
+      out[target] = {
+        text: value,
+        links: (field.links ?? []).filter((l) => value.includes(l.name)),
+      }
+    }
+    if (keep.length !== field.text.split('\n').length) {
+      const text = keep.join('\n')
+      const links = (field.links ?? []).filter((l) => text.includes(l.name))
+      out[key] = { text, links }
+    }
+  }
+  return out
+}
+
+export function questDetails(scraped) {
+  if (!scraped || scraped.missing) return []
+  const entry = splitEmbedded(scraped)
   const rows = []
   for (const [key, label] of FIELDS) {
     const field = entry[key]
