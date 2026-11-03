@@ -22,6 +22,7 @@ export const markerSchema = z.object({
       }),
     )
     .optional(),
+  path: z.array(z.tuple([z.number(), z.number()])).optional(),
   set: z.string().optional(),
   minZoom: z.number().optional(),
 })

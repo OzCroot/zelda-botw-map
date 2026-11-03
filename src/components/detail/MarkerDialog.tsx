@@ -1,4 +1,4 @@
-import { Check, ExternalLink, Link2, MapPin } from 'lucide-react'
+import { Check, ExternalLink, Link2, MapPin, Route } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
@@ -90,6 +90,9 @@ function SeedImage({ markerId, alt }: { markerId: string; alt: string }) {
 export function MarkerDialog() {
   const id = useUi((s) => s.selectedId)
   const select = useUi((s) => s.select)
+  const showPath = useUi((s) => s.showPath)
+  const hidePath = useUi((s) => s.hidePath)
+  const pathShown = useUi((s) => !!id && s.pathId === id)
   const done = useProgress((s) => (id ? id in s.completed : false))
   const completedAt = useProgress((s) => (id ? s.completed[id] : undefined))
 
@@ -197,6 +200,15 @@ export function MarkerDialog() {
             )}
 
             <DialogFooter className="sm:justify-start">
+              {m.path && (
+                <Button
+                  variant="outline"
+                  onClick={() => (pathShown ? hidePath() : showPath(m.id))}
+                  title={pathShown ? 'Remove the route from the map' : 'Draw the route on the map'}
+                >
+                  <Route data-icon="inline-start" /> {pathShown ? 'Hide path' : 'Show path'}
+                </Button>
+              )}
               <Button
                 variant="outline"
                 onClick={() =>

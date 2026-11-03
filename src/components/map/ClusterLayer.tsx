@@ -21,6 +21,7 @@ export function ClusterLayer({
   const map = useMap()
   const completed = useProgress((s) => s.completed)
   const focusId = useUi((s) => s.focusId)
+  const pathId = useUi((s) => s.pathId)
   const group = useRef<L.MarkerClusterGroup | null>(null)
   const pins = useRef(new Map<string, { pin: L.Marker; data: MarkerData }>())
   // Latest values, read when pins are created so the membership effect doesn't depend on them.
@@ -80,12 +81,13 @@ export function ClusterLayer({
   // out from a cluster), rather than a second copy of it being drawn on top.
   const labelled = useRef<L.Marker | null>(null)
   useEffect(() => {
-    const entry = focusId ? pins.current.get(focusId) : undefined
+    // No label while its route is shown: it would sit over the first stops (the route chip names it instead).
+    const entry = focusId && focusId !== pathId ? pins.current.get(focusId) : undefined
     if (labelled.current === entry?.pin) return
     labelled.current?.unbindTooltip()
     labelled.current = entry?.pin ?? null
     entry?.pin.bindTooltip(entry.data.name, { permanent: true, direction: 'top', offset: [0, -22] })
-  }, [focusId, markers])
+  }, [focusId, pathId, markers])
 
   // Reveal: once the map has flown to a marker, make sure its pin is actually showing: zoom in or spread out the
   // cluster that is holding it. (Markers on exactly the same spot, like a shrine and its chest, never separate by

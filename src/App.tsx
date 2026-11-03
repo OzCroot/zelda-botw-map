@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { MarkerDialog } from './components/detail/MarkerDialog'
 import { MapView } from './components/map/MapView'
+import { PathChip } from './components/map/PathChip'
 import { MapChrome } from './components/panels/MapChrome'
 import { toggleWithUndo } from './hooks/useToggleWithUndo'
 import { useUrlState } from './hooks/useUrlState'
@@ -22,7 +23,11 @@ export default function App() {
       if (/INPUT|TEXTAREA|SELECT/.test((e.target as HTMLElement).tagName)) return
       const { selectedId, select } = useUi.getState()
       if (e.key === 'Escape') select(null)
-      if (e.key === 'c' && selectedId && CATEGORY_BY_ID[MARKER_BY_ID.get(selectedId)?.category ?? '']?.checkable)
+      if (
+        e.key === 'c' &&
+        selectedId &&
+        CATEGORY_BY_ID[MARKER_BY_ID.get(selectedId)?.category ?? '']?.checkable
+      )
         toggleWithUndo(selectedId)
     }
     addEventListener('keydown', onKey)
@@ -33,6 +38,7 @@ export default function App() {
     <div className="relative h-dvh w-full overflow-hidden">
       <MapView />
       <MapChrome />
+      <PathChip />
       <MarkerDialog />
       <Toaster position="bottom-center" />
     </div>

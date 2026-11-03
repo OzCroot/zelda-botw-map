@@ -25,6 +25,8 @@ export interface Marker {
       url: string
     }[]
   }[]
+  /** Korok seeds with a route (flower trail, race): map points [x, y] in the order to follow them. Shown on request. */
+  path?: [number, number][]
   /** Clothing only: the armor set an item belongs to ("Other" if none). */
   set?: string
   /** Landmarks only: lowest map zoom at which the label is shown. */
