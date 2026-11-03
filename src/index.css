@@ -185,7 +185,7 @@
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
-/* Korok seed route (PathLayer): a muted gold line with numbered stops on it. */
-.leaflet-container path.seed-path-glow { filter: drop-shadow(0 0 3px rgb(201 162 74 / .45)); }
-.path-stop { width: 22px; height: 22px; margin: 2px; display: grid; place-items: center; border-radius: 9999px; background: #1a2230; color: #e9dfc3; border: 2px solid #b8975a; font: 700 11px/1 system-ui, sans-serif; box-shadow: 0 1px 4px rgb(0 0 0 / .55); }
-.path-stop-goal { width: 26px; height: 26px; margin: 0; background: #b8975a; color: #1a2230; border-color: #e9dfc3; box-shadow: 0 0 0 3px rgb(184 151 90 / .3), 0 1px 5px rgb(0 0 0 / .55); }
+/* Korok seed route (PathLayer): an amber line, slightly translucent, with numbered stops on it. */
+.leaflet-container path.seed-path-glow { filter: drop-shadow(0 0 4px rgb(245 158 11 / .5)); }
+.path-stop { width: 22px; height: 22px; margin: 2px; display: grid; place-items: center; border-radius: 9999px; background: #0b1220; color: #fff7d6; border: 2px solid #f59e0b; font: 700 11px/1 system-ui, sans-serif; box-shadow: 0 1px 4px rgb(0 0 0 / .6); opacity: .88; }
+.path-stop-goal { width: 26px; height: 26px; margin: 0; background: #f59e0b; color: #0b1220; border-color: #fff7d6; box-shadow: 0 0 0 3px rgb(245 158 11 / .3), 0 1px 5px rgb(0 0 0 / .6); }
