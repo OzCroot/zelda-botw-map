@@ -53,6 +53,9 @@ const EMBEDDED_KEY = {
   'required items': 'neededItems',
 }
 
+/** "Rewards you with an Armoranth." tacked onto another field -> the reward, "Armoranth". */
+const REWARD_SENTENCE = /^rewards? you with (?:an?\s+|the\s+)?(.+?)\.?$/i
+
 /** Moves those lines (and the links whose names occur in them) into fields of their own. */
 function splitEmbedded(entry) {
   const out = { ...entry }
@@ -60,6 +63,14 @@ function splitEmbedded(entry) {
     if (!field || typeof field.text !== 'string') continue
     const keep = []
     for (const line of field.text.split('\n')) {
+      const sentence = line.trim().match(REWARD_SENTENCE)
+      if (sentence && !out.reward) {
+        out.reward = {
+          text: sentence[1],
+          links: (field.links ?? []).filter((l) => sentence[1].includes(l.name)),
+        }
+        continue
+      }
       const found = line.trim().match(EMBEDDED)
       const target = found && EMBEDDED_KEY[found[1].toLowerCase()]
       if (!target || out[target]) {
