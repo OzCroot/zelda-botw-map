@@ -7,5 +7,45 @@
         "value": "After completing the four Divine Beasts, Link can return here to place the Sheikah Slate on a pedestal, access a hidden mini-dungeon (a Divine Beast-like trial), defeat Monk Maz Koshia, and unlock the Master Cycle Zero."
       }
     ]
+  },
+  "Kuhn Sidajj Shrine": {
+    "details": [
+      {
+        "label": "Shrine quest",
+        "value": "Trial of Second Sight"
+      }
+    ]
+  },
+  "Daag Chokah Shrine": {
+    "details": [
+      {
+        "label": "Shrine quest",
+        "value": "The Lost Pilgrimage"
+      }
+    ]
+  },
+  "Lakna Rokee Shrine": {
+    "details": [
+      {
+        "label": "Shrine quest",
+        "value": "The Stolen Heirloom"
+      }
+    ]
+  },
+  "Bareeda Naag Shrine": {
+    "details": [
+      {
+        "label": "Shrine quest",
+        "value": "The Ancient Rito Song"
+      }
+    ]
+  },
+  "Maag Halan Shrine": {
+    "details": [
+      {
+        "label": "Shrine quest",
+        "value": "The Test of Wood"
+      }
+    ]
   }
 }
