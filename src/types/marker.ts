@@ -16,7 +16,15 @@ export interface Marker {
   /** Shrines only: the shrine's blessing name, e.g. "Dila Maag's Blessing". */
   blessing?: string
   /** Extra facts shown in the dialog, in order (e.g. Treasure, Requirements). */
-  details?: { label: string; value: string; /** Id of a marker this row links to (shown as a link that reveals it). */ marker?: string }[]
+  details?: {
+    label: string
+    value: string
+    /** Id of a marker this row links to (shown as a link that reveals it). */ marker?: string
+    /** Words in `value` that link to a wiki page (opened in a new tab). */ links?: {
+      name: string
+      url: string
+    }[]
+  }[]
   /** Clothing only: the armor set an item belongs to ("Other" if none). */
   set?: string
   /** Landmarks only: lowest map zoom at which the label is shown. */
@@ -38,7 +46,15 @@ export interface AreaLabel {
 export interface Category {
   id: string
   label: string
-  group: 'Travel' | 'Quests' | 'Collectibles' | 'Clothing' | 'Enemies' | 'Places' | 'Services' | 'Treasure'
+  group:
+    | 'Travel'
+    | 'Quests'
+    | 'Collectibles'
+    | 'Clothing'
+    | 'Enemies'
+    | 'Places'
+    | 'Services'
+    | 'Treasure'
   /** short glyph rendered in the map pin */
   glyph: string
   color: string
