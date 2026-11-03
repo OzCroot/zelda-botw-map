@@ -11,7 +11,7 @@ const helpers = new Function(
   'DOMParser',
   `${source}; return { parseSummary, cleanTitle, candidates, readDescriptions }`,
 )(window.DOMParser) as {
-  parseSummary: (html: string) => Record<string, unknown> | null
+  parseSummary: (html: string, withIntro?: boolean) => Record<string, unknown> | null
   cleanTitle: (name: string) => string
   candidates: (name: string) => string[]
   readDescriptions: (json: unknown, titles: string[]) => Record<string, unknown>
@@ -130,5 +130,47 @@ describe('batched description lookup', () => {
         'Bad|Title',
       ]),
     ).toEqual({ 'Bad|Title': { missing: true } })
+  })
+})
+
+const KOKO_CUISINE =
+  '<div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><p><b>Requirements:</b> <span class="internal-link" data-target="Cooking with Koko">Cooking with Koko</span><br />, Raw meat <br />\n<b>Questgiver:</b> <a href="/wiki/Koko" title="Koko">Koko</a>, <a href="/wiki/Kakariko_Village_(Breath_of_the_Wild)" title="Kakariko Village (Breath of the Wild)">Kakariko Village</a><br />\n<b>Special Notes:</b> Part of the following Side Quest chain:\n</p>\n<ol><li><span class="internal-link" data-target="Koko&#39;s Kitchen">Koko\'s Kitchen</span></li>\n<li><span class="internal-link" data-target="Koko Cuisine">Koko Cuisine</span></li></ol>\n<!-- NewPP limit report -->\n</div>'
+
+describe('quest map page parser', () => {
+  it('reads requirements, quest giver and the quest chain, with their links', () => {
+    const parsed = parseSummary(KOKO_CUISINE) as Record<string, { text: string; links: unknown[] }>
+    expect(parsed.questgiver).toEqual({
+      text: 'Koko, Kakariko Village',
+      links: [
+        { name: 'Koko', page: 'Koko' },
+        { name: 'Kakariko Village', page: 'Kakariko Village (Breath of the Wild)' },
+      ],
+    })
+    expect(parsed.requirements!.links).toEqual([
+      { name: 'Cooking with Koko', page: 'Cooking with Koko' },
+    ])
+    expect(parsed.specialNotes!.text).toBe(
+      "Part of the following Side Quest chain:\nKoko's Kitchen\nKoko Cuisine",
+    )
+    expect(parsed.specialNotes!.links).toEqual([
+      { name: "Koko's Kitchen", page: "Koko's Kitchen" },
+      { name: 'Koko Cuisine', page: 'Koko Cuisine' },
+    ])
+  })
+})
+
+describe('quest page intro', () => {
+  const MAIN =
+    '<div class="mw-parser-output"><p>Given by the Old Man after completing <span class="internal-link" data-target="The Isolated Plateau">The Isolated Plateau</span>.\n</p>\n<p>Find the Great Plateau Tower.\n</p>\n</div>'
+  it('keeps unlabelled opening text and following paragraphs when asked', () => {
+    expect(parseSummary(MAIN, true)).toEqual({
+      intro: {
+        text: 'Given by the Old Man after completing The Isolated Plateau.\nFind the Great Plateau Tower.',
+        links: [{ name: 'The Isolated Plateau', page: 'The Isolated Plateau' }],
+      },
+    })
+  })
+  it('ignores that text by default, so shrine summaries are unchanged', () => {
+    expect(parseSummary(MAIN)).toEqual({})
   })
 })

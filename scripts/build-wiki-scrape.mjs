@@ -12,8 +12,13 @@ const shrines = unique(markers.filter((m) => m.category === 'shrine').map((m) =>
 // Phase 2 covers everything except shrines (their own phase) and Korok seeds (hundreds of identical, page-less names).
 const names = unique(markers.filter((m) => m.category !== 'shrine' && m.category !== 'korok-seed').map((m) => m.name))
 
+// Quest markers also get their "Map:<name>" page looked up (requirements, quest giver, notes).
+const QUEST_CATEGORIES = new Set(['side-quest', 'shrine-quest', 'main-quest', 'quest-objective'])
+const quests = unique(markers.filter((m) => QUEST_CATEGORIES.has(m.category)).map((m) => m.name))
+
 const template = readFileSync('scripts/browser/wiki-scrape.template.js', 'utf8')
 const out = template.replace('/*SHRINES*/[]', JSON.stringify(shrines)).replace('/*NAMES*/[]', JSON.stringify(names))
+  .replace('/*QUESTS*/[]', JSON.stringify(quests))
 if (out === template) throw new Error('placeholders not found in the template')
 writeFileSync('scripts/browser/fetch-wiki-data.js', out)
-console.log(`fetch-wiki-data.js: ${shrines.length} shrines, ${names.length} other names, ${(out.length / 1024).toFixed(0)} KB`)
+console.log(`fetch-wiki-data.js: ${shrines.length} shrines, ${names.length} other names, ${quests.length} quests, ${(out.length / 1024).toFixed(0)} KB`)

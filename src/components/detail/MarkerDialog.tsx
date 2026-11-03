@@ -19,6 +19,31 @@ import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
 import { useProgress } from '@/store/progress'
 import { useUi } from '@/store/ui'
 
+/** A detail value with some of its words linked to wiki pages, which open in a new tab. */
+function LinkedText({ text, links }: { text: string; links?: { name: string; url: string }[] }) {
+  const parts: React.ReactNode[] = []
+  let rest = text
+  for (const { name, url } of links ?? []) {
+    const at = rest.indexOf(name)
+    if (at === -1) continue
+    if (at > 0) parts.push(rest.slice(0, at))
+    parts.push(
+      <a
+        key={`${url}:${parts.length}`}
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        className="underline decoration-dotted underline-offset-4 hover:text-primary"
+      >
+        {name}
+      </a>,
+    )
+    rest = rest.slice(at + name.length)
+  }
+  if (rest) parts.push(rest)
+  return <>{parts}</>
+}
+
 /**
  * A detail row that points at another marker (a shrine's quest, a chest's shrine…). Opens that marker's dialog and
  * reveals it on the map, switching its category and sub-group filters on if they were hiding it.
@@ -87,7 +112,9 @@ export function MarkerDialog() {
                     {cat?.label}
                     {region ? ` · ${region}` : ''}
                   </DialogDescription>
-                  {m.blessing && <p className="mt-0.5 text-sm text-muted-foreground italic">{m.blessing}</p>}
+                  {m.blessing && (
+                    <p className="mt-0.5 text-sm text-muted-foreground italic">{m.blessing}</p>
+                  )}
                 </div>
               </div>
               {(m.tags?.length ?? 0) > 0 && (
@@ -101,13 +128,17 @@ export function MarkerDialog() {
               )}
             </DialogHeader>
 
-            {m.category === 'korok-seed' && <SeedImage markerId={m.id} alt={`Where to find ${m.name}`} />}
+            {m.category === 'korok-seed' && (
+              <SeedImage markerId={m.id} alt={`Where to find ${m.name}`} />
+            )}
 
             {hint ? (
               <dl className="space-y-2.5 text-sm">
                 {(hint.location || m.description) && (
                   <div>
-                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Where</dt>
+                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Where
+                    </dt>
                     <dd>
                       {hint.location ?? m.description}
                       {hint.location && m.description && (
@@ -118,7 +149,9 @@ export function MarkerDialog() {
                 )}
                 {hint.puzzle && (
                   <div>
-                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Puzzle</dt>
+                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Puzzle
+                    </dt>
                     <dd>{hint.puzzle}</dd>
                   </div>
                 )}
@@ -131,8 +164,16 @@ export function MarkerDialog() {
               <dl className="space-y-2.5 text-sm">
                 {m.details.map((d) => (
                   <div key={d.label}>
-                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{d.label}</dt>
-                    <dd>{d.marker ? <MarkerLink id={d.marker}>{d.value}</MarkerLink> : d.value}</dd>
+                    <dt className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      {d.label}
+                    </dt>
+                    <dd>
+                      {d.marker ? (
+                        <MarkerLink id={d.marker}>{d.value}</MarkerLink>
+                      ) : (
+                        <LinkedText text={d.value} links={d.links} />
+                      )}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -165,7 +206,10 @@ export function MarkerDialog() {
                 <Link2 data-icon="inline-start" /> Copy link
               </Button>
               {m.wikiUrl && (
-                <Button variant="outline" render={<a href={m.wikiUrl} target="_blank" rel="noreferrer" />}>
+                <Button
+                  variant="outline"
+                  render={<a href={m.wikiUrl} target="_blank" rel="noreferrer" />}
+                >
                   <ExternalLink data-icon="inline-start" /> Wiki
                 </Button>
               )}

@@ -11,13 +11,14 @@
 (async () => {
   const SHRINES = /*SHRINES*/[];
   const NAMES = /*NAMES*/[];
+  const QUESTS = /*QUESTS*/[]; // quest marker names; their "Map:<name>" pages hold requirements, quest giver and notes
   const DELAY_MS = 2500; // pause between requests (plus up to 1s of jitter)
   const CACHE_KEY = "zd-wiki-v1";
 
   // <helpers>
   // Turns the shrine summary HTML into { blessing, requirements: { text, links }, ... }. The HTML is a single <p> of
   // "<b>Label:</b> value" runs separated by <br>, led by an italic blessing name.
-  const parseSummary = (html) => {
+  const parseSummary = (html, withIntro = false) => {
     const p = new DOMParser().parseFromString(html, "text/html").querySelector("p");
     if (!p) return null;
     const out = {};
@@ -31,11 +32,12 @@
       page: el.dataset.target || decodeURIComponent((el.getAttribute("href") || "").replace(/^\/wiki\//, "")).replace(/_/g, " "),
     });
 
-    let key = null;
+    // Quest pages can open with plain text before the first label ("Given by the Old Man after…"); keep it as "intro".
+    let key = withIntro ? "intro" : null;
     let text = "";
     let links = [];
     const flush = () => {
-      if (!key) return;
+      if (!key || (key === "intro" && !text.trim())) { key = null; text = ""; links = []; return; }
       out[key] = { text: text.split("\n").map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean).join("\n"), links };
       key = null;
       text = "";
@@ -54,6 +56,15 @@
             links.push(...found.map(linkOf));
           }
         }
+      }
+    }
+    // A numbered/bulleted list straight after the paragraph (a quest chain) belongs to the last label.
+    // With withIntro, further paragraphs (a main quest's objective text) are kept the same way.
+    const keep = (el) => /^(OL|UL)$/.test(el.tagName) || (withIntro && el.tagName === "P");
+    for (let el = p.nextElementSibling; key && el && keep(el); el = el.nextElementSibling) {
+      for (const part of el.tagName === "P" ? [el] : el.querySelectorAll("li")) {
+        text += "\n" + part.textContent;
+        links.push(...[...part.querySelectorAll("a, .internal-link")].map(linkOf));
       }
     }
     flush();
@@ -87,6 +98,7 @@
   const cache = JSON.parse(localStorage.getItem(CACHE_KEY) || "{}");
   cache.shrines ||= {};
   cache.titles ||= {};
+  cache.quests ||= {};
   // Reuse shrine summaries saved by the earlier shrines-only version of this script, so they are not fetched again.
   // (Entries that had no summary are left out so they get another try.)
   const earlier = JSON.parse(localStorage.getItem("zd-shrine-summaries-v1") || "{}");
@@ -136,6 +148,9 @@
     await pause();
   }
 
+  // ---- Phase 3 (runs after phase 2, see below) is defined here: quests' "Map:" pages ------------------------------------
+  const questsTodo = () => QUESTS.filter((n) => !cache.quests[n]);
+
   // ---- Phase 2: descriptions for everything else, 50 titles per request ----------------------------------------
   if (!stopped) {
     const titles = [...new Set(NAMES.flatMap(candidates))].filter((t) => !cache.titles[t]);
@@ -165,14 +180,34 @@
     }
   }
 
+  // ---- Phase 3: quest details (requirements, quest giver, notes) from each quest's "Map:" page ----------------------
+  if (!stopped) {
+    const todo = questsTodo();
+    console.log("Phase 3: %d quests, %d to fetch (~%d min)", QUESTS.length, todo.length, Math.ceil((todo.length * (DELAY_MS + 500)) / 60000));
+    for (const [i, name] of todo.entries()) {
+      const q = new URLSearchParams({ format: "json", action: "parse", prop: "text", page: "Map:" + name, redirects: "1" });
+      const json = await get("/wiki/api.php?" + q);
+      if (!json) break;
+      const html = json.parse && json.parse.text && json.parse.text["*"];
+      const parsed = html ? parseSummary(html, true) : null;
+      cache.quests[name] = parsed && Object.keys(parsed).length
+        ? { ...parsed, fetchedAt: new Date().toISOString() }
+        : { missing: true, error: json.error && json.error.info, fetchedAt: new Date().toISOString() };
+      save();
+      console.log("[%d/%d] %s%s", i + 1, todo.length, name, cache.quests[name].missing ? "  (no Map page)" : "");
+      await pause();
+    }
+  }
+
   if (stopped) console.warn(stopped);
+  console.log("Quests: %d of %d with details.", QUESTS.filter((n) => cache.quests[n] && !cache.quests[n].missing).length, QUESTS.length);
   const shrinesOk = SHRINES.filter((n) => cache.shrines[n] && !cache.shrines[n].missing).length;
   const found = Object.values(cache.titles).filter((t) => t.description).length;
   console.log("Shrines: %d of %d with a summary. Titles: %d looked up, %d with a description.", shrinesOk, SHRINES.length, Object.keys(cache.titles).length, found);
 
   // Marker name -> the titles to try for it, so the importer does not have to repeat the clean-up rules.
   const names = Object.fromEntries(NAMES.map((n) => [n, candidates(n)]));
-  const out = { shrines: cache.shrines, titles: cache.titles, names, fetchedAt: new Date().toISOString() };
+  const out = { shrines: cache.shrines, titles: cache.titles, names, quests: cache.quests, fetchedAt: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
   const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "zeldadungeon-data.json" });
   a.click();
