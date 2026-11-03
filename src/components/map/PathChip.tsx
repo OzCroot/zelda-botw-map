@@ -13,7 +13,7 @@ export function PathChip() {
   return (
     <div className="pointer-events-none absolute inset-x-3 bottom-4 z-[1000] flex justify-center sm:bottom-6">
       <div className="pointer-events-auto flex max-w-full items-center gap-1 rounded-full border border-border/70 bg-background/92 py-1 pr-1 pl-3 shadow-lg backdrop-blur-md">
-        <Route className="size-4 shrink-0 text-[#b8975a]" aria-hidden />
+        <Route className="size-4 shrink-0 text-amber-400" aria-hidden />
         <button
           type="button"
           onClick={() => select(m.id)}

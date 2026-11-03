@@ -17,7 +17,7 @@ const stopIcon = (n: number, last: boolean) =>
   })
 
 /**
- * The route of the marker whose "Show path" was pressed: a dark casing for contrast on any terrain, a soft muted-gold glow,
+ * The route of the marker whose "Show path" was pressed: a dark casing for contrast on any terrain, a warm amber glow,
  * and a dashed line along it. The first point is the marker's own pin, so only the stops after
  * it are numbered.
  */
@@ -48,19 +48,25 @@ export function PathLayer() {
           positions={points}
           interactive={false}
           className="seed-path-casing"
-          pathOptions={{ ...round, color: '#10161f', weight: 9, opacity: 0.7 }}
+          pathOptions={{ ...round, color: '#0b1220', weight: 9, opacity: 0.6 }}
         />
         <Polyline
           positions={points}
           interactive={false}
           className="seed-path-glow"
-          pathOptions={{ ...round, color: '#b8975a', weight: 4.5, opacity: 0.95 }}
+          pathOptions={{ ...round, color: '#fbbf24', weight: 4.5, opacity: 0.75 }}
         />
         <Polyline
           positions={points}
           interactive={false}
           className="seed-path-dash"
-          pathOptions={{ ...round, color: '#e9dfc3', weight: 2.5, opacity: 1, dashArray: '2 12' }}
+          pathOptions={{
+            ...round,
+            color: '#fff7d6',
+            weight: 2.5,
+            opacity: 0.85,
+            dashArray: '2 12',
+          }}
         />
       </Pane>
       <Pane name="path-stops" style={{ zIndex: 620, pointerEvents: 'none' }}>
