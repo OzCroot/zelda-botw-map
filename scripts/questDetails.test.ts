@@ -128,6 +128,39 @@ describe('questDetails with unbolded labels', () => {
   })
 })
 
+describe('questDetails reward sentence', () => {
+  it('turns "Rewards you with an Armoranth." on the quest giver into a Reward row', () => {
+    const rows = questDetails({
+      questgiver: {
+        text: "Tumbo, Zora's Domain\nRewards you with an Armoranth.",
+        links: [
+          { name: 'Tumbo', page: 'Tumbo' },
+          { name: "Zora's Domain", page: "Zora's Domain (Breath of the Wild)" },
+          { name: 'Armoranth', page: 'Armoranth' },
+        ],
+      },
+    })
+    expect(rows).toEqual([
+      {
+        label: 'Quest giver',
+        value: "Tumbo, Zora's Domain",
+        links: [
+          { name: 'Tumbo', url: 'https://www.zeldadungeon.net/wiki/Tumbo' },
+          {
+            name: "Zora's Domain",
+            url: "https://www.zeldadungeon.net/wiki/Zora's_Domain_(Breath_of_the_Wild)",
+          },
+        ],
+      },
+      {
+        label: 'Reward',
+        value: 'Armoranth',
+        links: [{ name: 'Armoranth', url: 'https://www.zeldadungeon.net/wiki/Armoranth' }],
+      },
+    ])
+  })
+})
+
 describe('wikiUrl', () => {
   it('uses underscores and encodes what needs it', () => {
     expect(wikiUrl('Stalhorse: Pictured!')).toBe(
