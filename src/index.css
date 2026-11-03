@@ -184,3 +184,10 @@
 .leaflet-tooltip-top::before { border-top-color: var(--border); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* Korok seed route (PathLayer): dashes flow along the direction to follow; numbered stops sit on the route. */
+.leaflet-container path.seed-path-glow { filter: drop-shadow(0 0 4px rgb(245 158 11 / .7)); }
+.leaflet-container path.seed-path-flow { animation: seed-path-flow 1.1s linear infinite; }
+@keyframes seed-path-flow { to { stroke-dashoffset: -14; } }
+.path-stop { width: 22px; height: 22px; margin: 2px; display: grid; place-items: center; border-radius: 9999px; background: #0b1220; color: #fff7d6; border: 2px solid #f59e0b; font: 700 11px/1 system-ui, sans-serif; box-shadow: 0 1px 4px rgb(0 0 0 / .6); }
+.path-stop-goal { width: 26px; height: 26px; margin: 0; background: #f59e0b; color: #0b1220; border-color: #fff7d6; box-shadow: 0 0 0 3px rgb(245 158 11 / .35), 0 1px 5px rgb(0 0 0 / .6); }

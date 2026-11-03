@@ -19,6 +19,7 @@ import { useVisibleMarkers } from '../../hooks/useVisibleMarkers'
 import { useProgress } from '../../store/progress'
 import { useUi } from '../../store/ui'
 import { ClusterLayer } from './ClusterLayer'
+import { PathLayer } from './PathLayer'
 import { labelIcon, markerIcon } from './icons'
 
 // Tile grid: zoom 0 = one TILE_SIZE-wide tile covering the whole map width; 1 map unit = 1px at max native zoom.
@@ -197,6 +198,7 @@ export function MapView() {
       <Pane name="landmarks" style={{ zIndex: 450 }}>
         <Landmarks markers={landmarks} />
       </Pane>
+      <PathLayer />
       <ClusterLayer markers={pins} toLatLng={toLatLng} />
       {/* Above the pins (z 600) so region names stay readable over clusters; non-interactive so clicks fall through. */}
       <Pane name="area-labels" style={{ zIndex: 640, pointerEvents: 'none' }}>

@@ -23,6 +23,10 @@ interface UiState {
   selectedId: MarkerId | null
   /** Marker highlighted on the map (search result, last clicked pin). */
   focusId: MarkerId | null
+  /** Marker whose route is drawn on the map (see Marker.path). Never saved; off until asked for. */
+  pathId: MarkerId | null
+  /** Bumped by showPath() to ask the map to frame the route. */
+  pathFit: number
   /** Bumped by reveal() to ask the map to fly to a marker. */
   flyTo: { id: MarkerId; n: number } | null
   query: string
@@ -45,6 +49,9 @@ interface UiState {
   /** Make a marker visible (adjusting filters if needed), fly to it and highlight it. */
   reveal: (id: MarkerId) => { enabledCategory: boolean; enabledMasterMode: boolean }
   clearFocus: () => void
+  /** Draw a marker's route on the map and close its dialog so the map is visible. */
+  showPath: (id: MarkerId) => void
+  hidePath: () => void
   setQuery: (q: string) => void
   setMenuOpen: (v: boolean) => void
   setMenuWidth: (w: number) => void
@@ -74,6 +81,8 @@ export const useUi = create<UiState>()(
       tab: 'filters',
       selectedId: null,
       focusId: null,
+      pathId: null,
+      pathFit: 0,
       flyTo: null,
       query: '',
       menuOpen: false,
@@ -118,6 +127,9 @@ export const useUi = create<UiState>()(
         return { enabledCategory, enabledMasterMode }
       },
       clearFocus: () => set({ focusId: null }),
+      showPath: (id) =>
+        set((s) => ({ pathId: id, focusId: id, selectedId: null, pathFit: s.pathFit + 1 })),
+      hidePath: () => set({ pathId: null }),
       setQuery: (query) => set({ query }),
       setMenuOpen: (menuOpen) => set({ menuOpen }),
       setMenuWidth: (w) => set({ menuWidth: Math.max(MENU_MIN_WIDTH, Math.round(w)) }),
