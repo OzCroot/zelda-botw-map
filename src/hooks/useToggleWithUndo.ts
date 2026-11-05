@@ -9,6 +9,8 @@ export function toggleWithUndo(id: string) {
   // Checking an item off dismisses its dialog; the toast below still offers Undo. (Un-checking keeps it open.)
   const ui = useUi.getState()
   if (done && ui.selectedId === id) ui.select(null)
+  // A finished marker's route is no longer needed on the map.
+  if (done && ui.pathId === id) ui.hidePath()
   const name = MARKER_BY_ID.get(id)?.name ?? id
   toast(done ? `Checked off ${name}` : `Unchecked ${name}`, {
     duration: 4000,
