@@ -104,13 +104,13 @@ function useViewport() {
 }
 
 const LandmarkPin = memo(function LandmarkPin({ marker: m }: { marker: MarkerData }) {
-  const select = useUi((s) => s.select)
+  // Plain text: not clickable, so labels never steal clicks from the pins beneath them (they stay searchable).
   return (
     <Marker
       position={toLatLng(m.x, m.y)}
       icon={labelIcon(m.name)}
       keyboard={false}
-      eventHandlers={{ click: () => select(m.id) }}
+      interactive={false}
     />
   )
 })
@@ -154,7 +154,8 @@ export function MapView() {
   const select = useUi((s) => s.select)
   // Landmarks are plain labels outside the cluster group, so their highlight is drawn here. Every other marker is
   // highlighted on its own pin inside the cluster group (see ClusterLayer), so it never appears twice.
-  const focusedMarker = focusId && !(hideCompleted && focusDone) ? MARKER_BY_ID.get(focusId) : undefined
+  const focusedMarker =
+    focusId && !(hideCompleted && focusDone) ? MARKER_BY_ID.get(focusId) : undefined
   const focused = focusedMarker?.category === 'landmark' ? focusedMarker : undefined
 
   return (
