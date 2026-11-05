@@ -188,8 +188,9 @@ export function CategoryFilters() {
         const ids = items.map((c) => c.id)
         const onCount = ids.filter((i) => enabled[i]).length
         // A group with a single category needs no accordion: show that category's area filter directly.
-        if (items.length === 1) {
-          const c = items[0]
+        const only = items.length === 1 ? items[0] : undefined
+        if (only) {
+          const c = only
           const regs = byRegion[c.id] ?? {}
           const regIds = REGIONS.filter((r) => regs[r.id]).map((r) => r.id)
           const hidden = hiddenRegions[c.id] ?? []
