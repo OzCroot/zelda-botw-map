@@ -106,11 +106,13 @@ export function MarkerDialog() {
       <DialogContent className="sm:max-w-md">
         {m && (
           <>
-            <DialogHeader>
+            <DialogHeader className="min-w-0">
               <div className="flex items-center gap-3 pr-8">
-                <CategoryIcon id={m.category} markerId={m.id} className="size-10" />
+                <CategoryIcon id={m.category} markerId={m.id} className="size-10 shrink-0" />
                 <div className="min-w-0">
-                  <DialogTitle className="truncate text-base">{m.name}</DialogTitle>
+                  <DialogTitle className="text-base leading-snug [overflow-wrap:anywhere] text-balance">
+                    {m.name}
+                  </DialogTitle>
                   <DialogDescription>
                     {cat?.label}
                     {region ? ` · ${region}` : ''}
