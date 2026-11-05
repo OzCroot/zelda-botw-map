@@ -1,13 +1,12 @@
 import type { Category } from '../types/marker'
 
-type C = Omit<Category, 'icon'> & { icon?: string }
 const c = (
   id: string, label: string, group: Category['group'], glyph: string, color: string,
   checkable: boolean, defaultOn = true, icon?: string,
-): C => ({ id, label, group, glyph, color, checkable, defaultOn, icon: icon ?? id })
+): Category => ({ id, label, group, glyph, color, checkable, defaultOn, icon })
 
 export const CATEGORIES: Category[] = [
-  // Map labels (text only, not clickable)
+  // Map labels (text only, not clickable, and no artwork: they show the glyph)
   c('landmark', 'Place names', 'Map labels', '⚑', '#94a3b8', false, true),
   // Travel
   c('shrine', 'Shrines', 'Travel', '⛩', '#38bdf8', true, true, 'travel/shrine'),
@@ -58,7 +57,7 @@ export const CATEGORIES: Category[] = [
   c('bows', 'Bows', 'Treasure', '☽', '#86efac', false, false, 'stamps/treasure'),
   c('arrows', 'Arrows', 'Treasure', '➶', '#fdba74', false, false, 'stamps/treasure'),
   c('shields', 'Shields', 'Treasure', '⛉', '#7dd3fc', false, false, 'stamps/treasure'),
-] as Category[]
+]
 
 /** Per-marker icon overrides (marker id -> icon path in public/icons, no extension). */
 export const MARKER_ICON_OVERRIDES: Record<string, string> = {
@@ -83,6 +82,9 @@ export const iconScale = (name?: string): number =>
 export const CATEGORY_BY_ID: Record<string, Category> = Object.fromEntries(
   CATEGORIES.map((x) => [x.id, x]),
 )
+
+/** The categories that can be checked off, in display order (these are what Progress counts). */
+export const CHECKABLE_CATEGORIES = CATEGORIES.filter((x) => x.checkable)
 
 export const CATEGORY_GROUPS = [...new Set(CATEGORIES.map((x) => x.group))]
 

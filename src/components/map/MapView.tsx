@@ -31,6 +31,16 @@ const BOUNDS: L.LatLngBoundsExpression = [
 ]
 const toLatLng = (x: number, y: number): L.LatLngExpression => [-y, x]
 
+/** Bounds enclosing a set of markers. */
+function boundsOf(points: { x: number; y: number }[]): L.LatLngBoundsExpression {
+  const xs = points.map((p) => p.x)
+  const ys = points.map((p) => p.y)
+  return [
+    [-Math.max(...ys), Math.min(...xs)],
+    [-Math.min(...ys), Math.max(...xs)],
+  ]
+}
+
 function Controller() {
   const map = useMap()
   const flyTo = useUi((s) => s.flyTo)
@@ -38,19 +48,8 @@ function Controller() {
 
   useEffect(() => {
     // Open on the playable area (marker extent) rather than the whole padded tile square.
-    const xs = MARKERS.map((m) => m.x)
-    const ys = MARKERS.map((m) => m.y)
-    if (!xs.length) {
-      map.fitBounds(BOUNDS)
-      return
-    }
-    map.fitBounds(
-      [
-        [-Math.max(...ys), Math.min(...xs)],
-        [-Math.min(...ys), Math.max(...xs)],
-      ],
-      { padding: [24, 24], animate: false },
-    )
+    if (!MARKERS.length) map.fitBounds(BOUNDS)
+    else map.fitBounds(boundsOf(MARKERS), { padding: [24, 24], animate: false })
   }, [map])
 
   // Clicking empty map clears the highlight.
@@ -80,15 +79,7 @@ function Controller() {
     if (!region) return
     const pts = MARKERS.filter((m) => m.region === region)
     if (!pts.length) return
-    const xs = pts.map((m) => m.x)
-    const ys = pts.map((m) => m.y)
-    map.flyToBounds(
-      [
-        [-Math.max(...ys), Math.min(...xs)],
-        [-Math.min(...ys), Math.max(...xs)],
-      ],
-      { duration: 0.6, padding: [40, 40] },
-    )
+    map.flyToBounds(boundsOf(pts), { duration: 0.6, padding: [40, 40] })
   }, [map, region])
 
   return null

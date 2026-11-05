@@ -5,7 +5,9 @@ import { toast } from 'sonner'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CATEGORIES, CATEGORY_BY_ID } from '@/data/categories'
 import { MARKERS, REGION_BY_ID } from '@/data/loadMarkers'
+import { isShortcut } from '@/lib/keys'
 import { once } from '@/lib/once'
+import { revealMarker } from '@/lib/revealMarker'
 import { searchMarkers } from '@/lib/search'
 import { cn } from '@/lib/utils'
 import { useUi } from '@/store/ui'
@@ -25,7 +27,6 @@ const item =
 export function SearchBox() {
   const query = useUi((s) => s.query)
   const setQuery = useUi((s) => s.setQuery)
-  const reveal = useUi((s) => s.reveal)
   const ref = useRef<HTMLInputElement>(null)
   const [focused, setFocused] = useState(false)
   const q = query.trim().toLowerCase()
@@ -41,7 +42,7 @@ export function SearchBox() {
   // "/" focuses the search box from anywhere outside a text field.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test((e.target as HTMLElement).tagName)) {
+      if (e.key === '/' && isShortcut(e)) {
         e.preventDefault()
         ref.current?.focus()
       }
@@ -57,10 +58,7 @@ export function SearchBox() {
   }
   const pick = (m: Marker) => {
     track('search_result_selected', { category: m.category })
-    const { enabledCategory, enabledMasterMode } = reveal(m.id)
-    if (enabledMasterMode) toast('Master Mode items are now shown')
-    else if (enabledCategory)
-      toast(`Showing ${CATEGORY_BY_ID[m.category]?.label ?? 'category'} on the map`)
+    revealMarker(m.id, m.category)
     done()
   }
   const pickCategory = (id: string) => {

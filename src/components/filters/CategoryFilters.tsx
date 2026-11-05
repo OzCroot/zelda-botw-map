@@ -1,24 +1,25 @@
 import { ChevronDown, EyeOff, MapPin, Shirt, Swords } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CATEGORIES, CATEGORY_GROUPS } from '@/data/categories'
-import { FACET_BY_SET, SET_ORDER, facetKey } from '@/data/facets'
+import { CLOTHING_SET_ORDER } from '@/data/clothingSets'
+import { FACET_BY_SET, facetKey } from '@/data/facets'
 import { MARKERS, REGIONS } from '@/data/loadMarkers'
+import { isMasterMode } from '@/lib/markers'
 import { once } from '@/lib/once'
 import { track } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 import { PRESETS, useUi } from '@/store/ui'
 import { CategoryIcon } from '../map/CategoryIcon'
 
-const isMaster = (m: { tags?: string[] }) => !!m.tags?.includes('Master Mode')
-const masterCount = once(() => MARKERS.filter(isMaster).length)
+const masterCount = once(() => MARKERS.filter(isMasterMode).length)
 
 // Counts per category, and per category+sub-group (region, or set for clothing), with and without Master Mode items.
 function tally(master: boolean) {
   const totals: Record<string, number> = {}
   const byRegion: Record<string, Record<string, number>> = {}
   for (const m of MARKERS) {
-    if (!master && isMaster(m)) continue
+    if (!master && isMasterMode(m)) continue
     totals[m.category] = (totals[m.category] ?? 0) + 1
     const key = facetKey(m)
     if (key) {
@@ -29,6 +30,8 @@ function tally(master: boolean) {
   return { totals, byRegion }
 }
 const getCounts = once(() => ({ on: tally(true), off: tally(false) }))
+
+const GROUPS = CATEGORY_GROUPS.map((g) => ({ g, items: CATEGORIES.filter((c) => c.group === g) }))
 
 const COLLAPSED_BY_DEFAULT = new Set(['Treasure', 'Enemies', 'Places'])
 
@@ -128,14 +131,9 @@ export function CategoryFilters() {
   const { totals, byRegion } = masterMode ? getCounts().on : getCounts().off
   const toggleCatRegion = useUi((s) => s.toggleCatRegion)
   const setCatRegions = useUi((s) => s.setCatRegions)
-  const setEnabled = (ids: string[], on: boolean) =>
-    useUi.setState((s) => ({ enabled: { ...s.enabled, ...Object.fromEntries(ids.map((i) => [i, on])) } }))
+  const setEnabled = useUi((s) => s.setEnabled)
 
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set(COLLAPSED_BY_DEFAULT))
-  const groups = useMemo(
-    () => CATEGORY_GROUPS.map((g) => ({ g, items: CATEGORIES.filter((c) => c.group === g) })),
-    [],
-  )
 
   return (
     <div className="space-y-6">
@@ -183,7 +181,7 @@ export function CategoryFilters() {
         )}
       </div>
 
-      {groups.map(({ g, items }) => {
+      {GROUPS.map(({ g, items }) => {
         const open = !collapsed.has(g)
         const ids = items.map((c) => c.id)
         const onCount = ids.filter((i) => enabled[i]).length
@@ -276,7 +274,7 @@ export function CategoryFilters() {
                   const regs = byRegion[c.id] ?? {}
                   // Sub-groups: the sets for clothing (people hunt it a set at a time), the regions otherwise.
                   const bySet = FACET_BY_SET.has(c.id)
-                  const regIds = bySet ? SET_ORDER.filter((s) => regs[s]) : REGIONS.filter((r) => regs[r.id]).map((r) => r.id)
+                  const regIds = bySet ? CLOTHING_SET_ORDER.filter((s) => regs[s]) : REGIONS.filter((r) => regs[r.id]).map((r) => r.id)
                   const noun = bySet ? 'sets' : 'areas'
                   const FacetIcon = bySet ? Shirt : MapPin
                   const canSplit = regIds.length > 1

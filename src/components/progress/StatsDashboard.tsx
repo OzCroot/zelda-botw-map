@@ -9,9 +9,9 @@ import { Button } from '@/components/ui/button'
 import type { ReactNode } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { CATEGORIES } from '@/data/categories'
+import { CHECKABLE_CATEGORIES } from '@/data/categories'
 import { REGIONS } from '@/data/loadMarkers'
-import { countDone, getGroups } from '@/lib/tracked'
+import { countDone, getGroups, percent } from '@/lib/tracked'
 import { useProgress } from '@/store/progress'
 import { cn } from '@/lib/utils'
 import { useUi } from '@/store/ui'
@@ -32,7 +32,7 @@ function Bar({
   small?: boolean
   trailing?: ReactNode
 }) {
-  const pct = total ? Math.round((done / total) * 100) : 0
+  const pct = percent(done, total)
   const complete = total > 0 && done === total
   return (
     <Progress
@@ -73,7 +73,7 @@ export function StatsDashboard() {
       <Card size="sm">
         <CardContent className="text-center">
           <div className="text-4xl font-bold tabular-nums">
-            {items.length ? Math.round((doneItems / items.length) * 100) : 0}%
+            {percent(doneItems, items.length)}%
           </div>
           <div className="text-sm text-muted-foreground">
             {doneItems} of {items.length} tracked items complete
@@ -85,7 +85,7 @@ export function StatsDashboard() {
         <h3 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
           By category
         </h3>
-        {CATEGORIES.filter((c) => c.checkable).map((c) => {
+        {CHECKABLE_CATEGORIES.map((c) => {
           const all = byCategory.get(c.id) ?? []
           return (
             <Bar
@@ -128,7 +128,7 @@ export function StatsDashboard() {
                 </AccordionTrigger>
                 <AccordionContent className="px-2 pb-3">
                   <div className="ml-1 space-y-2.5 border-l border-border pl-3">
-                    {CATEGORIES.filter((c) => c.checkable).map((c) => {
+                    {CHECKABLE_CATEGORIES.map((c) => {
                       const inCategory = all.filter((m) => m.category === c.id)
                       if (!inCategory.length) return null
                       return (

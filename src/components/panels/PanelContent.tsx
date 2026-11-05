@@ -20,7 +20,10 @@ const TABS: { id: Tab; label: string }[] = [
 ]
 
 export function PanelContent() {
-  const { tab, setTab, theme, toggleTheme } = useUi()
+  const tab = useUi((s) => s.tab)
+  const setTab = useUi((s) => s.setTab)
+  const theme = useUi((s) => s.theme)
+  const toggleTheme = useUi((s) => s.toggleTheme)
   return (
     <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)} className="h-full min-h-0 gap-4">
       <div className="flex items-center gap-2">

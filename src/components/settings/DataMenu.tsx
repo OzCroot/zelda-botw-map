@@ -26,6 +26,7 @@ import {
   type ProgressExport,
 } from '@/lib/exportImport'
 import { track } from '@/lib/analytics'
+import { copyText } from '@/lib/clipboard'
 import { once } from '@/lib/once'
 import { decodeProgress, encodeProgress } from '@/lib/shareCode'
 import { useProgress } from '@/store/progress'
@@ -61,7 +62,7 @@ export function DataMenu() {
   const [code, setCode] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
 
-  const stamp = new Date().toISOString().slice(0, 10)
+  const stamp = () => new Date().toISOString().slice(0, 10)
 
   const readFile = async (file: File) => {
     const r = parseExport(await file.text())
@@ -120,7 +121,7 @@ export function DataMenu() {
             onClick={() => {
               track('progress_exported', { format: 'json' })
               download(
-                `hyrule-tracker-${stamp}.json`,
+                `hyrule-tracker-${stamp()}.json`,
                 JSON.stringify(buildExport({ completed, notes }), null, 2),
                 'application/json',
               )
@@ -133,7 +134,7 @@ export function DataMenu() {
             variant="outline"
             onClick={() => {
               track('progress_exported', { format: 'csv' })
-              download(`hyrule-tracker-${stamp}.csv`, buildCsv({ completed, notes }), 'text/csv')
+              download(`hyrule-tracker-${stamp()}.csv`, buildCsv({ completed, notes }), 'text/csv')
             }}
           >
             Export CSV
@@ -219,7 +220,7 @@ export function DataMenu() {
               track('share_code_generated')
               const c = encodeProgress(getIds(), new Set(Object.keys(completed)))
               setCode(c)
-              navigator.clipboard?.writeText(c).then(() => toast('Code copied'))
+              void copyText(c, 'Code copied')
             }}
           >
             Generate &amp; copy

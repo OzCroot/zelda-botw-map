@@ -24,8 +24,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Progress } from '@/components/ui/progress'
-import { countDone, getGroups } from '@/lib/tracked'
-import { EMPTY_PROGRESS, useProgress, type ProgressData } from '@/store/progress'
+import { countDone, getGroups, percent } from '@/lib/tracked'
+import { useProgress } from '@/store/progress'
 import { cleanName, MAX_NAME_LENGTH, MAX_SAVES, useSaves, type SaveSlot } from '@/store/saves'
 
 type DialogState =
@@ -115,13 +115,12 @@ function SaveCard({
   const live = useProgress((s) => s.completed)
   const [menu, setMenu] = useState(false)
 
-  const data: ProgressData = active
-    ? { ...EMPTY_PROGRESS, completed: live }
-    : (slot.data ?? EMPTY_PROGRESS)
+  // The active save is read live; the others from what was stored when they were switched away from.
+  const completed = active ? live : (slot.data?.completed ?? {})
   const { items } = getGroups()
-  const done = countDone(items, data.completed)
-  const pct = items.length ? Math.round((done / items.length) * 100) : 0
-  const last = lastActivity(data.completed)
+  const done = countDone(items, completed)
+  const pct = percent(done, items.length)
+  const last = lastActivity(completed)
 
   return (
     <li

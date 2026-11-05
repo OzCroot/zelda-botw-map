@@ -13,7 +13,7 @@ const loaders = import.meta.glob('./generated/seed-hints.json', { import: 'defau
 >
 
 let cache: Promise<Hints> | undefined
-export function loadSeedHints(): Promise<Hints> {
+function loadSeedHints(): Promise<Hints> {
   const load = Object.values(loaders)[0]
   cache ??= import.meta.env.MODE === 'test' || !load ? Promise.resolve({}) : load().catch(() => ({}))
   return cache
