@@ -5,6 +5,7 @@ import { CATEGORIES, CATEGORY_GROUPS } from '@/data/categories'
 import { FACET_BY_SET, SET_ORDER, facetKey } from '@/data/facets'
 import { MARKERS, REGIONS } from '@/data/loadMarkers'
 import { once } from '@/lib/once'
+import { track } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 import { PRESETS, useUi } from '@/store/ui'
 import { CategoryIcon } from '../map/CategoryIcon'
@@ -140,7 +141,10 @@ export function CategoryFilters() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-1.5">
         {PRESETS.map((p) => (
-          <Chip key={p.label} on={false} onClick={() => applyPreset(p.ids)}>
+          <Chip key={p.label} on={false} onClick={() => {
+              track('filter_preset', { preset: p.label })
+              applyPreset(p.ids)
+            }}>
             {p.label}
           </Chip>
         ))}
@@ -288,8 +292,14 @@ export function CategoryFilters() {
                         <button
                           type="button"
                           aria-pressed={on}
-                          onClick={() => toggleCategory(c.id)}
-                          onDoubleClick={() => soloCategory(c.id)}
+                          onClick={() => {
+                            track('category_toggled', { category: c.id, on: !on })
+                            toggleCategory(c.id)
+                          }}
+                          onDoubleClick={() => {
+                            track('category_solo', { category: c.id })
+                            soloCategory(c.id)
+                          }}
                           title={`${c.label} · click to toggle, double-click to show only this`}
                           className={cn(
                             'flex h-full min-w-0 flex-1 items-center gap-2 rounded-xl pl-2 text-left text-[13px] outline-none transition-[opacity,filter] focus-visible:ring-3 focus-visible:ring-ring/50',
