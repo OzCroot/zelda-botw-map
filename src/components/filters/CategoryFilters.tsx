@@ -29,7 +29,7 @@ function tally(master: boolean) {
 }
 const getCounts = once(() => ({ on: tally(true), off: tally(false) }))
 
-const COLLAPSED_BY_DEFAULT = new Set(['Treasure', 'Enemies', 'Places', 'Map labels'])
+const COLLAPSED_BY_DEFAULT = new Set(['Treasure', 'Enemies', 'Places'])
 
 function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -183,6 +183,58 @@ export function CategoryFilters() {
         const open = !collapsed.has(g)
         const ids = items.map((c) => c.id)
         const onCount = ids.filter((i) => enabled[i]).length
+        // A group with a single category needs no accordion: show that category's area filter directly.
+        if (items.length === 1) {
+          const c = items[0]
+          const regs = byRegion[c.id] ?? {}
+          const regIds = REGIONS.filter((r) => regs[r.id]).map((r) => r.id)
+          const hidden = hiddenRegions[c.id] ?? []
+          const on = !!enabled[c.id]
+          return (
+            <section key={g}>
+              <div className="mb-2.5 flex items-center">
+                <span className="flex flex-1 items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                  {g}
+                  <CountChip>{totals[c.id] ?? 0}</CountChip>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setEnabled([c.id], !on)}
+                  className="rounded px-1.5 py-0.5 text-xs text-muted-foreground hover:text-foreground"
+                >
+                  {on ? 'Hide all' : 'Show all'}
+                </button>
+              </div>
+              <div className={cn('flex flex-wrap gap-1.5 transition-opacity', !on && 'opacity-50')}>
+                <Chip
+                  on={on && hidden.length === 0}
+                  onClick={() => {
+                    if (!on) setEnabled([c.id], true)
+                    setCatRegions(c.id, [])
+                  }}
+                >
+                  All
+                </Chip>
+                <Chip on={!on} onClick={() => setEnabled([c.id], false)}>
+                  None
+                </Chip>
+                {regIds.map((rid) => (
+                  <Chip
+                    key={rid}
+                    on={on && !hidden.includes(rid)}
+                    onClick={() => {
+                      if (!on) setEnabled([c.id], true)
+                      toggleCatRegion(c.id, rid)
+                    }}
+                  >
+                    {REGIONS.find((r) => r.id === rid)?.label}{' '}
+                    <span className="opacity-60 tabular-nums">{regs[rid]}</span>
+                  </Chip>
+                ))}
+              </div>
+            </section>
+          )
+        }
         return (
           <section key={g}>
             <div className="mb-2.5 flex items-center">
