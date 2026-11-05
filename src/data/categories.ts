@@ -7,6 +7,8 @@ const c = (
 ): C => ({ id, label, group, glyph, color, checkable, defaultOn, icon: icon ?? id })
 
 export const CATEGORIES: Category[] = [
+  // Map labels (text only, not clickable)
+  c('landmark', 'Place names', 'Map labels', '⚑', '#94a3b8', false, true),
   // Travel
   c('shrine', 'Shrines', 'Travel', '⛩', '#38bdf8', true, true, 'travel/shrine'),
   c('shrine-dlc', 'Shrines (DLC)', 'Travel', '⛩', '#38bdf8', true, true, 'travel/shrine-dlc'),
@@ -42,8 +44,6 @@ export const CATEGORIES: Category[] = [
   c('armor-shop', 'Armor Shops', 'Places', '🛡', '#fda4af', false, false, 'locations/armor'),
   c('dye-shop', 'Dye Shops', 'Places', '◐', '#f9a8d4', false, false, 'locations/dye'),
   c('jewelry-shop', 'Jewelry Shops', 'Places', '◇', '#a5f3fc', false, false, 'locations/jewelry'),
-  // Map labels (text only, not clickable)
-  c('landmark', 'Place names', 'Map labels', '⚑', '#94a3b8', false, true),
   // Treasure
   c('rare-gems', 'Rare gems', 'Treasure', '◆', '#f87171', false, false, 'stamps/treasure'),
   c('common-gems', 'Common gems', 'Treasure', '◆', '#fb923c', false, false, 'stamps/treasure'),
