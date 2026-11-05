@@ -11,9 +11,25 @@ export function toggleWithUndo(id: string) {
   if (done && ui.selectedId === id) ui.select(null)
   // A finished marker's route is no longer needed on the map.
   if (done && ui.pathId === id) ui.hidePath()
-  const name = MARKER_BY_ID.get(id)?.name ?? id
+  const marker = MARKER_BY_ID.get(id)
+  const name = marker?.name ?? id
+  // Completing a shrine also completes everything linked to it (its shrine quest and treasure).
+  // Undo puts those back as they were.
+  const linkedIds =
+    done && id.startsWith('shrine:')
+      ? (marker?.details ?? [])
+          .map((d) => d.marker)
+          .filter((m): m is string => !!m && !(m in useProgress.getState().completed))
+      : []
+  linkedIds.forEach((l) => setCompleted(l, true))
   toast(done ? `Checked off ${name}` : `Unchecked ${name}`, {
     duration: 4000,
-    action: { label: 'Undo', onClick: () => setCompleted(id, !done) },
+    action: {
+      label: 'Undo',
+      onClick: () => {
+        setCompleted(id, !done)
+        linkedIds.forEach((l) => setCompleted(l, false))
+      },
+    },
   })
 }
