@@ -52,10 +52,10 @@ export interface Category {
     | 'Travel'
     | 'Quests'
     | 'Collectibles'
-    | 'Clothing'
+    | 'Points of interest'
     | 'Enemies'
     | 'Places'
-    | 'Services'
+    | 'Map labels'
     | 'Treasure'
   /** short glyph rendered in the map pin */
   glyph: string

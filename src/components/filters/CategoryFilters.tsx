@@ -29,7 +29,7 @@ function tally(master: boolean) {
 }
 const getCounts = once(() => ({ on: tally(true), off: tally(false) }))
 
-const COLLAPSED_BY_DEFAULT = new Set(['Treasure', 'Enemies', 'Services', 'Places'])
+const COLLAPSED_BY_DEFAULT = new Set(['Treasure', 'Enemies', 'Places', 'Map labels'])
 
 function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
   return (

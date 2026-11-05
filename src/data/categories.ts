@@ -21,11 +21,12 @@ export const CATEGORIES: Category[] = [
   // Collectibles
   c('korok-seed', 'Korok Seeds', 'Collectibles', '🍃', '#4ade80', true, true, 'quest/korok'),
   c('great-fairy', 'Great Fairies', 'Collectibles', '✿', '#f472b6', true, true, 'stamps/star'),
-  c('goddess-statue', 'Goddess Statues', 'Collectibles', '♆', '#e2e8f0', false, false, 'stamps/human'),
-  c('cooking-pot', 'Cooking Pots', 'Collectibles', '♨', '#fca5a5', false, false, 'stamps/cuisine'),
-  c('raft', 'Rafts', 'Collectibles', '≈', '#93c5fd', false, false, 'stamps/leaf'),
-  // Clothing: its own group, and tracked (checkable) so it appears in Progress
-  c('clothing', 'Clothing', 'Clothing', '▣', '#f472b6', true, true, 'stamps/treasure'),
+  // Tracked (checkable) so it appears in Progress
+  c('clothing', 'Clothing', 'Collectibles', '▣', '#f472b6', true, true, 'stamps/treasure'),
+  // Points of interest
+  c('goddess-statue', 'Goddess Statues', 'Points of interest', '♆', '#e2e8f0', false, false, 'stamps/human'),
+  c('cooking-pot', 'Cooking Pots', 'Points of interest', '♨', '#fca5a5', false, false, 'stamps/cuisine'),
+  c('raft', 'Rafts', 'Points of interest', '≈', '#93c5fd', false, false, 'stamps/leaf'),
   // Enemies
   c('stone-talus', 'Stone Taluses', 'Enemies', '▲', '#a8a29e', false, false, 'stamps/ore'),
   c('hinox', 'Hinoxes', 'Enemies', '☠', '#ef4444', false, false, 'stamps/enemy'),
@@ -36,13 +37,13 @@ export const CATEGORIES: Category[] = [
   c('stable', 'Stables', 'Places', '⌂', '#a8a29e', true, true, 'locations/stable'),
   c('village', 'Towns & Villages', 'Places', '⌖', '#e2e8f0', false, true, 'locations/village'),
   c('settlement', 'Settlements', 'Places', '·', '#cbd5e1', false, false, 'locations/checkpoint'),
-  c('landmark', 'Landmarks', 'Places', '⚑', '#94a3b8', false, false),
-  // Services
-  c('inn', 'Inns', 'Services', '☾', '#fcd34d', false, false, 'locations/inn'),
-  c('general-store', 'General Stores', 'Services', '$', '#86efac', false, false, 'locations/store'),
-  c('armor-shop', 'Armor Shops', 'Services', '🛡', '#fda4af', false, false, 'locations/armor'),
-  c('dye-shop', 'Dye Shops', 'Services', '◐', '#f9a8d4', false, false, 'locations/dye'),
-  c('jewelry-shop', 'Jewelry Shops', 'Services', '◇', '#a5f3fc', false, false, 'locations/jewelry'),
+  c('inn', 'Inns', 'Places', '☾', '#fcd34d', false, false, 'locations/inn'),
+  c('general-store', 'General Stores', 'Places', '$', '#86efac', false, false, 'locations/store'),
+  c('armor-shop', 'Armor Shops', 'Places', '🛡', '#fda4af', false, false, 'locations/armor'),
+  c('dye-shop', 'Dye Shops', 'Places', '◐', '#f9a8d4', false, false, 'locations/dye'),
+  c('jewelry-shop', 'Jewelry Shops', 'Places', '◇', '#a5f3fc', false, false, 'locations/jewelry'),
+  // Map labels (text only, not clickable)
+  c('landmark', 'Place names', 'Map labels', '⚑', '#94a3b8', false, true),
   // Treasure
   c('rare-gems', 'Rare gems', 'Treasure', '◆', '#f87171', false, false, 'stamps/treasure'),
   c('common-gems', 'Common gems', 'Treasure', '◆', '#fb923c', false, false, 'stamps/treasure'),
