@@ -170,7 +170,7 @@
 .leaflet-container .pin img { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: contain; }
 .pin:has(img) { background: transparent; border-color: transparent; box-shadow: none; font-size: 0; }
 .landmark-label { pointer-events: none; }
-.landmark-label span { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: auto; cursor: pointer; font: 600 15px/1 Georgia, 'Times New Roman', serif; color: #f3e3b0; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 1px 2px #000; }
+.landmark-label span { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: none; font: 600 15px/1 Georgia, 'Times New Roman', serif; color: #f3e3b0; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 1px 2px #000; }
 .region-label { pointer-events: none; }
 .region-label span { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; font: 700 28px/1 Georgia, 'Times New Roman', serif; letter-spacing: .14em; text-transform: uppercase; color: #fff7d6; opacity: .92; text-shadow: 0 0 5px #000, 0 0 5px #000, 0 0 12px #000, 0 2px 3px #000; }
 .area-label { pointer-events: none; }
