@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { useUi } from '@/store/ui'
 import type { Marker } from '@/types/marker'
 import { CategoryIcon } from '../map/CategoryIcon'
+import { track } from '@/lib/analytics'
 
 const getCounts = once(() => {
   const counts: Record<string, number> = {}
@@ -55,6 +56,7 @@ export function SearchBox() {
     useUi.getState().setMenuOpen(false)
   }
   const pick = (m: Marker) => {
+    track('search_result_selected', { category: m.category })
     const { enabledCategory, enabledMasterMode } = reveal(m.id)
     if (enabledMasterMode) toast('Master Mode items are now shown')
     else if (enabledCategory)
@@ -62,6 +64,7 @@ export function SearchBox() {
     done()
   }
   const pickCategory = (id: string) => {
+    track('search_category_selected', { category: id })
     useUi.getState().soloCategory(id)
     useUi.getState().setRegion(null)
     toast(`Showing only ${CATEGORY_BY_ID[id]?.label}`)

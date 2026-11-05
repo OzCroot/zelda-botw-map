@@ -25,6 +25,7 @@ import {
   type ImportDiff,
   type ProgressExport,
 } from '@/lib/exportImport'
+import { track } from '@/lib/analytics'
 import { once } from '@/lib/once'
 import { decodeProgress, encodeProgress } from '@/lib/shareCode'
 import { useProgress } from '@/store/progress'
@@ -71,6 +72,7 @@ export function DataMenu() {
   const apply = (mode: 'merge' | 'replace') => {
     if (!pending) return
     const payload = { completed: pending.data.completed, notes: pending.data.notes }
+    track('progress_imported', { mode })
     if (mode === 'merge') mergeIn(payload)
     else replaceAll(payload)
     setPending(null)
@@ -85,6 +87,7 @@ export function DataMenu() {
       completed: pending.data.completed,
       notes: pending.data.notes,
     })
+    track('progress_imported', { mode: 'new_save' })
     toast.dismiss()
     toast.success('Imported as a new save')
     setPending(null)
@@ -115,6 +118,7 @@ export function DataMenu() {
         <div className="flex flex-wrap gap-2">
           <Button
             onClick={() => {
+              track('progress_exported', { format: 'json' })
               download(
                 `hyrule-tracker-${stamp}.json`,
                 JSON.stringify(buildExport({ completed, notes }), null, 2),
@@ -127,9 +131,10 @@ export function DataMenu() {
           </Button>
           <Button
             variant="outline"
-            onClick={() =>
+            onClick={() => {
+              track('progress_exported', { format: 'csv' })
               download(`hyrule-tracker-${stamp}.csv`, buildCsv({ completed, notes }), 'text/csv')
-            }
+            }}
           >
             Export CSV
           </Button>
@@ -211,6 +216,7 @@ export function DataMenu() {
           <Button
             variant="outline"
             onClick={() => {
+              track('share_code_generated')
               const c = encodeProgress(getIds(), new Set(Object.keys(completed)))
               setCode(c)
               navigator.clipboard?.writeText(c).then(() => toast('Code copied'))
@@ -223,6 +229,7 @@ export function DataMenu() {
             onClick={() => {
               const done = decodeProgress(getIds(), code)
               if (!done) return toast.error('Invalid code for this dataset')
+              track('share_code_loaded')
               const now = Date.now()
               replaceAll({
                 completed: Object.fromEntries(done.map((id) => [id, completed[id] ?? now])),

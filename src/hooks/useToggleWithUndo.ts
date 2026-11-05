@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import { MARKER_BY_ID } from '../data/loadMarkers'
+import { track } from '../lib/analytics'
 import { useProgress } from '../store/progress'
 import { useUi } from '../store/ui'
 
@@ -12,6 +13,7 @@ export function toggleWithUndo(id: string) {
   // A finished marker's route is no longer needed on the map.
   if (done && ui.pathId === id) ui.hidePath()
   const marker = MARKER_BY_ID.get(id)
+  track(done ? 'marker_completed' : 'marker_uncompleted', { category: marker?.category ?? 'unknown' })
   const name = marker?.name ?? id
   // Completing a shrine also completes everything linked to it (its shrine quest and treasure).
   // Undo puts those back as they were.

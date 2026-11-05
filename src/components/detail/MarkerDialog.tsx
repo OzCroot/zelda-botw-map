@@ -1,5 +1,5 @@
 import { Check, ExternalLink, Link2, MapPin, Route } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ import { CategoryIcon } from '../map/CategoryIcon'
 import { MARKER_BY_ID, REGION_BY_ID } from '@/data/loadMarkers'
 import { useSeedHint } from '@/data/seedHints'
 import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
+import { track } from '@/lib/analytics'
 import { useProgress } from '@/store/progress'
 import { useUi } from '@/store/ui'
 
@@ -99,6 +100,11 @@ export function MarkerDialog() {
   const m = id ? MARKER_BY_ID.get(id) : undefined
   const cat = m ? CATEGORY_BY_ID[m.category] : undefined
   const hint = useSeedHint(m?.id)
+  const openedId = m?.id
+  const openedCategory = m?.category
+  useEffect(() => {
+    if (openedId && openedCategory) track('marker_opened', { category: openedCategory })
+  }, [openedId, openedCategory])
   const region = m?.region ? (REGION_BY_ID[m.region]?.label ?? m.region) : undefined
 
   return (
@@ -205,7 +211,13 @@ export function MarkerDialog() {
               {m.path && (
                 <Button
                   variant="outline"
-                  onClick={() => (pathShown ? hidePath() : showPath(m.id))}
+                  onClick={() => {
+                    if (pathShown) hidePath()
+                    else {
+                      track('path_shown')
+                      showPath(m.id)
+                    }
+                  }}
                   title={pathShown ? 'Remove the route from the map' : 'Draw the route on the map'}
                 >
                   <Route data-icon="inline-start" /> {pathShown ? 'Hide path' : 'Show path'}
@@ -222,7 +234,14 @@ export function MarkerDialog() {
               {m.wikiUrl && (
                 <Button
                   variant="outline"
-                  render={<a href={m.wikiUrl} target="_blank" rel="noreferrer" />}
+                  render={
+                    <a
+                      href={m.wikiUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => track('wiki_link_clicked', { category: m.category })}
+                    />
+                  }
                 >
                   <ExternalLink data-icon="inline-start" /> Wiki
                 </Button>
