@@ -2,6 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { initData } from './data/loadMarkers'
+import { initAnalytics } from './lib/analytics'
+
+initAnalytics()
 
 // Fetch the marker data and the app code in parallel; render once both are ready.
 void (async () => {
