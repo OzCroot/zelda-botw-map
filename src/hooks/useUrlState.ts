@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { MARKER_BY_ID } from '../data/loadMarkers'
-import { useUi, type Tab } from '../store/ui'
-
-const TABS = ['filters', 'list', 'stats', 'data']
+import { TAB_IDS, useUi, type Tab } from '../store/ui'
 
 /**
  * Deep links: ?m=<markerId> selects a marker (mirrored back to the URL while selected);
@@ -23,7 +21,7 @@ export function useUrlState() {
     const focus = params.get('focus')
     if (focus && MARKER_BY_ID.has(focus)) useUi.getState().reveal(focus)
     const tab = params.get('tab')
-    if (tab && TABS.includes(tab)) {
+    if (tab && (TAB_IDS as readonly string[]).includes(tab)) {
       useUi.getState().setTab(tab as Tab)
       useUi.getState().setMenuOpen(true)
     }

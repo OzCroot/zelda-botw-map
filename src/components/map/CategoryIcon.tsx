@@ -28,7 +28,7 @@ export function CategoryIcon({
         style={{ transform: `scale(${iconScale(icon)})` }}
         onError={(e) => {
           // .svg missing: iconSrc now points at the .png; that missing too: fall back to the glyph.
-          if (e.currentTarget.src.endsWith('.svg') && icon) {
+          if (e.currentTarget.src.endsWith('.svg')) {
             markPng(icon)
             retry((n) => n + 1)
           } else setFailed(true)

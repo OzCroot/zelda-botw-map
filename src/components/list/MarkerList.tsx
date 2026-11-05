@@ -104,7 +104,7 @@ export function MarkerList() {
                       {m.name}
                     </span>
                     <span className="block truncate text-xs font-normal text-muted-foreground">
-                      {cat?.label} · {REGION_BY_ID[m.region ?? '']?.label}
+                      {[cat?.label, m.region && REGION_BY_ID[m.region]?.label].filter(Boolean).join(' · ')}
                     </span>
                   </span>
                 </Button>

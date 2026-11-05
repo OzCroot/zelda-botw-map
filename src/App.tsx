@@ -8,6 +8,7 @@ import { toggleWithUndo } from './hooks/useToggleWithUndo'
 import { useUrlState } from './hooks/useUrlState'
 import { CATEGORY_BY_ID } from './data/categories'
 import { MARKER_BY_ID } from './data/loadMarkers'
+import { isShortcut } from './lib/keys'
 import { useUi } from './store/ui'
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (/INPUT|TEXTAREA|SELECT/.test((e.target as HTMLElement).tagName)) return
+      if (!isShortcut(e)) return
       const { selectedId, select } = useUi.getState()
       if (e.key === 'Escape') select(null)
       if (

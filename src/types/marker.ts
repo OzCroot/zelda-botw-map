@@ -64,7 +64,7 @@ export interface Category {
   checkable: boolean
   /** shown on the map by default */
   defaultOn?: boolean
-  /** optional PNG name in public/icons/ (without extension) */
+  /** artwork in public/icons/ (no extension: .svg, else .png). Without it the glyph is shown. */
   icon?: string
 }
 

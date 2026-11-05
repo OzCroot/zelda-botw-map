@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
+import { isShortcut } from '@/lib/keys'
 import { cn } from '@/lib/utils'
 import { MENU_MIN_WIDTH, useUi } from '@/store/ui'
 import { PanelContent } from './PanelContent'
@@ -65,7 +66,7 @@ export function MapChrome() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (/INPUT|TEXTAREA|SELECT/.test((e.target as HTMLElement).tagName)) return
+      if (!isShortcut(e)) return
       if (e.key === 'f' || e.key === 'm') setMenuOpen(!useUi.getState().menuOpen)
       if (e.key === 'Escape') setMenuOpen(false)
     }

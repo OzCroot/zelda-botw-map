@@ -4,13 +4,15 @@ import { safeStorage } from '../lib/safeStorage'
 import { CATEGORIES, defaultEnabled } from '../data/categories'
 import { facetKey } from '../data/facets'
 import { MARKER_BY_ID } from '../data/loadMarkers'
+import { isMasterMode } from '../lib/markers'
 import type { MarkerId } from '../types/marker'
 import { useProgress } from './progress'
 
 /** Narrowest the menu can be (23rem at 16px): the original fixed width. */
 export const MENU_MIN_WIDTH = 368
 
-export type Tab = 'filters' | 'list' | 'stats' | 'data'
+export const TAB_IDS = ['filters', 'list', 'stats', 'data'] as const
+export type Tab = (typeof TAB_IDS)[number]
 
 interface UiState {
   enabled: Record<string, boolean>
@@ -38,6 +40,8 @@ interface UiState {
   hiddenRegions: Record<string, string[]>
   theme: 'dark' | 'light'
   toggleCategory: (id: string) => void
+  /** Switch several categories on or off at once, leaving the rest as they are. */
+  setEnabled: (ids: string[], on: boolean) => void
   soloCategory: (id: string) => void
   setAll: (on: boolean) => void
   applyPreset: (ids: string[]) => void
@@ -90,6 +94,8 @@ export const useUi = create<UiState>()(
       hiddenRegions: {},
       theme: 'dark',
       toggleCategory: (id) => set((s) => ({ enabled: { ...s.enabled, [id]: !s.enabled[id] } })),
+      setEnabled: (ids, on) =>
+        set((s) => ({ enabled: { ...s.enabled, ...Object.fromEntries(ids.map((id) => [id, on])) } })),
       soloCategory: (id) =>
         set({ enabled: Object.fromEntries(CATEGORIES.map((c) => [c.id, c.id === id])) }),
       setAll: (on) => set({ enabled: Object.fromEntries(CATEGORIES.map((c) => [c.id, on])) }),
@@ -107,7 +113,7 @@ export const useUi = create<UiState>()(
         const s = get()
         const enabledCategory = !s.enabled[m.category]
         const facet = facetKey(m)
-        const enabledMasterMode = !!m.tags?.includes('Master Mode') && !s.masterMode
+        const enabledMasterMode = isMasterMode(m) && !s.masterMode
         set({
           focusId: id,
           masterMode: s.masterMode || enabledMasterMode,

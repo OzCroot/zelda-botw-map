@@ -1,6 +1,5 @@
 import { Check, ExternalLink, Link2, MapPin, Route } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,6 +16,9 @@ import { MARKER_BY_ID, REGION_BY_ID } from '@/data/loadMarkers'
 import { useSeedHint } from '@/data/seedHints'
 import { toggleWithUndo } from '@/hooks/useToggleWithUndo'
 import { track } from '@/lib/analytics'
+import { copyText } from '@/lib/clipboard'
+import { seedNumber } from '@/lib/markers'
+import { revealMarker } from '@/lib/revealMarker'
 import { useProgress } from '@/store/progress'
 import { useUi } from '@/store/ui'
 
@@ -58,10 +60,8 @@ function MarkerLink({ id, children }: { id: string; children: React.ReactNode })
       title={`Show ${target.name} on the map`}
       className="inline-flex items-center gap-1 rounded text-left underline decoration-dotted underline-offset-4 outline-none hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/50"
       onClick={() => {
-        const { reveal, select } = useUi.getState()
-        const { enabledCategory } = reveal(id)
-        select(id)
-        if (enabledCategory) toast(`Showing ${CATEGORY_BY_ID[target.category]?.label ?? 'it'}`)
+        revealMarker(id, target.category)
+        useUi.getState().select(id)
       }}
     >
       {children}
@@ -72,7 +72,7 @@ function MarkerLink({ id, children }: { id: string; children: React.ReactNode })
 
 /** Local-only screenshot: public/images/korok/webp/<seed number>.webp. Hidden if the file isn't there. */
 function SeedImage({ markerId, alt }: { markerId: string; alt: string }) {
-  const num = /Seed(\d+)$/.exec(markerId)?.[1]
+  const num = seedNumber(markerId)
   const [failed, setFailed] = useState<string | null>(null)
   if (!num || failed === num) return null
   return (
@@ -225,9 +225,7 @@ export function MarkerDialog() {
               )}
               <Button
                 variant="outline"
-                onClick={() =>
-                  navigator.clipboard.writeText(location.href).then(() => toast('Link copied'))
-                }
+                onClick={() => void copyText(location.href, 'Link copied')}
               >
                 <Link2 data-icon="inline-start" /> Copy link
               </Button>

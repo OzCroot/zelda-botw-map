@@ -1,4 +1,5 @@
-import type { AreaLabel, Marker, MarkerDataset } from '../types/marker'
+import { seedNumber } from '../lib/markers'
+import type { AreaLabel, Marker, MarkerDataset, RegionInfo } from '../types/marker'
 import sample from './sample/markers.json'
 import { CATEGORY_BY_ID } from './categories'
 import { clothingSetOf } from './clothingSets'
@@ -14,23 +15,21 @@ const generated = import.meta.glob('./generated/markers.json', {
 const DLC_CATEGORY: Record<string, string> = { shrine: 'shrine-dlc' }
 
 function prepare(ds: MarkerDataset): MarkerDataset {
-  // DLC shrines get their own category so they can be shown, hidden and counted separately.
-  // (The id is unchanged, so saved progress and deep links keep working.)
-  const markers: Marker[] = ds.markers
-    .map((m) => {
-      const dlc = DLC_CATEGORY[m.category]
-      return dlc && m.tags?.includes('DLC')
-        ? { ...m, category: dlc, tags: [...new Set(m.tags)] }
-        : m
-    })
+  const markers: Marker[] = []
+  for (const m of ds.markers) {
+    if (!(m.category in CATEGORY_BY_ID)) continue
+    let next = m
+    // DLC shrines get their own category so they can be shown, hidden and counted separately.
+    // (The id is unchanged, so saved progress and deep links keep working.)
+    const dlc = DLC_CATEGORY[m.category]
+    if (dlc && m.tags?.includes('DLC')) next = { ...next, category: dlc, tags: [...new Set(m.tags)] }
     // Korok seeds are all named alike; show their number (e.g. "Korok Seed #031") so they can be told apart and searched.
-    .map((m) => {
-      const num = m.category === 'korok-seed' ? /Seed(\d+)$/.exec(m.id)?.[1] : undefined
-      return num ? { ...m, name: `Korok Seed #${num.padStart(3, '0')}` } : m
-    })
+    const num = next.category === 'korok-seed' ? seedNumber(next.id) : undefined
+    if (num) next = { ...next, name: `Korok Seed #${num.padStart(3, '0')}` }
     // Clothing is browsed by set, which the data doesn't carry; work it out from the name.
-    .map((m) => (m.category === 'clothing' && !m.set ? { ...m, set: clothingSetOf(m.name) } : m))
-    .filter((m) => m.category in CATEGORY_BY_ID)
+    if (next.category === 'clothing' && !next.set) next = { ...next, set: clothingSetOf(next.name) }
+    markers.push(next)
+  }
   return { ...ds, markers }
 }
 
@@ -40,8 +39,8 @@ export let MARKERS: Marker[]
 export let MARKER_BY_ID: Map<string, Marker>
 export let usingSampleData: boolean
 export let AREA_LABELS: AreaLabel[]
-export let REGIONS: MarkerDataset['regions']
-export let REGION_BY_ID: Record<string, MarkerDataset['regions'][number]>
+export let REGIONS: RegionInfo[]
+export let REGION_BY_ID: Record<string, RegionInfo>
 
 function apply(ds: MarkerDataset) {
   dataset = prepare(ds)

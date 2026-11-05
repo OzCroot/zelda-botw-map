@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const markerSchema = z.object({
+const markerSchema = z.object({
   id: z.string().min(1),
   category: z.string().min(1),
   name: z.string(),
@@ -27,7 +27,7 @@ export const markerSchema = z.object({
   minZoom: z.number().optional(),
 })
 
-export const areaLabelSchema = z.object({
+const areaLabelSchema = z.object({
   id: z.string(),
   kind: z.enum(['region', 'area']).optional(),
   name: z.string(),
@@ -37,7 +37,7 @@ export const areaLabelSchema = z.object({
   maxZoom: z.number(),
 })
 
-export const regionSchema = z.object({
+const regionSchema = z.object({
   id: z.string(),
   label: z.string(),
   x: z.number(),

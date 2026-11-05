@@ -1,5 +1,6 @@
 import { facetKey } from '../data/facets'
 import { MARKERS } from '../data/loadMarkers'
+import { isMasterMode } from '../lib/markers'
 import { useProgress } from '../store/progress'
 import { useUi } from '../store/ui'
 import type { Marker } from '../types/marker'
@@ -29,7 +30,7 @@ function filterVisible(inputs: Inputs): Marker[] {
   const result = MARKERS.filter(
     (m) =>
       enabled[m.category] &&
-      (masterMode || !m.tags?.includes('Master Mode')) &&
+      (masterMode || !isMasterMode(m)) &&
       !hiddenIn(hiddenRegions, m) &&
       (!region || m.region === region) &&
       !(hideCompleted && m.id in completed),
