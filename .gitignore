@@ -30,3 +30,6 @@ data/raw/
 public/images/korok/raw/
 .vercel
 .env*
+
+# Local backup of the pre-rewrite history (contains old author emails); never commit
+*.bundle
