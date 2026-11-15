@@ -5,11 +5,66 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0f172a" />
-    <meta name="description" content="Local-first Breath of the Wild map & completion tracker." />
-    <title>Breath of the Wild | Complete Map</title>
+    <title>Breath of the Wild Interactive Map – Korok Seeds, Shrines &amp; Completion Tracker</title>
+    <meta
+      name="description"
+      content="Free interactive Breath of the Wild map with Korok seeds, shrines, towers, stables and more. Track your 100% completion progress locally, no account needed."
+    />
+    <link rel="canonical" href="https://zelda-botw-map.vercel.app/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Breath of the Wild Complete Map" />
+    <meta property="og:title" content="Breath of the Wild Interactive Map &amp; Completion Tracker" />
+    <meta
+      property="og:description"
+      content="Korok seeds, shrines, towers, stables and more on one map. Track your 100% run locally, no account needed."
+    />
+    <meta property="og:url" content="https://zelda-botw-map.vercel.app/" />
+    <meta property="og:image" content="https://zelda-botw-map.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Breath of the Wild Interactive Map &amp; Completion Tracker" />
+    <meta
+      name="twitter:description"
+      content="Korok seeds, shrines, towers, stables and more on one map. Track your 100% run locally, no account needed."
+    />
+    <meta name="twitter:image" content="https://zelda-botw-map.vercel.app/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Breath of the Wild Complete Map",
+        "url": "https://zelda-botw-map.vercel.app/",
+        "description": "Interactive map and completion tracker for The Legend of Zelda: Breath of the Wild, covering Korok seeds, shrines, towers, stables and more.",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "inLanguage": "en",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Static intro for crawlers and no-JS visitors; React replaces it on mount. -->
+    <div id="root">
+      <main style="max-width: 40rem; margin: 0 auto; padding: 2rem 1rem; font-family: system-ui, sans-serif; color: #e2e8f0; background: #0f172a; min-height: 100vh">
+        <h1>Breath of the Wild Interactive Map</h1>
+        <p>
+          A free interactive map for The Legend of Zelda: Breath of the Wild. Browse and filter Korok seeds, shrines,
+          towers, stables, Ancient Tech Labs, quests, locations and more, and track your 100% completion progress in
+          your browser. No account needed; your progress stays on your device.
+        </p>
+        <h2>Features</h2>
+        <ul>
+          <li>Search every marker and filter by category</li>
+          <li>Mark locations complete and undo with one tap</li>
+          <li>Export, import and share your progress with a share code</li>
+        </ul>
+        <noscript><p>This map needs JavaScript enabled to run.</p></noscript>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
