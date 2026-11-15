@@ -37,5 +37,10 @@ jobs:
           node-version: 24
       - run: npm i -g vercel@65
       - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      # Vercel returns production env vars marked sensitive as the literal "[SENSITIVE]", which Vite would bake
+      # into the bundle. The GTM container ID is public, so drop the placeholder and supply the real value here.
+      - run: sed -i '/^VITE_GTM_ID=/d' .vercel/.env.production.local
       - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VITE_GTM_ID: GTM-NNN8CKMQ
       - run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
