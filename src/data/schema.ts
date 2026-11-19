@@ -12,6 +12,7 @@ const markerSchema = z.object({
   description: z.string().optional(),
   wikiUrl: z.string().optional(),
   blessing: z.string().optional(),
+  guide: z.string().optional(),
   details: z
     .array(
       z.object({

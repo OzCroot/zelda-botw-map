@@ -23,7 +23,7 @@ Search the map, check things off as you play, and keep your progress in your own
   map to the marker and highlights it with a label.
 - Filter by category group, use quick presets (*Shrine hunt*, *Korok run*, *Story*, …), hide completed items, or focus on a region.
 - A **list view** (virtualized, sortable) stays in sync with the map filters.
-- Selecting a marker opens a **details dialog** with a complete/undo button and a personal note.
+- Selecting a marker opens a **details dialog** with a quick guide (shrines, quests and memories), a complete/undo button and a personal note.
 
 **Built for phones too**
 - Mobile layout with a draggable bottom sheet, 44px touch targets and safe-area padding.
@@ -75,12 +75,17 @@ Put a dataset at `src/data/generated/markers.json`. It is picked up automaticall
       "x": 10000, "y": 9000,         // map units — see below
       "region": "hebra",
       "description": "optional",
+      "guide": "optional shorthand walkthrough",
       "tags": ["DLC"]                // optional
     }
   ]
 }
 ```
 
+- **Guides.** `guide` is a one-or-two-sentence walkthrough shown as a "Quick guide" box in the marker dialog. The text for
+  shrines, shrine quests, side quests, main quests, quest objectives and memories is kept in [`scripts/guides.json`](scripts/guides.json) (marker id → text) and
+  merged into the dataset with `node scripts/add-guides.mjs [guides.json] [markers.json]`. Re-run it after regenerating
+  `markers.json`; edit `guides.json`, not the generated file. Entries starting with "(Unverified)" are best guesses.
 - **Coordinates** are pixels of the full-size map image: origin at the top-left, `x` east, `y` south.
 - **Categories** (ids, labels, colours, which ones are checkable) live in [`src/data/categories.ts`](src/data/categories.ts).
 - The shape is validated with [zod](https://zod.dev) ([`src/data/schema.ts`](src/data/schema.ts)); an invalid file falls back to the sample.

@@ -15,6 +15,8 @@ export interface Marker {
   wikiUrl?: string
   /** Shrines only: the shrine's blessing name, e.g. "Dila Maag's Blessing". */
   blessing?: string
+  /** Shorthand walkthrough for shrines, quests and memories (see scripts/add-guides.mjs). */
+  guide?: string
   /** Extra facts shown in the dialog, in order (e.g. Treasure, Requirements). */
   details?: {
     label: string

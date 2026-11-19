@@ -171,6 +171,15 @@ export function MarkerDialog() {
               m.description && <p className="text-sm text-muted-foreground">{m.description}</p>
             )}
 
+            {m.guide && (
+              <div className="rounded-md border bg-muted/50 px-3 py-2 text-sm">
+                <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                  Quick guide
+                </div>
+                <p>{m.guide}</p>
+              </div>
+            )}
+
             {m.details && m.details.length > 0 && (
               <dl className="space-y-2.5 text-sm">
                 {m.details.map((d) => (
